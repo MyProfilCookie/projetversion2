@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 require("dotenv").config();
 console.log(process.env.DB_USER);
 const mongoose = require("mongoose");
@@ -22,9 +22,9 @@ mongoose
   .catch((err) => console.log(err));
   
 // importation des routes
-const recetteRoutes = require("./api/routes/recetteRoutes");
-const userRoutes = require("./api/routes/userRoutes");
-const adminRoutes = require("./api/routes/adminRoutes");
+const recetteRoutes = require("./api/routes/recette.routes");
+const userRoutes = require("./api/routes/user.routes");
+const adminRoutes = require("./api/routes/admin.routes");
 
 
 // routes

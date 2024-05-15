@@ -1,19 +1,22 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const likeSchema = new Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
-  recette: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Recette',
-    required: true
-  }
+// Définition du schéma pour les likes d'une recette
+const LikeSchema = new Schema({
+    recette: {
+        type: Schema.Types.ObjectId, // Utilise ObjectId pour référencer une recette
+        ref: 'Recette',              // Le modèle 'Recette' référencé
+        required: true               // Champ obligatoire
+    },
+    likesCount: {
+        type: Number,                // Compteur de likes
+        default: 0                   // Initialise à zéro
+    }
+}, {
+    timestamps: true  // Ajoute les propriétés `createdAt` et `updatedAt` automatiquement
 });
 
-const Like = mongoose.model('Like', likeSchema);
+// Création du modèle Mongoose 'RecetteLike' à partir du schéma défini
+const Like = mongoose.model('RecetteLike', LikeSchema);
 
 module.exports = Like;

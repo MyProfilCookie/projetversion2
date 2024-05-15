@@ -72,18 +72,21 @@ const recetteSchema = new Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
-    commentaires: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Commentaire",
-      },
-    ],
-    likes: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Like",
-      },
-    ],
+    comments: {
+      type: [
+        {
+          commenterId: String,
+          commenterPseudo: String,
+          text: String,
+          timestamp: Number,
+        },
+      ],
+      required: true,
+    },
+    likes: {
+      type: [String],
+      required: true,
+    },
   },
   {
     timestamps: true,

@@ -10,6 +10,8 @@ import AdminPanel from "../pages/dashboard/admin/AdminPanel"
 import DashboardLayout from "../layout/DashboardLayout"
 import Dashboard from "../pages/dashboard/admin/Dashboard"
 import Users from "../pages/dashboard/admin/Users"
+import Contact from "../components/Contact"
+import About from "../components/About"
 // import Login from "../components/Login"
 // import UpdateRecette from "../pages/dashboard/admin/UpdateRecette"
 // import UpdateUser from "../pages/dashboard/admin/UpdateUser"
@@ -26,7 +28,7 @@ const router = createBrowserRouter([
             },
             {
                 path: "/recettes",
-                element: <PrivateRouter><Recettes /></PrivateRouter>
+                element: <Recettes />
             },
             {
                 path: "/admin-panel",
@@ -35,11 +37,11 @@ const router = createBrowserRouter([
             },
             {
                 path: "/contact",
-                element: <div>Contact 📞</div>
+                element: <Contact />
             },
             {
                 path: "/about",
-                element: <div>About 📧</div>
+                element: <About />
             },
             {
                 path: "/*",

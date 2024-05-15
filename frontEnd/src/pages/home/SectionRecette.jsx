@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCookieBite } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 import { faStar } from '@fortawesome/free-solid-svg-icons'
+import logo from '/avatar.jpg'
 
 function SectionRecette() {
     return (
@@ -30,22 +31,22 @@ function SectionRecette() {
                         <div className="avatar-group -space-x-6 rtl-space-x-reverse">
                             <div className="avatar">
                                 <div className="w-12">
-                                    <img src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+                                    <img src={logo} />
                                 </div>
                             </div>
                             <div className="avatar">
                                 <div className="w-12">
-                                    <img src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+                                    <img src={logo} />
                                 </div>
                             </div>
                             <div className="avatar">
                                 <div className="w-12">
-                                    <img src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+                                    <img src={logo} />
                                 </div>
                             </div>
                             <div className="avatar">
                                 <div className="w-12">
-                                    <img src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+                                    <img src={logo} />
                                 </div>
                             </div>
                         </div>
