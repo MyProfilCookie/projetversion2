@@ -276,7 +276,6 @@
       360deg
     );
   }
-  
   .bg-noir {
     background-color: rgba(18, 18, 18, 1);
   }
@@ -288,3 +287,183 @@
     color: #333; // Couleur du texte pour une bonne lisibilité sur fond clair
     min-height: 100vh; // Assure que le fond couvre toute la hauteur de la vue
   }
+  @mixin gradient-vanilla-sky {
+    background: linear-gradient(to right, #f3e7e9, #e3eeff);
+  }
+  
+  @mixin gradient-mango-tango {
+    background: linear-gradient(to right, #ffe259, #ffa751);
+  }
+  
+  @mixin gradient-peach-melba {
+    background: linear-gradient(to right, #ffecd2, #fcb69f);
+  }
+  
+  @mixin gradient-buttercream-frosting {
+    background: linear-gradient(to right, #f9f9f9, #e6e6e6);
+  }
+  
+  @mixin gradient-lemon-tart {
+    background: linear-gradient(to right, #f6d365, #fda085);
+  }
+  
+  @mixin gradient-cherry-blossom {
+    background: linear-gradient(to right, #ff9a9e, #fecfef);
+  }
+  
+  @mixin gradient-caramel-swirl {
+    background: linear-gradient(to right, #d4a5a5, #e0c3c3);
+  }
+  
+  @mixin gradient-hazelnut-cocoa {
+    background: linear-gradient(to right, #c2b280, #965d62);
+  }
+  
+  @mixin gradient-apple-cinnamon {
+    background: linear-gradient(to right, #ffafbd, #ffc3a0);
+  }
+  
+  @mixin gradient-raspberry-mousse {
+    background: linear-gradient(to right, #fbc2eb, #a6c1ee);
+  }
+
+  @mixin gradient-aqua-marine {
+    background: linear-gradient(to right, #1a2980, #26d0ce);
+  }
+  
+  @mixin gradient-sunset-beach {
+    background: linear-gradient(to right, #ff7e5f, #feb47b);
+  }
+  
+  @mixin gradient-floral-bloom {
+    background: linear-gradient(to right, #ff9a9e, #fad0c4);
+  }
+  
+  @mixin gradient-summer-breeze {
+    background: linear-gradient(to right, #00c6ff, #0072ff);
+  }
+  
+  @mixin gradient-sunrise-glow {
+    background: linear-gradient(to right, #ff9a9e, #fecfef);
+  }
+  
+  @mixin gradient-rainforest {
+    background: linear-gradient(to right, #13547a, #80d0c7);
+  }
+  
+  @mixin gradient-mountain-mist {
+    background: linear-gradient(to right, #636363, #a2ab58);
+  }
+  
+  @mixin gradient-firework-sparkle {
+    background: linear-gradient(to right, #d53369, #cbad6d);
+  }
+  
+  @mixin gradient-ocean-wave {
+    background: linear-gradient(to right, #43c6ac, #191654);
+  }
+  
+  @mixin gradient-pink-sunset {
+    background: linear-gradient(to right, #ff758c, #ff7eb3);
+  }
+  @mixin gradient-aqua-marine {
+    background: linear-gradient(to right, #1a2980, #26d0ce);
+  }
+  
+  @mixin gradient-sunset-beach {
+    background: linear-gradient(to right, #ff7e5f, #feb47b);
+  }
+  
+  @mixin gradient-floral-bloom {
+    background: linear-gradient(to right, #ff9a9e, #fad0c4);
+  }
+  
+  @mixin gradient-summer-breeze {
+    background: linear-gradient(to right, #00c6ff, #0072ff);
+  }
+  
+  @mixin gradient-sunrise-glow {
+    background: linear-gradient(to right, #ff9a9e, #fecfef);
+  }
+  
+  @mixin gradient-rainforest {
+    background: linear-gradient(to right, #13547a, #80d0c7);
+  }
+  
+  @mixin gradient-mountain-mist {
+    background: linear-gradient(to right, #636363, #a2ab58);
+  }
+  
+  @mixin gradient-firework-sparkle {
+    background: linear-gradient(to right, #d53369, #cbad6d);
+  }
+  
+  @mixin gradient-ocean-wave {
+    background: linear-gradient(to right, #43c6ac, #191654);
+  }
+  
+  @mixin gradient-pink-sunset {
+    background: linear-gradient(to right, #ff758c, #ff7eb3);
+  }
+  @mixin gradient-light-to-dark-1 {
+    background: linear-gradient(to right, #ffffff, #000000);
+  }
+  
+  @mixin gradient-light-to-dark-2 {
+    background: linear-gradient(to right, #f0f0f0, #505050);
+  }
+  
+  @mixin gradient-light-to-dark-3 {
+    background: linear-gradient(to right, #e0e0e0, #404040);
+  }
+  
+  @mixin gradient-light-to-dark-4 {
+    background: linear-gradient(to right, #d0d0d0, #303030);
+  }
+  
+  @mixin gradient-light-to-dark-5 {
+    background: linear-gradient(to right, #c0c0c0, #202020);
+  }
+  
+  @mixin gradient-light-to-dark-6 {
+    background: linear-gradient(to right, #b0b0b0, #101010);
+  }
+  
+  @mixin gradient-light-to-dark-7 {
+    background: linear-gradient(to right, #a0a0a0, #080808);
+  }
+  
+  @mixin gradient-light-to-dark-8 {
+    background: linear-gradient(to right, #909090, #040404);
+  }
+  
+  @mixin gradient-light-to-dark-9 {
+    background: linear-gradient(to right, #808080, #020202);
+  }
+  
+  @mixin gradient-light-to-dark-10 {
+    background: linear-gradient(to right, #707070, #010101);
+  }
+  
+  @mixin gradient-light-to-dark-11 {
+    background: linear-gradient(to right, #606060, #000000);
+  }
+  
+  @mixin gradient-light-to-dark-12 {
+    background: linear-gradient(to right, #505050, #000000);
+  }
+  
+  @mixin gradient-light-to-dark-13 {
+    background: linear-gradient(to right, #404040, #000000);
+  }
+  
+  @mixin gradient-light-to-dark-14 {
+    background: linear-gradient(to right, #303030, #000000);
+  }
+  
+  @mixin gradient-light-to-dark-15 {
+    background: linear-gradient(to right, #202020, #000000);
+  }
+  
+    
+  

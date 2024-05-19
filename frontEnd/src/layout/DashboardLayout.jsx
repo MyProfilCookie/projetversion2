@@ -1,90 +1,147 @@
-/* eslint-disable react/no-unescaped-entities */
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
-import React, { useContext, useState } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUserAstronaut, faGaugeHigh, faUserGroup, faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
-import { IoMdCloseCircleOutline } from "react-icons/io";
-import { MdFormatListBulletedAdd } from "react-icons/md";
-import { LiaUserEditSolid } from "react-icons/lia";
-import { FaRegEdit } from "react-icons/fa";
-import { MdDashboardCustomize } from "react-icons/md";
-import { AuthContext } from '../contexts/AuthProvider'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { Outlet } from 'react-router-dom'
-import logo from '/logo.svg'
 
-function DashboardLayout() {
-    const { logOut } = useContext(AuthContext)
-    const [isModalOpen, setIsModalOpen] = useState();
-    const openModal = () => {
-        setIsModalOpen(true);
-    };
+import logo from "/logo.svg";
+// eslint-disable-next-line no-unused-vars
+import { Link, Outlet, useNavigate } from "react-router-dom";
+import { MdDashboard, MdOutlineDashboardCustomize } from "react-icons/md";
+import {
+  FaEdit,
+  FaHome,
+  FaLocationArrow,
+  FaPlusCircle,
+  FaQuestionCircle,
+  FaRegUser,
+  FaShoppingBag,
+  FaUsers,
+} from "react-icons/fa";
+import { FaCartShopping } from "react-icons/fa6";
+import useAdmin from "../hooks/useAdmin";
+import Register from "../components/Register";
+import useAuth from "../hooks/useAuth";
 
-    const closeModal = () => {
-        setIsModalOpen(false);
-    };
+const sharedMenu = (
+  <>
+    <li className="mt-3">
+      <Link to="/">
+        <FaHome />
+        Home
+      </Link>
+    </li>
+    <li>
+      <Link to="/menu">
+        <FaCartShopping />
+        Menu
+      </Link>
+    </li>
+    <li>
+      <Link to="/menu">
+      <FaLocationArrow />
+        Orders Tracking
+      </Link>
+    </li>
+    <li>
+      <Link to="/menu">
+      <FaQuestionCircle />
+        Customer Support
+      </Link>
+    </li>
+  </>
+);
 
-    const handleLogout = () => {
-        logOut().then(() => {
-            alert('Vous êtes déconnecté')
-            setIsModalOpen(false);
-            navigate(from, { replace: true }); //  redirection vers la page 
-        }).catch((error) => { console.log(error) })
-    }
-    //  redirection vers la page d'accueil après connexion
-    const location = useLocation()
-    const navigate = useNavigate()
-    //  redirection vers la page d'accueil après connexion
-    const from = location.state?.from?.pathname || '/'
-    return (
-        <div>
-            <div className="drawer-2 drawer-end h-full z-100">
-                <input id="my-drawer-2" type="checkbox" className="drawer-toggle-2" /> 
-                <FontAwesomeIcon icon={faRightFromBracket} onClick={handleLogout} className=' close-drawer-button lg-hidden'/>
-                <div className="drawer-content-2 flex items-center justify-between mx-4 flex-wrap">
-                    <div className="flex items-center justify-between mt-4">
-                        <label htmlFor="my-drawer-2" className="drawer-button btn btn-primary btn-ghost btn-circle avatar-profile lg-hidden ">
-                            <MdDashboardCustomize className="w-32"/>
-                        </label>
-                       
-                    </div>
-                    <Outlet />
-                </div>
-                <div className="hidden drawer-side-2">
-                    <label htmlFor="my-drawer-2" aria-label="close sidebar" className="drawer-overlay-2"></label>
-                    <ul className="menu-drawer-2 p-4 w-80 min-h-full">
-                        {/* Sidebar content here */}
-                        <li>
-                            <Link to="/profile" className='flex justify-start mb-3 align-center'>
-                                <img src={logo} className="w-20" alt="logo" />
-                                <span className="badge badge-accent">Admin</span>
-                            </Link>
-                        </li>
-                        <li className='mb-1 '>
-                            <Link to="/dashboard"><FontAwesomeIcon icon={faGaugeHigh} className='mr-2' /> Dashboard</Link>
-                        </li>
-                        <li className='mb-1'>
-                            <Link to="/dashboard/users"><FontAwesomeIcon icon={faUserGroup} className='mr-2' /> Tous les utilisateurs</Link>
-                        </li>
-                        <li className='mb-1'>
-                            <Link to="/dashboard"><MdFormatListBulletedAdd className='mr-2' /> Ajout d'une recette</Link>
-                        </li>
-                        <li className='mb-1'>
-                            <Link to="/dashboard/"><FaRegEdit className='mr-2' />
-                                Modification d'une recette</Link>
-                        </li>
-                        <li className='mb-1'>
-                            <Link to="/dashboard/users"><LiaUserEditSolid className='mr-2' /> Modification du rôle d'un utilisateur</Link>
-                        </li>
-                        <li className='mb-1'>
-                            <a onClick={handleLogout} ><FontAwesomeIcon icon={faRightFromBracket} className='mr-2' /> Logout</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+const DashboardLayout = () => {
+  const {loading} = useAuth()
+  const [isAdmin, isAdminLoading] = useAdmin();
+  // console.log(isAdmin);
+
+  return (
+    <div>
+      {
+        isAdminLoading || isAdmin ? <div className="drawer sm:drawer-open">
+        <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
+        <div className="drawer-content flex flex-col sm:items-start sm:justify-start my-2">
+          {/* Page content here */}
+          <div className="flex items-center justify-between mx-4">
+            <label
+              htmlFor="my-drawer-2"
+              className="btn btn-primary drawer-button sm:hidden"
+            >
+              <MdOutlineDashboardCustomize />
+            </label>
+
+            {/* login or signout */}
+            <button className="btn flex items-center gap-2 rounded-full px-6 bg-green text-white sm:hidden">
+              <FaRegUser /> Logout
+            </button>
+          </div>
+          <div className="mt-5 md:mt-2 mx-4">
+            <Outlet />
+          </div>
         </div>
-    )
-}
+        <div className="drawer-side">
+          <label
+            htmlFor="my-drawer-2"
+            aria-label="close sidebar"
+            className="drawer-overlay"
+          ></label>
 
-export default DashboardLayout
+          <ul className="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
+            {/* Sidebar content here */}
+            <li>
+              <Link to="/dashboard" className="flex justify-start mb-3">
+                <img src={logo} alt="" className="w-20" />
+                <span className="indicator-item badge badge-primary">
+                  Admin
+                </span>
+              </Link>
+            </li>
+            <hr />
+
+            {/* dashboard */}
+            <li className="mt-3">
+              <Link to="/dashboard">
+                <MdDashboard /> Dashboard
+              </Link>
+            </li>
+
+            {/* manage orders */}
+            <li>
+              <Link to="/dashboard/bookings">
+                <FaShoppingBag /> Manage Bookings
+              </Link>
+            </li>
+
+            {/* Add Menu Items */}
+            <li>
+              <Link to="/dashboard/add-menu">
+                <FaPlusCircle /> Add Menu
+              </Link>
+            </li>
+
+            {/* Manage Menu Items */}
+            <li>
+              <Link to="/dashboard/manage-items">
+                <FaEdit /> Manage Items
+              </Link>
+            </li>
+
+            {/* users */}
+            <li className="mb-3">
+              <Link to="/dashboard/users">
+                <FaUsers />
+                Users
+              </Link>
+            </li>
+
+            {/* shared menu */}
+            <hr />
+            {sharedMenu}
+          </ul>
+        </div>
+      </div> :  (loading ? <Register/> : <div className="h-screen flex items-center justify-center">
+        <Link to="/" >Back to Home</Link>
+        </div> )
+      }
+    </div>
+  );
+};
+
+export default DashboardLayout;

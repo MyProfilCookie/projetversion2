@@ -150,7 +150,7 @@ summary {
   flex-direction: column;
 }
 
-.dropdown:hover .dropdown-content {
+.dropdown .dropdown-content {
   display: flex;
   background-color: #ffffff;
 }
@@ -202,7 +202,7 @@ summary {
 }
 .bton-ghost {
   border-radius: 30px;
-  margin: 0 30px;
+  // margin: 0 30px;
   cursor: pointer;
   color: #333;
   text-decoration: none;

@@ -2,8 +2,9 @@
 /* eslint-disable react/prop-types */
 import React, { useContext, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUserAstronaut } from '@fortawesome/free-solid-svg-icons'
+import { faRightFromBracket, faClipboardList, faCircleUser  } from '@fortawesome/free-solid-svg-icons'
 import { AuthContext } from '../contexts/AuthProvider' 
+import { RiCake3Line } from "react-icons/ri";
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 function Profile({ user }) {
@@ -36,10 +37,12 @@ const from = location.state?.from?.pathname || '/'
                 <div className="drawer-content">
                     {/* Page content here */}
                     <label htmlFor="my-drawer-4" className="drawer-button bton-ghost btn-circle avatar-profile ">
-                    <div className="w-10 rounded-full">
-                           {user.photoURL? <img src={user.photoURL} alt="avatar" /> : 
+                    <div className="w-12">
+                           {user.photoURL? <img src={user.photoURL} alt="avatar" className="w-12 rounded-full" /> : 
                         //    dans le cas où l'utilisateur n'a pas de photo de profil, on affiche une icône par défaut
-                           <FontAwesomeIcon icon={faUserAstronaut} size='2xl' style={{height: '2.5rem'}}/>}
+                        //    <FontAwesomeIcon icon={faUserAstronaut} size='2xl' style={{height: '2.5rem', width: '2.5rem', color: '#fff'}}/>}
+                           <RiCake3Line  style={{height: '2.5rem', width: '2.5rem', color: '#fff'}}/>}
+                           
                         </div>
                     </label>
                 </div>
@@ -47,9 +50,9 @@ const from = location.state?.from?.pathname || '/'
                     <label htmlFor="my-drawer-4" aria-label="close sidebar" className="drawer-overlay"></label>
                     <ul className="menu-drawer p-4 w-80 min-h-full">
                         {/* Sidebar content here */}
-                        <li><a href='/update-profile'>Profile</a></li>
-                        <li><a>Mes recettes</a></li>
-                        <li><a onClick={handleLogout} >Logout</a></li>
+                        <li><a href='/update-profile'><FontAwesomeIcon icon={faCircleUser} /> Profile</a></li>
+                        <li><a href='/my-recipe'><FontAwesomeIcon icon={faClipboardList} /> Mes recettes</a></li>
+                        <li><a onClick={handleLogout} ><FontAwesomeIcon icon={faRightFromBracket} /> Logout</a></li>
                     </ul>
                 </div>
             </div>

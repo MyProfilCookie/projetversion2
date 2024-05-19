@@ -2,7 +2,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
-import '../assets/scss/loadingScreen.scss';
+import '../assets/scss/_loadingScreen.scss';
 
 
 const LoadingScreen = () => {

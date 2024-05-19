@@ -50,10 +50,10 @@
   display: none; /* Masqué par défaut, affiché via JavaScript si nécessaire */
 }
 
-.menu-drawer-2 {
-  list-style: none;
-  padding: 30px;
-}
+// .menu-drawer-2 {
+//   list-style: none;
+//   padding: 30px;
+// }
 
 .menu-drawer-2 li a {
   display: flex;
@@ -86,6 +86,50 @@
   display: block;
   padding: 15px;
   transition: all 0.3s ease;
+}
+.dashboard-layout {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.drawer-side-2 {
+  background-color: #60a3bc00;
+  overflow-y: auto; /* Permet le scrolling si nécessaire */
+  border-right: 1px solid #ccc;
+  display: none; /* Masqué par défaut */
+  transition: transform 0.3s ease-in-out;
+}
+
+.drawer-content-2 {
+  flex-grow: 1;
+  padding: 20px;
+}
+
+.menu-drawer-2 {
+  list-style: none;
+  padding: 20px;
+}
+
+.menu-drawer-2 li a{
+  font-size: 1.3rem;
+    display: block;
+    margin-bottom: 3rem;
+    color: #333;
+    text-decoration: none;
+    border-radius: 5px;
+    padding: 0.4rem;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.menu-drawer-2 li a:hover{
+  background-color: #EB2F06;
+}
+
+@media (min-width: 768px) {
+  .drawer-side-2 {
+      display: block; /* Toujours visible en desktop */
+  }
 }
 
 /* Gestion de la visibilité et du positionnement sur les écrans plus grands */

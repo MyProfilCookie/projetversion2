@@ -36,3 +36,39 @@
 .bg-light-to-dark-3 { @include gradient-light-to-dark-3; }
 .bg-light-to-dark-4 { @include gradient-light-to-dark-4; }
 .bg-light-to-dark-5 { @include gradient-light-to-dark-5; }
+.bg-light-to-dark-6 { @include gradient-light-to-dark-6; }
+.bg-light-to-dark-7 { @include gradient-light-to-dark-7;}
+.bg-light-to-dark-8 { @include gradient-light-to-dark-8;}
+.bg-light-to-dark-9 { @include gradient-light-to-dark-9;}
+.bg-light-to-dark-10 { @include gradient-light-to-dark-10;}
+.bg-light-to-dark-11 { @include gradient-light-to-dark-11;}
+.bg-light-to-dark-12 { @include gradient-light-to-dark-12;}
+.bg-light-to-dark-14 { @include gradient-light-to-dark-14;}
+.bg-light-to-dark-15 { @include gradient-light-to-dark-15;}
+
+// Classes pour les dégradés inspirés de desserts
+.bg-vanilla-sky { @include gradient-vanilla-sky;}
+.bg-mango-tango { @include gradient-mango-tango;}
+.bg-peach-melba { @include gradient-peach-melba;}
+.bg-buttercream-frosting { @include gradient-buttercream-frosting;}
+.bg-lemon-tart { @include gradient-lemon-tart;}
+.bg-cherry-blossom { @include gradient-cherry-blossom;}
+.bg-caramel-swirl { @include gradient-caramel-swirl;}
+.bg-hazelnut-cocoa { @include gradient-hazelnut-cocoa;}
+.bg-apple-cinnamon { @include gradient-apple-cinnamon;}
+.bg-raspberry-mousse { @include gradient-raspberry-mousse;}
+
+// Classes pour des dégradés colorés
+.bg-aqua-marine { @include gradient-aqua-marine;}
+.bg-sunset-beach { @include gradient-sunset-beach;}
+.bg-floral-bloom { @include gradient-floral-bloom;}
+.bg-summer-breeze { @include gradient-summer-breeze;}
+.bg-sunrise-glow { @include gradient-sunrise-glow;}
+.bg-rainforest { @include gradient-rainforest;}
+.bg-mountain-mist { @include gradient-mountain-mist;}
+.bg-firework-sparkle { @include gradient-firework-sparkle;}
+.bg-ocean-wave { @include gradient-ocean-wave;}
+.bg-pink-sunset { @include gradient-pink-sunset;}
+
+
+

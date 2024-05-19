@@ -4,7 +4,7 @@ import Home from "../pages/home/Home"
 import Recettes from "../pages/recette/Recettes"
 import Register from "../components/Register"
 import PrivateRouter from "../PrivateRouter/PrivateRouter"
-import UpdateProfile from "../pages/dashboard/UpdateProfile"
+import UserProfil from "../pages/dashboard/user/UserProfile"
 import RecetteDetail from "../pages/recette/RecetteDetail"
 import AdminPanel from "../pages/dashboard/admin/AdminPanel"
 import DashboardLayout from "../layout/DashboardLayout"
@@ -12,6 +12,10 @@ import Dashboard from "../pages/dashboard/admin/Dashboard"
 import Users from "../pages/dashboard/admin/Users"
 import Contact from "../components/Contact"
 import About from "../components/About"
+import RecipeManagement from "../pages/dashboard/user/RecipeManagement"
+// import Login from "../components/Login"
+// import UpdateRecette from "../pages/dashboard/admin/UpdateRecette"
+// import UpdateUser from "../pages/dashboard/admin/UpdateUser"
 // import Login from "../components/Login"
 // import UpdateRecette from "../pages/dashboard/admin/UpdateRecette"
 // import UpdateUser from "../pages/dashboard/admin/UpdateUser"
@@ -47,10 +51,13 @@ const router = createBrowserRouter([
                 path: "/*",
                 element: <div>404</div>
             },
-            
+            {
+                path:"/my-recipe",
+                element:<PrivateRouter><RecipeManagement /></PrivateRouter>
+            },
             {
                 path: "/update-profile",
-                element: <UpdateProfile />
+                element: <UserProfil />
             },
             {
                 path: "/recettes/nouvelles",

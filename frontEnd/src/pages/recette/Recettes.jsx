@@ -15,7 +15,7 @@ function Recettes() {
     () => {
       const fetchData = async () => {
         try {
-          const response = await fetch('http://localhost:3001/recettes');
+          const response = await fetch('http://localhost:3000/recettes');
           const data = await response.json();
           const normalizedData = data.map(item => ({
             ...item,
