@@ -106,10 +106,11 @@
 
 .drawer-side {
   position: fixed;
-  top: 5rem;  // 4rem = 64px c'etait à 0 à la base
+  top: 0;  // 4rem = 64px c'etait à 0 à la base
   right: 0;
   height: 100%;
-  background-color: rgb(218, 191, 191);
+  background-color: rgb(231, 217, 203);
+  // background-color: rgb(218, 191, 191);
   // background-color: rgba(123, 114, 114, 0.22);
   // background-color: rgba(229, 49, 49, 0.13);
   color: #1f2937;

@@ -7,7 +7,7 @@ import { faIceCream } from '@fortawesome/free-solid-svg-icons'
 function Banner() {
   return (
     <div className='container mx-auto px-4 py-16 xl-px-24 max-w-screen-2xl'>
-      <h1 className='text-center text-4xl font-bold text-gray-90 leading-snug'>Notre patisserie <span className='text-red'>binaire</span> on code <span className='text-red'>avec des cônes <FontAwesomeIcon icon={faIceCream} /></span>.</h1>
+      <h1 className='text-center text-4xl font-bold text-gray-90 leading-snug'>Notre patisserie <span className='text-red'>binaire</span> on code <span className='text-red'>avec des cônes <FontAwesomeIcon icon={faIceCream} /></span></h1>
 
       <div className='section-container py-16 flex md-flex-col-reverse justify-between items-center gap-8'>
 

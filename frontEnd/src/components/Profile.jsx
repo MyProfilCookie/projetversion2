@@ -3,6 +3,7 @@
 import React, { useContext, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faRightFromBracket, faClipboardList, faCircleUser  } from '@fortawesome/free-solid-svg-icons'
+import { faUser } from '@fortawesome/free-solid-svg-icons'
 import { AuthContext } from '../contexts/AuthProvider' 
 import { RiCake3Line } from "react-icons/ri";
 import { Link, useLocation, useNavigate } from 'react-router-dom'
@@ -35,7 +36,6 @@ const from = location.state?.from?.pathname || '/'
             <div className="drawer drawer-end h-full z-100">
                 <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
                 <div className="drawer-content">
-                    {/* Page content here */}
                     <label htmlFor="my-drawer-4" className="drawer-button bton-ghost btn-circle avatar-profile ">
                     <div className="w-12">
                            {user.photoURL? <img src={user.photoURL} alt="avatar" className="w-12 rounded-full" /> : 
@@ -50,9 +50,9 @@ const from = location.state?.from?.pathname || '/'
                     <label htmlFor="my-drawer-4" aria-label="close sidebar" className="drawer-overlay"></label>
                     <ul className="menu-drawer p-4 w-80 min-h-full">
                         {/* Sidebar content here */}
-                        <li><a href='/update-profile'><FontAwesomeIcon icon={faCircleUser} /> Profile</a></li>
-                        <li><a href='/my-recipe'><FontAwesomeIcon icon={faClipboardList} /> Mes recettes</a></li>
-                        <li><a onClick={handleLogout} ><FontAwesomeIcon icon={faRightFromBracket} /> Logout</a></li>
+                        <li style={{fontSize: '1.3rem'}}><a href='/update-profile'><FontAwesomeIcon icon={faUser} size='2xl'/> Profile</a></li>
+                        <li style={{fontSize: '1.3rem'}}><a href='/my-recipe'><FontAwesomeIcon icon={faClipboardList} size='2xl' /> Mes recettes</a></li>
+                        <li style={{fontSize: '1.3rem'}}><a onClick={handleLogout} ><FontAwesomeIcon icon={faRightFromBracket} size='2xl' /> Logout</a></li>
                     </ul>
                 </div>
             </div>

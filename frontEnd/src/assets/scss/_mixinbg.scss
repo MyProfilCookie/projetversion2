@@ -40,7 +40,7 @@
 }
 
 @mixin gradient-strawberry-cream {
-  @include linear-gradient((#f85f73, #ffe985));
+  @include linear-gradient((#f85f73, #fc9191));
 }
 
 @mixin gradient-chocolate-raspberry {
@@ -87,6 +87,9 @@
 
 @mixin gradient-northern-lights {
   @include linear-gradient((#8a2387, #e94057, #f27121));
+}
+@mixin gradient-northern-lights-reverse {
+  @include linear-gradient((#f27121, #e94057, #8a2387));
 }
 
 @mixin gradient-sunset {

@@ -1,17 +1,18 @@
+// export default Diaporama
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import { useRef, useState } from 'react';
 import { Autoplay, Pagination, Navigation, EffectCoverflow } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import img from '../../public/images/chocolat.jpeg';
-import img2 from '../../public/images/chocolat.jpeg';
-import img3 from '../../public/images/chocolat.jpeg';
-import img4 from '../../public/images/chocolat.jpeg';
-import img5 from '../../public/images/chocolat.jpeg';
-import img6 from '../../public/images/chocolat.jpeg';
-import img7 from '../../public/images/chocolat.jpeg';
-import img8 from '../../public/images/chocolat.jpeg';
-import img9 from '../../public/images/chocolat.jpeg';
+import img from '/images/chocolat.jpeg';
+import img2 from '/images/chocolat.jpeg';
+import img3 from '/images/chocolat.jpeg';
+import img4 from '/images/chocolat.jpeg';
+import img5 from '/images/chocolat.jpeg';
+import img6 from '/images/chocolat.jpeg';
+import img7 from '/images/chocolat.jpeg';
+import img8 from '/images/chocolat.jpeg';
+import img9 from '/images/chocolat.jpeg';
 // import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 
 
@@ -26,7 +27,7 @@ function Diaporama() {
  
     return (
         <Swiper
-        slidesPerView={3}
+        slidesPerView={1}
         spaceBetween={10}
         // effect={'coverflow'}
         grabCursor={true}
@@ -42,7 +43,7 @@ function Diaporama() {
         autoplay={true}
         pagination={true}
         modules={[EffectCoverflow, Pagination, Autoplay]}
-        className="mySwiper section-container rounded-3xl mt-20"
+        className="mySwiper section-container mt-20"
        
       >
             <SwiperSlide><img src={img} className='img-diaporama' /></SwiperSlide>

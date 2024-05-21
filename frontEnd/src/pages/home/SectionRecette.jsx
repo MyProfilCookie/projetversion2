@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCookieBite } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 import { faStar } from '@fortawesome/free-solid-svg-icons'
-import logo from '/avatar.jpg'
+import logo from '/avatar.webp'
 
 function SectionRecette() {
     return (
@@ -50,7 +50,7 @@ function SectionRecette() {
                                 </div>
                             </div>
                         </div>
-                        <div className='space-0'>
+                        <div className='space-0 mb-8'>
                             <h5 className='text-lg font-semibold'>Avis de nos petits chefs</h5>
                             <div className='flex items-center gap-2'>
                                 <FontAwesomeIcon icon={faStar} className='hover-scale-110 transition duration-300 text-yellow' />

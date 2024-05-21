@@ -3,14 +3,9 @@
   justify-content: space-between;
   padding: 0 1rem;
   align-items: center;
-  // background-color: #d7816a;
   background-color: rgb(75, 32, 65);
   color: #ffffff;
-
-  box-shadow:
-    0 2px 4px 0 rgba(0, 0, 0, 0.1),
-    0 2px 4px 0 rgba(0, 0, 0, 0.06);
-  // padding: 20px 0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 2px 4px 0 rgba(0, 0, 0, 0.06);
   width: 100%;
   margin-bottom: 20px;
 }
@@ -150,7 +145,7 @@ summary {
   flex-direction: column;
 }
 
-.dropdown .dropdown-content {
+.dropdown:hover .dropdown-content {
   display: flex;
   background-color: #ffffff;
 }
@@ -184,9 +179,9 @@ summary {
   color: #6366f1; /* hover:text-blue-500 */
 }
 
-// .dropdown:hover .dropdown-content {
-//   display: block;
-// }
+.dropdown:hover .dropdown-content {
+  display: block;
+}
 
 .menu-horizontal {
   align-items: center;

@@ -40,12 +40,12 @@ function Categories() {
 
             </div>
 
-            <div className='flex flex-wrap gap-4 md-flex-col justify-around items-center mt-12'>
+            <div className='gap-4 items-center mt-12 mobile-grid '>
                 {
                     Category.map((category) => {
-                        return <div key={category.id} className=' shadow-lg rounded-md py-6 w-112 media-w-64 bg-white rounded-md mx-auto text-center cursor-pointer' >
-                            <div className='media-w-64 w-112 mx-auto'>
-                                <img className='media-w-64 w-112' src={category.image} alt={category.name} />
+                        return <div key={category.id} className=' shadow-lg rounded-md py-6 w-112 media-w-96 media-w-64 bg-white rounded-md mx-auto text-center cursor-pointer mb-10' >
+                            <div className='media-w-96 media-w-64 w-112 mx-auto'>
+                                <img className='media-w-96 media-w-64 w-112' src={category.image} alt={category.name} />
                             </div>
                             <div className='mt-5 space-y-1 '>
                                 <h5 className='text-center font-bold'>{category.name}</h5>

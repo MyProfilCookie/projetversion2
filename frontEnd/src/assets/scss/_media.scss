@@ -30,9 +30,29 @@
         width: 80%;
     }
 }
+.media-grid-cols-1 {
+    @media (min-width: 768px) {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+}
 .media-grid-cols-3 {
     @media (min-width: 768px) {
         grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+.media-grid-cols-4 {
+    @media (min-width: 768px) {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+.media-grid-cols-2 {
+    @media (min-width: 768px) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+.media-grid-cols-1 {
+    @media (min-width: 768px) {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
     }
 }
 .media-justify-between {
@@ -45,6 +65,7 @@
         margin-bottom: 2.5rem;
     }
 }
+
 .media-mt-10 {
     @media (min-width: 768px) {
         margin-top: 2.5rem;
@@ -60,8 +81,17 @@
         width: 16rem;
     }
 }
+
+.media-w-96 {
+    @media (min-width: 768px) {
+        width: 24rem;
+    }
+}
 .media-w-4-5 {
     @media (min-width: 768px) {
         width: 80%;
     }
 }
+
+
+// tablette 

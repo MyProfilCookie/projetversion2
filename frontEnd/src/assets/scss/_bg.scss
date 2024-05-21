@@ -22,6 +22,7 @@
 // Classes pour les dégradés colorés
 .bg-tropical { @include gradient-tropical; }
 .bg-northern-lights { @include gradient-northern-lights; }
+.bg-northern-lights-renverse { @include gradient-northern-lights-reverse; }
 .bg-sunset { @include gradient-sunset; }
 .bg-spring { @include gradient-spring; }
 .bg-rainbow { @include gradient-rainbow; }
