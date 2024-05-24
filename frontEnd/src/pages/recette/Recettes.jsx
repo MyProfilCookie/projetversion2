@@ -1,6 +1,8 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import Cards from '../../components/Cards';
+import { LikeRecetteProvider } from '../../contexts/LikeRecetteProvider';
+
 
 function Recettes() {
   const [recettes, setRecettes] = useState([]);
@@ -86,85 +88,94 @@ function Recettes() {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
-    <div>
-      <div className='container mx-auto px-4 xl-px-24 max-w-screen-2xl'>
-        <div className='py-36 flex flex-col items-center justify-center gap-8'>
-          <div className='text-center space-y-7 px-4'>
-            <h2 className='media-text-5xl text-4xl font-bold media-leading-snug leading-snug'>La pâtisserie <span className='text-red'>gourmande</span> <span className='text-red'>elit</span>.</h2>
-            <p className='text-xl text-gray text-xl media-w-4-5 mx-auto'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-          </div>
-        </div>
-      </div>
-
-      <div className="section-container align-center mx-auto">
-        {/* barre de recherche */}
-        <div className='text-center mb-10'>Bouton de recherche</div>
-        <div className='container'>
-          <div className='search-bar'>
-            <input
-              type="text"
-              placeholder="Rechercher une recette"
-              value={search}
-              onChange={handleSearchChange}
-              className="form-control"
-            />
-          </div>
-          <div>
-            {filteredRecettes.length > 0 ? (
-              <p className="search-results-count">
-                {filteredRecettes.length} recette{filteredRecettes.length > 1 ? 's' : ''} trouvée{filteredRecettes.length > 1 ? 's' : ''}
+    <LikeRecetteProvider>
+      <div className='p-10 '>
+        <div className="container mx-auto px-4 xl-px-24 max-w-screen-2xl ">
+          <div className="py-36 flex flex-col items-center justify-center gap-8">
+            <div className="text-center space-y-7 px-4">
+              <h2 className="media-text-5xl text-4xl font-bold media-leading-snug leading-snug">
+                La pâtisserie <span className="text-red">gourmande</span> <span className="text-red">elit</span>.
+              </h2>
+              <p className="text-xl text-gray text-xl media-w-4-5 mx-auto">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
               </p>
-            ) : (
-              <p className="search-results-count">Aucune recette trouvée</p>
-            )}
+            </div>
           </div>
         </div>
 
-        <div className='flex flex-wrap media-justify-between items-center flex-row mx-auto'>
-          <div className='flex mb-10 media-mb-10 media-mt-10 gap-4 flex-wrap'>
-            <button onClick={() => filterRecettes('toutes')} className={searchOptions === 'toutes' ? 'button active' : 'btn'}>Toutes</button>
-            <button onClick={() => filterRecettes('Pains et viennoiserie')} className={searchOptions === 'Pains et viennoiserie' ? 'button active' : 'btn'}>Pains et viennoiserie</button>
-            <button onClick={() => filterRecettes('Chocolat')} className={searchOptions === 'Chocolat' ? 'button active' : 'btn'}>Chocolat</button>
-            <button onClick={() => filterRecettes('Gourmandises')} className={searchOptions === 'Gourmandises' ? 'button active' : 'btn'}>Gourmandises</button>
-            <button onClick={() => filterRecettes('Fruits')} className={searchOptions === 'Fruits' ? 'button active' : 'btn'}>Fruits</button>
+        <div className="section-container align-center mx-auto">
+          {/* barre de recherche */}
+          <div className="text-center mb-10">Bouton de recherche</div>
+          <div className="container">
+            <div className="search-bar">
+              <input
+                type="text"
+                placeholder="Rechercher une recette"
+                value={search}
+                onChange={handleSearchChange}
+                className="form-control"
+              />
+            </div>
+            <div>
+              {filteredRecettes.length > 0 ? (
+                <p className="search-results-count">
+                  {filteredRecettes.length} recette{filteredRecettes.length > 1 ? 's' : ''} trouvée{filteredRecettes.length > 1 ? 's' : ''}
+                </p>
+              ) : (
+                <p className="search-results-count">Aucune recette trouvée</p>
+              )}
+            </div>
           </div>
 
-          <div className='mb-10 media-mb-10 media-mt-10 flex'>
-            <select
-              className="form-select form-select-lg btn"
-              name="sort"
-              id="sort"
-              onChange={(e) => showCategory(e.target.value)}
-              value={searchOptions}
+          <div className="flex flex-wrap media-justify-between items-center flex-row mx-auto">
+            <div className="flex mb-10 media-mb-10 media-mt-10 gap-4 flex-wrap">
+              <button onClick={() => filterRecettes('toutes')} className={searchOptions === 'toutes' ? 'button active' : 'btn'}>Toutes</button>
+              <button onClick={() => filterRecettes('Pains et viennoiserie')} className={searchOptions === 'Pains et viennoiserie' ? 'button active' : 'btn'}>Pains et viennoiserie</button>
+              <button onClick={() => filterRecettes('Chocolat')} className={searchOptions === 'Chocolat' ? 'button active' : 'btn'}>Chocolat</button>
+              <button onClick={() => filterRecettes('Gourmandises')} className={searchOptions === 'Gourmandises' ? 'button active' : 'btn'}>Gourmandises</button>
+              <button onClick={() => filterRecettes('Fruits')} className={searchOptions === 'Fruits' ? 'button active' : 'btn'}>Fruits</button>
+            </div>
+
+            <div className="mb-10 media-mb-10 media-mt-10 flex">
+              <select
+                className="form-select form-select-lg btn"
+                name="sort"
+                id="sort"
+                onChange={(e) => showCategory(e.target.value)}
+                value={searchOptions}
+              >
+                <option value="toutes">Toutes</option>
+                <option value="difficile">Difficile</option>
+                <option value="facile">Facile</option>
+                <option value="moyenne">Moyenne</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Affichage des recettes */}
+          <div className="cards-grid">
+            {currentRecettes.map((item, index) => (
+              <Cards key={index} item={item} />
+            ))}
+          </div>
+        </div>
+
+        <div className="flex justify-center mb-10 gap-4 mt-10">
+          {Array.from({ length: Math.ceil(filteredRecettes.length / itemsPerPage) }).map((_, index) => (
+            <button
+              key={index + 1}
+              onClick={() => paginate(index + 1)}
+              className={`mx-1 px-2 py-1 rounded-full ${currentPage === index + 1 ? 'btn-primary' : 'btn'}`}
             >
-              <option value="toutes">Toutes</option>
-              <option value="difficile">Difficile</option>
-              <option value="facile">Facile</option>
-              <option value="moyenne">Moyenne</option>
-            </select>
-          </div>
-        </div>
-
-        {/* Affichage des recettes */}
-        <div className='grid grid-cols-2 media-grid-cols-3 lg-grid-cols-4 gap-4 mb-10'>
-          {currentRecettes.map((item, index) => (
-            <Cards key={index} item={item} />
+              {index + 1}
+            </button>
           ))}
         </div>
       </div>
-
-      <div className='flex justify-center mb-10 gap-4'>
-        {Array.from({ length: Math.ceil(filteredRecettes.length / itemsPerPage) }).map((_, index) => (
-          <button
-            key={index + 1}
-            onClick={() => paginate(index + 1)}
-            className={`mx-1 px-2 py-1 rounded-full ${currentPage === index + 1 ? 'btn-primary' : 'btn'}`}
-          >
-            {index + 1}
-          </button>
-        ))}
-      </div>
-    </div>
+    </LikeRecetteProvider>
   );
 }
 

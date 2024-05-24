@@ -1,8 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import recettes from '../../../public/recettes'; // Assurez-vous que le chemin est correct
-
+import recettes from '../../../public/recettes'; 
 function RecetteDetail() {
     const { id } = useParams();
     const [recette, setRecette] = useState(null);

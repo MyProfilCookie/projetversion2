@@ -119,7 +119,13 @@ const RecipeManagement = () => {
         </div>
         <div>
           <label>Catégorie</label>
-          <input type="text" name="category" value={formData.category} onChange={handleChange} required />
+          <select name="category" value={formData.category} onChange={handleChange} required>
+            <option value="">Sélectionner</option>
+            <option value="Chocolat">Chocolat</option>
+            <option value="Gourmandises">Gourmandises</option>
+            <option value="Pains et viennoiserie">Pains et viennoiserie</option>
+            <option value="Fruits">Fruits</option>
+          </select>
         </div>
         <div>
           <label>Image URL</label>
@@ -130,6 +136,5 @@ const RecipeManagement = () => {
     </div>
   );
 };
-
 
 export default RecipeManagement;

@@ -1,112 +1,114 @@
+/* Mise en page de la grille */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+@media (min-width: 576px) {
+  .cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .cards-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Styles pour les cartes */
 .card {
   position: relative;
   display: flex;
   flex-direction: column;
-  border-radius: var(--rounded-box, 1rem);
+  border-radius: 15px; /* Ajout du border-radius */
+  background-color: #fdf5e6; /* Couleur de fond douce */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+  overflow: hidden;
 }
-.card-compact .card-body-cards {
-  padding: 1rem;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.card img {
+  // border-top-left-radius: 15px;
+  // border-top-right-radius: 15px;
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
 }
 
 .card-body-cards {
-  display: flex;
-  flex: 1 1 auto;
-  flex-direction: column;
+  padding: 1rem;
   text-align: center;
-}
-.bton-primary {
-  background-color: #ff4747;
-  border: none;
-  color: #fff;
-  cursor: pointer;
 }
 
-.card-compact .card-title {
-  margin-bottom: 0.25rem;
-}
 .card-title {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
   font-size: 1.25rem;
-  line-height: 1.75rem;
   font-weight: 600;
+  margin-bottom: 0.5rem;
 }
-.justify-end {
-  justify-content: flex-end;
-}
-.justify-center {
-  justify-content: center;
-}
+
 .card-actions {
   display: flex;
-  flex-wrap: wrap;
-  // align-items: flex-start;
-  gap: 4rem;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
 }
-.bton {
-  display: inline-flex;
+
+.like-button, .dislike-button {
+  padding: 10px;
+  border-radius: 50%;
+  transition: background-color 0.3s, color 0.3s;
+  cursor: pointer;
+  display: flex;
   align-items: center;
   justify-content: center;
-  // padding: 0.375rem 0.75rem;
-  font-size: 0.875rem;
-  font-weight: 600;
-  line-height: 1.5;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: middle;
-  user-select: none;
-  border: 1px solid transparent;
-  border-radius: 0.25rem;
-  transition:
-    color 0.15s ease-in-out,
-    background-color 0.15s ease-in-out,
-    border-color 0.15s ease-in-out,
-    box-shadow 0.15s ease-in-out;
+  font-size: 1.5rem;
 }
-.btn-primary {
-  color: #fff;
-  background-color: #ff4747;
-  border-color: #ff4747;
+
+.like-button {
+  background-color: white;
+  color: gray;
+  border: 2px solid gray;
 }
-.btn-primary:hover {
-  color: #fff;
-  background-color: #ff4747;
-  border-color: #ff4747;
+
+.like-button.liked {
+  background-color: red;
+  color: white;
+  border-color: red;
 }
-.h-48 {
-  height: 12rem;
+
+.like-button:hover {
+  background-color: lightcoral;
+  color: white;
 }
-.h-52 {
-  height: 13rem;
+
+.dislike-button {
+  background-color: white;
+  color: gray;
+  border: 2px solid gray;
 }
-.h-60 {
-  height: 15rem;
+
+.dislike-button.disliked {
+  background-color: green;
+  color: white;
+  border-color: green;
 }
-.h-6 {
-  height: 1.5rem;
+
+.dislike-button:hover {
+  background-color: lightgreen;
+  color: white;
 }
-.w-6 {
-  width: 1.5rem;
-}
-.h-96 {
-  height: 24rem;
-}
-.h-100 {
-  height: 100%;
-}
-.h300 {
-  height: 300px;
-}
-.h-46 {
-  height: 46rem;
-}
+
 .badge {
   display: inline-block;
   padding: 0.5em 0.4em;
-  // font-size: 75%;
   font-weight: 700;
   line-height: 1;
   text-align: center;
@@ -120,30 +122,41 @@
   color: #fff;
   background-color: #ff4747;
 }
+
 .badge-primary:hover {
   color: #fff;
   background-color: #ff4747;
 }
+
 .badge-secondary {
   color: #fff;
   background-color: #6365f15a;
 }
+
 .badge-secondary:hover {
   color: #fff;
   background-color: #6365f15a;
 }
+
 .badge-accent {
   color: #fff;
   background-color: #28a745;
 }
+
 .badge-accent:hover {
   color: #fff;
   background-color: #28a745;
 }
-.card-img-top {
+
+/* Style pour la notification */
+.notification {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  border-top-left-radius: calc(0.25rem - 1px);
-  border-top-right-radius: calc(0.25rem - 1px);
-  object-fit: cover;
-  object-position: top;
+  background-color: blue;
+  color: white;
+  text-align: center;
+  padding: 8px;
+  z-index: 10;
 }

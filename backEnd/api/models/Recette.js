@@ -63,6 +63,7 @@ const recetteSchema = new Schema(
       required: true,
       minlenght: 1,
       maxlenght: 10,
+      enum: ["Chocolat", "Gourmandises", "Pains et viennoiserie", "Fruits"],
     },
     image: {
       type: String,

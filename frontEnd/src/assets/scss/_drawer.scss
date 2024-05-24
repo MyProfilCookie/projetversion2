@@ -100,19 +100,12 @@
   transform: translateX(0);
 }
 
-// #my-drawer-4:checked ~ .drawer-content {
-//   transform: translateX(-80%);
-// }
-
 .drawer-side {
   position: fixed;
   top: 0;  // 4rem = 64px c'etait à 0 à la base
   right: 0;
   height: 100%;
-  background-color: rgb(231, 217, 203);
-  // background-color: rgb(218, 191, 191);
-  // background-color: rgba(123, 114, 114, 0.22);
-  // background-color: rgba(229, 49, 49, 0.13);
+  background-color: rgba(231, 203, 212, 0.94);
   color: #1f2937;
   transform: translateX(100%);
   transition: transform 0.3s ease;
@@ -187,12 +180,6 @@
     object-fit: cover;
   }
 }
-
-// .drawer-button:hover {
-//   transform: scale(1.1);
-//   background-color: #e9ecef;
-//   right: 0;
-// }
 .menu-drawer :where(li:not(.menu-title)>*:not(ul,details,.menu-title,.btn)), .menu-drawer :where(li:not(.menu-title)>details>summary:not(.menu-title)) {
   border-radius: var(--rounded-btn, .5rem);
   padding: .5rem 1rem;

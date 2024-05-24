@@ -12,14 +12,16 @@ import {
     QueryClient,
     QueryClientProvider,
 } from '@tanstack/react-query'
+import { LikeRecetteProvider } from './contexts/LikeRecetteProvider.jsx'
 
 const queryClient = new QueryClient()
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <AuthProvider>
-        <QueryClientProvider client={queryClient}>
-            <RouterProvider router={router} />
-        </QueryClientProvider>
-
+        <LikeRecetteProvider>
+            <QueryClientProvider client={queryClient}>
+                <RouterProvider router={router} />
+            </QueryClientProvider>
+        </LikeRecetteProvider>
     </AuthProvider>
 )
