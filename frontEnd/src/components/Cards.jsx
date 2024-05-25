@@ -43,7 +43,7 @@ function Cards({ item }) {
                 />
             </figure>
 
-            <div className="card-body-cards">
+            <Link to={`/recettes/${item.id}`} className="card-body-cards">
                 <Link to={`/recettes/${item.id}`} className="mx-auto">
                     <h3 className="card-title">{item.titre}</h3>
                 </Link>
@@ -69,7 +69,7 @@ function Cards({ item }) {
                         {item.difficulte === 'difficile' && <span className="badge badge-accent">{item.difficulte}</span>}
                     </p>
                 </div>
-            </div>
+            </Link>
         </div>
     );
 }

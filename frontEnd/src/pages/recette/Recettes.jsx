@@ -91,7 +91,7 @@ function Recettes() {
     <LikeRecetteProvider>
       <div className='p-10 '>
         <div className="container mx-auto px-4 xl-px-24 max-w-screen-2xl ">
-          <div className="py-36 flex flex-col items-center justify-center gap-8">
+          <div className="flex flex-col items-center justify-center gap-8">
             <div className="text-center space-y-7 px-4">
               <h2 className="media-text-5xl text-4xl font-bold media-leading-snug leading-snug">
                 La pâtisserie <span className="text-red">gourmande</span> <span className="text-red">elit</span>.
@@ -108,7 +108,7 @@ function Recettes() {
 
         <div className="section-container align-center mx-auto">
           {/* barre de recherche */}
-          <div className="text-center mb-10">Bouton de recherche</div>
+          <div className="text-center mb-10"><p className="subtitle">Trouver une recette</p></div>
           <div className="container">
             <div className="search-bar">
               <input
