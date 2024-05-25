@@ -14,7 +14,8 @@ function RecetteDetail() {
     const { user } = useAuth();
     const [recette, setRecette] = useState(null);
     const [comment, setComment] = useState('');
-    const [comments, setComments] = useState([]); 
+    const [comments, setComments] = useState([]); // Initialize as an array
+    const [checkedSteps, setCheckedSteps] = useState([]);
 
     useEffect(() => {
         const recetteId = parseInt(id, 10);
@@ -26,10 +27,10 @@ function RecetteDetail() {
     const fetchComments = async (recetteId) => {
         try {
             const response = await axios.get(`/api/recettes/${recetteId}/comments`);
-            setComments(response.data || []); 
+            setComments(response.data || []); // Ensure it's an array
         } catch (error) {
             console.error('Error fetching comments:', error);
-            setComments([]); 
+            setComments([]); // Ensure it's an array even in case of error
         }
     };
 
@@ -46,6 +47,18 @@ function RecetteDetail() {
         } catch (error) {
             console.error('Error posting comment:', error);
         }
+    };
+
+    const handleStepCheck = (index) => {
+        setCheckedSteps((prevCheckedSteps) => {
+            const newCheckedSteps = [...prevCheckedSteps];
+            if (newCheckedSteps.includes(index)) {
+                newCheckedSteps.splice(newCheckedSteps.indexOf(index), 1);
+            } else {
+                newCheckedSteps.push(index);
+            }
+            return newCheckedSteps;
+        });
     };
 
     if (!recette) {
@@ -88,19 +101,26 @@ function RecetteDetail() {
                     <h3>Étape par étape</h3>
                     <ol>
                         {recette.instructions.map((step, index) => (
-                            <li key={index}>{step}</li>
+                            <li key={index} className={checkedSteps.includes(index) ? 'checked' : ''}>
+                                <input
+                                    type="checkbox"
+                                    checked={checkedSteps.includes(index)}
+                                    onChange={() => handleStepCheck(index)}
+                                />
+                                {step}
+                            </li>
                         ))}
                     </ol>
                 </div>
                 <div className="comments-section">
-                    <h3 className='text-center'>Commentaires</h3>
+                    <h3>Commentaires</h3>
                     <ul>
                         {Array.isArray(comments) && comments.map((c, index) => (
                             <li key={index}>{c.comment}</li>
                         ))}
                     </ul>
                     {user && (
-                        <form onSubmit={handleCommentSubmit} style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                        <form onSubmit={handleCommentSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                             <textarea
                                 value={comment}
                                 onChange={(e) => setComment(e.target.value)}
@@ -109,7 +129,7 @@ function RecetteDetail() {
                                 cols={30}
                                 rows={5}
                             />
-                            <button type="submit" style={{ alignSelf: 'center', padding: '5px 10px', border: 'none', borderRadius: '5px', cursor: 'pointer', background: '#ff6347', color: 'white' }}>Envoyer</button>
+                            <button type="submit" style={{ alignSelf: 'center', padding: '0.5rem 1rem', borderRadius: '0.5rem', fontWeight: 'bold', cursor: 'pointer', transition: 'background-color 0.3s',backgroundColor: '#ff6347', color: '#fff', border: 'none' }}>Envoyer</button>
                         </form>
                     )}
                 </div>

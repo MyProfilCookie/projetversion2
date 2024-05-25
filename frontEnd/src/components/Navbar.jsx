@@ -34,26 +34,26 @@ const Navbar = () => {
   ];
 
   return (
-    <header className={`max-w-screen-2xl sticky top-0 left-0 right-0 transition-all duration-300 ease-in-out z-10000 py-4 ${isSticky ? 'shadow-md' : ''}`}>
-      <div className="navbar bg-base-100">
-        <a href='/'>
+    <header id="navbar-header" className={`sticky top-0 left-0 right-0 transition-all duration-300 ease-in-out z-10000 py-4 ${isSticky ? 'shadow-md' : ''}`}>
+      <div id="navbar" className="navbar bg-base-100">
+        <a href='/' id="navbar-logo">
           <img src={logo} alt="logo" style={{ width: '60px' }} className='logo-react' />
         </a>
-        <div className="navbar-start">
-          <div className="dropdown">
-            <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden" onClick={toggleMenu}>
-              <FontAwesomeIcon icon={isOpen ? faTimes : faBars} size="2xl" style={{ color: '#fff' }} />
+        <div id="navbar-start" className="navbar-start">
+          <div id="navbar-dropdown" className={`dropdown ${isOpen ? 'open' : ''}`}>
+            <div tabIndex={0} role="button" className="btn btn-ghost" onClick={toggleMenu}>
+              <FontAwesomeIcon icon={isOpen ? faTimes : faBars} size="2xl" style={{height: '50px' }} className='md-hidden' />
             </div>
-            <ul tabIndex={0} className={`dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52 ${isOpen ? 'block' : 'hidden'}`}>
+            <ul tabIndex={0} className="dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
               {navItems.map(item => (
-                <li className="py-1 mt-3 mb-3"  key={item.id}>
-                  <NavLink to={item.link} onClick={() => setIsOpen(false)} >{item.name}</NavLink>
+                <li key={item.id} className="py-1 mt-3 mb-3">
+                  <NavLink to={item.link} onClick={() => setIsOpen(false)}>{item.name}</NavLink>
                 </li>
               ))}
             </ul>
           </div>
         </div>
-        <div className="navbar-center hidden lg:flex px-4">
+        <div id="navbar-center" className="navbar-center hidden lg:flex px-4">
           <ul className="menu menu-horizontal px-1">
             {navItems.map(item => (
               <li key={item.id}>
@@ -62,7 +62,7 @@ const Navbar = () => {
             ))}
           </ul>
         </div>
-        <div className="navbar-end">
+        <div id="navbar-end" className="navbar-end">
           {user ? <Profile user={user} /> : <Modal />}
         </div>
       </div>

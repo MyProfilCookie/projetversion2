@@ -1,10 +1,10 @@
-
-$primary-color: #ff6347; // Tomate
+// variables
+$primary-color: #ff6347; 
 $secondary-color: #333;
-$bg-color: #f4f1ea; // Background color - Linen
-$card-bg-color: #fffaf0; // Floral White
+$bg-color: #f4f1ea; 
+$card-bg-color: #fffaf0; 
 $input-border-color: #ccc;
-$input-bg-color: #f5deb3; // Wheat
+$input-bg-color: #f5deb3; 
 $box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
 #recette-detail {
@@ -15,7 +15,7 @@ $box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin: 0 auto;
   padding: 20px;
   background: $bg-color;
-  // border-radius: 10px;
+  border-radius: 10px;
 
   > .header {
     margin-top: 2rem;
@@ -117,6 +117,18 @@ $box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
           padding: 10px;
           border-radius: 5px;
           margin-bottom: 8px;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+
+          &.checked {
+            text-decoration: line-through;
+            color: darken($input-bg-color, 20%);
+          }
+
+          > input[type="checkbox"] {
+            margin-right: 10px;
+          }
         }
       }
 
@@ -149,8 +161,8 @@ $box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             font-size: 1rem;
             color: $secondary-color;
             background-color: $input-bg-color;
-            resize: vertical; 
-            min-height: 100px; 
+            resize: vertical; /* Allow vertical resizing */
+            min-height: 100px; /* Set a minimum height */
           }
 
           > button {
