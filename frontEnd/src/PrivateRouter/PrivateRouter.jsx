@@ -1,27 +1,21 @@
-/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import React, {useContext, } from 'react'
-import { AuthContext } from '../contexts/AuthProvider'
-import {useLocation, Navigate  } from "react-router-dom"
-import LoadingScreen from '../components/LoadingScreen';
+// PrivateRouter.jsx
+import React from 'react';
+import { Navigate, Outlet } from 'react-router-dom';
+import useAuth from '../hooks/useAuth';
 
-function PrivateRouter({children}) {
-    const {user, loading } = useContext(AuthContext);
-    const location = useLocation();
+const PrivateRouter = () => {
+  const { user, loading } = useAuth();
 
-    
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
-    if(loading) {
-        return (
-        <LoadingScreen />
-        )
-    }
-    if(user) {
-        return children
-    }
-  return (
-   <Navigate to="/register" state={{from: location}} replace />
-  )
-}
+  if (!user) {
+    return <Navigate to="/login" />;
+  }
 
-export default PrivateRouter
+  return <Outlet />;
+};
+
+export default PrivateRouter;

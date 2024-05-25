@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const Recette = require("../models/Recette");
 const createError = require("http-errors");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
@@ -7,19 +8,19 @@ const JWTGenerator = require("../Utils/JWTGenerator");
 const getAllUsers = async (req, res, next) => {
   try {
     const result = await User.find({});
-      res.status(200).json({
-        status: true,
-        result,
-      });
-    } catch (error) {
-      next(createError(500, error.message));
-    }
-
+    res.status(200).json({
+      status: true,
+      result,
+    });
+  } catch (error) {
+    next(createError(500, error.message));
+  }
 };
+
 const getMe = async (req, res, next) => {
   try {
     const me = req.user;
-    if(!me) {
+    if (!me) {
       next(createError(404, "Utilisateur introuvable"));
     }
     res.status(200).json({
@@ -92,6 +93,7 @@ const createUser = async (req, res, next) => {
     next(createError(500, error.message));
   }
 };
+
 const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -142,13 +144,14 @@ const updateUser = async (req, res, next) => {
         { new: true }
       );
       if (updateUser.nModified > 0) {
-        const updatedUser = await User.findById(req.params.id).select("-password");
+        const updatedUser = await User.findById(req.params.id).select(
+          "-password"
+        );
         res.status(200).json({
           status: true,
           message: "Utilisateur mis à jour avec succes",
           result: updatedUser,
         });
-
       } else {
         res.status(200).json({
           status: false,
@@ -163,7 +166,7 @@ const updateUser = async (req, res, next) => {
 };
 
 const deleteUser = async (req, res, next) => {
-  const {id} = req.params;
+  const { id } = req.params;
   try {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       next(createError(400, "ID n'existe pas"));
@@ -193,7 +196,30 @@ const deleteAllUsers = async (req, res, next) => {
   } catch (error) {
     next(createError(500, `quelque chose s'est mal passe: ${error.message}`));
   }
-};  
+};
+
+// Nouvelle fonction pour obtenir les recettes publiées par l'utilisateur
+const getUserRecipes = async (req, res, next) => {
+  try {
+    const userRecipes = await Recette.find({ user: req.params.id });
+    res.status(200).json(userRecipes);
+  } catch (error) {
+    next(createError(500, error.message));
+  }
+};
+
+const getUserLikedDislikedRecipes = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id).populate('likedRecipes').populate('dislikedRecipes');
+    res.status(200).json({
+      likedRecipes: user.likedRecipes || [],
+      dislikedRecipes: user.dislikedRecipes || []
+    });
+  } catch (error) {
+    next(createError(500, error.message));
+  }
+};
+
 
 module.exports = {
   getAllUsers,
@@ -206,4 +232,6 @@ module.exports = {
   getOneUser,
   getMe,
   postCommentaire,
+  getUserRecipes,
+  getUserLikedDislikedRecipes
 };
