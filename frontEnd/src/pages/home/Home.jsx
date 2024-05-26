@@ -18,6 +18,8 @@ const Home = () => {
       <SectionRecette />
       <OurServices />
     </div>
+   
+    
   )
 }
 

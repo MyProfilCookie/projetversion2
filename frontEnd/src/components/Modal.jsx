@@ -84,7 +84,7 @@ const from = location.state?.from?.pathname || '/'
                                 <form
                                     onSubmit={handleSubmit(onSubmit)} className="card-body" method='dialog'>
                                     <h3 className="font-bold flex justify-center align-center 
-                                    "><img src="./logo.svg" alt="logo" className="w-14" />Se connecter</h3>
+                                    "><img src="/logo.svg" alt="logo" className="w-14" />Se connecter</h3>
                                     <button onClick={closeModal} className="bton cursor-pointer hover-scale-110 buton-circle absolute top-0 right-0">x</button>
                                     <div className="form-control">
                                         <label className="label">

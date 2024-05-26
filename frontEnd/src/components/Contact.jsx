@@ -72,7 +72,7 @@ const Contact = () => {
         </div>
       </div>
 
-      <div className="section-container align-center mx-auto">
+      <div className="section-container align-center mx-auto mt-6">
         <form onSubmit={handleSubmit} className="form contact-form" encType="multipart/form-data">
           {errors.length > 0 && (
             <div id="messagesErrors" className="error">
@@ -133,7 +133,7 @@ const Contact = () => {
               id="message"
               name="message"
               placeholder=""
-              rows="5"
+              rows="6"
               className="form__input"
               value={message}
               onChange={handleInputChange(setMessage)}

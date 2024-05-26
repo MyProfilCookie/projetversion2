@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import Cards from '../../components/Cards';
 import { LikeRecetteProvider } from '../../contexts/LikeRecetteProvider';
 
-
 function Recettes() {
   const [recettes, setRecettes] = useState([]);
   const [filteredRecettes, setFilteredRecettes] = useState(recettes);
@@ -89,8 +88,8 @@ function Recettes() {
 
   return (
     <LikeRecetteProvider>
-      <div className='p-10 '>
-        <div className="container mx-auto px-4 xl-px-24 max-w-screen-2xl ">
+      <div className='p-10'>
+        <div className="container mx-auto px-4 xl-px-24 max-w-screen-2xl">
           <div className="flex flex-col items-center justify-center gap-8">
             <div className="text-center space-y-7 px-4">
               <h2 className="media-text-5xl text-4xl font-bold media-leading-snug leading-snug">
@@ -107,7 +106,6 @@ function Recettes() {
         </div>
 
         <div className="section-container align-center mx-auto">
-          {/* barre de recherche */}
           <div className="text-center mb-10"><p className="subtitle">Trouver une recette</p></div>
           <div className="container">
             <div className="search-bar">
@@ -155,7 +153,6 @@ function Recettes() {
             </div>
           </div>
 
-          {/* Affichage des recettes */}
           <div className="cards-grid">
             {currentRecettes.map((item, index) => (
               <Cards key={index} item={item} />
