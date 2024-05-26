@@ -151,6 +151,9 @@ h6 {
 .b-gradient-to-b {
   background-image: linear-gradient(to bottom, #eec1c1, rgba(255, 255, 255, 0));
 }
+.pb-8 {
+  padding-bottom: 6rem;
+}
 
 .py-24 {
   padding-top: 6rem;
@@ -329,6 +332,19 @@ h6 {
 .py-6 {
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
+}
+.pb-6 {
+  padding-top: 1rem;
+  padding-bottom: 1.5rem;
+}
+.pb-8 {
+  padding-bottom: 2rem;
+}
+.pt-6 {
+  padding-top: 1.5rem;
+}
+.font-bold {
+  font-weight: 700;
 }
 .font-semibold {
   font-weight: 600;
@@ -725,7 +741,7 @@ h6 {
   text-align: center;
 }
 .section-container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 .uppercase {
@@ -1188,6 +1204,12 @@ figure {
 }
 .mt-8 {
   margin-top: 2rem;
+}
+.-mt-24 {
+  margin-top: -6rem;
+}
+.-mt-18 {
+  margin-top: -4.5rem;
 }
 .mt-10 {
   margin-top: 2.5rem;

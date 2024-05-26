@@ -56,19 +56,19 @@ function Profile({ user }) {
                 </div>
                 <div className="drawer-side">
                     <label htmlFor="my-drawer-4" aria-label="close sidebar" className="drawer-overlay"></label>
-                    <ul className="menu-drawer p-4 w-80 min-h-full">
+                    <ul className="menu-drawer min-h-full">
                         {/* Sidebar content here */}
-                        <li style={{ fontSize: '1.3rem' }}>
+                        <li style={{ fontSize: '1rem' }}>
                             <Link to={`/dashboard/${user.uid}`}>
                                 <FontAwesomeIcon icon={faUser} size='2xl' /> Profile
                             </Link>
                         </li>
-                        <li style={{ fontSize: '1.3rem' }}>
+                        <li style={{ fontSize: '1rem' }}>
                             <Link to='/my-recipe'>
                                 <FontAwesomeIcon icon={faClipboardList} size='2xl' /> Mes recettes
                             </Link>
                         </li>
-                        <li style={{ fontSize: '1.3rem' }}>
+                        <li style={{ fontSize: '1rem' }}>
                             <a onClick={handleLogout}>
                                 <FontAwesomeIcon icon={faRightFromBracket} size='2xl' /> Logout
                             </a>
