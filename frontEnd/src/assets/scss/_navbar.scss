@@ -9,11 +9,13 @@ $hover-color: #6366f1;
 #navbar-header {
   .navbar {
     display: flex;
-    justify-content: space-between;
-    padding: 1rem 0;
+    justify-content: space-around;
+    // padding: 1rem 0;
     align-items: center;
-    background-color: $bg-color;
-    color: #ffffff;
+    background-color: #A7001E;
+    // background-color: #392E2C;
+    // background-color: $bg-color;
+    // color: #ffffff;
     box-shadow:
       0 2px 4px 0 rgba(0, 0, 0, 0.1),
       0 2px 4px 0 rgba(0, 0, 0, 0.06);
@@ -48,7 +50,7 @@ $hover-color: #6366f1;
       display: block;
 
       &:hover {
-        color: $hover-color;
+        color: #392E2C;
       }
     }
 
@@ -104,7 +106,7 @@ $hover-color: #6366f1;
         text-transform: uppercase;
 
         &:hover {
-          color: $hover-color;
+          color: #392E2C;
         }
       }
     }
@@ -114,17 +116,17 @@ $hover-color: #6366f1;
     .btn-primary-login {
       padding: 0.8rem 1.5rem;
       margin: 0 10px;
-      border-radius: 20px;
-      background-color: $primary-color;
+      // border-radius: 20px;
+      background-color: transparent;
       color: #fff;
       cursor: pointer;
 
-      &:hover {
-        background-color: darken($primary-color, 10%);
-        color: #fff;
-        scale: 1.1;
-        transition: scale 0.3s;
-      }
+      // &:hover {
+      //   background-color: darken($primary-color, 10%);
+      //   color: #fff;
+      //   scale: 1.1;
+      //   transition: scale 0.3s;
+      // }
     }
   }
 
@@ -136,6 +138,10 @@ $hover-color: #6366f1;
     .md-hidden {
       display: none;
     }
+    
+      .navbar {
+        padding: 1rem 8rem;
+      }
     #navbar-logo {
       img {
         width: 60px;

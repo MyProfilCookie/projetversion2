@@ -40,7 +40,7 @@ const [recettes, setRecettes] = useState([]);
         setSelectedUser(null);
       
         try {
-          const response = await fetch(`http://localhost:3000/users/${userId}`, {
+          const response = await fetch(`${import.meta.env.VITE_API_URL}/users/${userId}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ role: newRole }) 
@@ -61,7 +61,7 @@ const [recettes, setRecettes] = useState([]);
         const fetchData = async () => {
             setLoading(true);
             try {
-                const resRecettes = await fetch('http://localhost:3000/recettes');
+                const resRecettes = await fetch(`${import.meta.env.VITE_API_URL}/recettes`);
                 const dataRecettes = await resRecettes.json();
                 if (Array.isArray(dataRecettes)) {
                     setRecettes(dataRecettes);
@@ -69,7 +69,7 @@ const [recettes, setRecettes] = useState([]);
                     console.error('Data fetched for recettes is not an array:', dataRecettes);
                 }
 
-                const resUsers = await fetch('http://localhost:3000/users');
+                const resUsers = await fetch(`${import.meta.env.VITE_API_URL}/users`);
             const dataUsers = await resUsers.json();
             if (dataUsers.status && Array.isArray(dataUsers.result)) {
                 setUsers(dataUsers.result);

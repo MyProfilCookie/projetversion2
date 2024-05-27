@@ -10,7 +10,7 @@ function Footer() {
     return (
         <div>
             <footer className="shadow-footer items-center">
-                <aside className="footer grid-cols media-grid-cols-3 bg-belge text-base-content p-10  items-center mx-auto">
+                <aside className="footer grid-cols media-grid-cols-3 bg-belge text-base-content p-10 items-center mx-auto">
                     <nav>
                         <h6 className="subtitle mt-2"><Link to="/profile"><FontAwesomeIcon icon={faUser} /> Mon profil</Link></h6>
                         <a className="link link-hover">Recette favories</a>
@@ -34,7 +34,7 @@ function Footer() {
                 <aside className="border-t bg-belge text-base-content border-base-300 flex justify-between">
                     <aside className="items-center grid-flow-col flex">
                         <a href='/'>
-                            <img src={logo} alt="logo" width={100} />
+                            <img src={logo} alt="logo" width={50} />
                         </a>
                     </aside>
                     <ul className="example-2 flex">

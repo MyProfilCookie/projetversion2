@@ -1,0 +1,65 @@
+// Variables de couleur
+$primary-color: #ff4747;
+$bg-color: #f8f9fa;
+$text-color: #333;
+
+#error-404 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+//   background-color: $bg-color;
+
+  > .error-container {
+    text-align: center;
+    padding: 2rem;
+    border-radius: 10px;
+    // background: #fff;
+    // box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+    > .error-title {
+      font-size: 6rem;
+      color: $primary-color;
+      margin-bottom: 1rem;
+    }
+
+    > .error-message {
+      font-size: 1.5rem;
+      color: $text-color;
+      margin-bottom: 2rem;
+    }
+
+    > .btn-home {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      color: #fff;
+      background-color: $primary-color;
+      border-radius: 5px;
+      text-decoration: none;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: darken($primary-color, 10%);
+      }
+    }
+  }
+  @media (min-width: 768px) {
+    > .error-container {
+      padding: 3rem;
+
+      > .error-title {
+        font-size: 8rem;
+      }
+
+      > .error-message {
+        font-size: 2rem;
+      }
+
+      > .btn-home {
+        font-size: 1.25rem;
+        padding: 1rem 2rem;
+      }
+    }
+  }
+}

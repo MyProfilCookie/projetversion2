@@ -1,12 +1,22 @@
 const express = require("express");
-const UserRouter = express.Router();
-
-// Controllers
+const multer = require("multer");
 const UserController = require("../controllers/userControllers");
-const { checkRegisterInput, checkLoginInput, checkUserUpdateInput } = require("../Validation/UserDataRules");
+const { verifyToken} = require("../Middleware/verifyToken");
+const { verifyAdmin } = require("../Middleware/verifyAdmin");
 
-// toutes les recettes d'un utilisateur
-UserRouter.route("/")
+const UserRouter = express.Router();
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`);
+  }
+});
+
+const upload = multer({ storage });
+
+UserRouter.route("/", verifyToken, verifyAdmin)
   .get(UserController.getAllUsers)
   .patch(UserController.updateUser)
   .delete(UserController.deleteAllUsers);
@@ -15,16 +25,11 @@ UserRouter.route("/:id")
   .get(UserController.getOneUser)
   .delete(UserController.deleteUser);
 
-// Route pour obtenir les recettes publiées par un utilisateur
-UserRouter.get("/:id/recipes", UserController.getUserRecipes);
-
-// Route pour obtenir les recettes likées et dislikées par un utilisateur
-UserRouter.get("/:id/liked-disliked-recipes", UserController.getUserLikedDislikedRecipes);
-
-UserRouter.post("/register", checkRegisterInput, UserController.createUser);
-UserRouter.post("/login", checkLoginInput, UserController.loginUser);
+UserRouter.post("/register", UserController.createUser);
+UserRouter.post("/login", UserController.loginUser);
 UserRouter.get("/logout", UserController.logOut);
 UserRouter.get("/me", UserController.getMe);
+UserRouter.post("/:userId/upload", upload.single('profileImage'), UserController.uploadProfileImage);
 
 module.exports = UserRouter;
 

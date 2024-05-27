@@ -8,7 +8,7 @@ function PainsViennoiserie() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:3000/recettes?category=Pains et viennoiserie');
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/recettes?category=Pains et viennoiserie`);
         const data = await response.json();
         setRecettes(data);
       } catch (error) {

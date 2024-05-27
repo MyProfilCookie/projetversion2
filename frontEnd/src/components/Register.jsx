@@ -9,6 +9,7 @@ import { faGoogle, faInstagram, faFacebook, faTiktok } from '@fortawesome/free-b
 import { faHouseUser } from '@fortawesome/free-solid-svg-icons';
 import { useState, useContext } from 'react';
 import { AuthContext } from '../contexts/AuthProvider';
+import useAxiosPublic from "../hooks/useAxiosPublic";
 
 
 function Register() {
@@ -16,26 +17,60 @@ function Register() {
     const [isModalOpen, setIsModalOpen] = useState(true);
     const { createUser, login } = useContext(AuthContext)
     //  redirection vers la page d'accueil après connexion
+    const axiosPublic = useAxiosPublic();
     const location = useLocation()
     const navigate = useNavigate()
     //  redirection vers la page d'accueil après connexion
     const from = location.state?.from?.pathname || '/'
 
-        const onSubmit = (data) => {
-            const email = data.email
-            const password = data.password
-            createUser(email, password).then((result) => {
+    const onSubmit = (data) => {
+        const email = data.email;
+        const password = data.password;
+        // console.log(email, password)
+        createUser(email, password)
+            .then((result) => {
+                // Signed up
                 const user = result.user;
-                alert('Inscription effectuée avec succès!')
-                setIsModalOpen(false);
-                navigate(from, { replace: true }); 
-            }
-        ).catch((error) => {
-            const errorMessage = error.message;
-            alert("Email ou mot de passe incorrect")
+                updateUserProfile(data.name, data.photoURL)
+                    .then(() => {
+                        const userInfo = {
+                            name: data.name,
+                            email: data.email,
+                        };
 
+                        axiosPublic.post("/users", userInfo)
+                            .then((response) => {
+                                console.log(response)
+                                alert("Signin successful!");
+                                navigate(from, { replace: true });
+                            });
+                    })
+                    .catch((error) => {
+                        const errorMessage = error.message;
+                    });
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                // ..
+            });
+    };
+
+    // login with google
+    const handleRegister = () => {
+        signUpWithGmail().then(result => {
+            console.log(result.user);
+            const userInfo = {
+                email: result.user?.email,
+                name: result.user?.displayName
+            }
+            axiosPublic.post('/users', userInfo)
+                .then(res => {
+                    console.log(res.data);
+                    navigate('/');
+                })
         })
-    }
+    };
 
     const closeModal = () => {
         setIsModalOpen(false);

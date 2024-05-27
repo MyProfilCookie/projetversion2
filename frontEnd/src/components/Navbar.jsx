@@ -35,14 +35,14 @@ const Navbar = () => {
 
   return (
     <header id="navbar-header" className={`sticky top-0 left-0 right-0 transition-all duration-300 ease-in-out z-10000 py-4 ${isSticky ? 'shadow-md' : ''}`}>
-      <div id="navbar" className="navbar bg-base-100">
+      <div id="navbar" className="navbar" style={{ backgroundColor: 'A7001E' }}>
         <a href='/' id="navbar-logo">
           <img src={logo} alt="logo" style={{ width: '60px' }} className='logo-react' />
         </a>
         <div id="navbar-start" className="navbar-start">
           <div id="navbar-dropdown" className={`dropdown ${isOpen ? 'open' : ''}`}>
             <div tabIndex={0} role="button" className="btn btn-ghost" onClick={toggleMenu}>
-              <FontAwesomeIcon icon={isOpen ? faTimes : faBars} size="2xl" style={{height: '50px' }} className='md-hidden' />
+              <FontAwesomeIcon icon={isOpen ? faTimes : faBars} size="2xl" style={{height: '25px', color: '#FAF2EA' }} className='md-hidden' />
             </div>
             <ul tabIndex={0} className="dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
               {navItems.map(item => (

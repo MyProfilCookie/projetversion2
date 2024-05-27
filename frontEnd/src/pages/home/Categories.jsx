@@ -19,9 +19,9 @@ function Categories() {
 
       <div className='gap-4 items-center mt-12 mobile-grid '>
         {Category.map((category) => (
-          <Link key={category.id} to={category.path} className='shadow-lg rounded-md w-112 media-w-96 media-w-64 bg-white rounded-md mx-auto text-center cursor-pointer mb-10'>
-            <div className='media-w-96 media-w-64 w-112 mx-auto mb-3'>
-              <img className='media-w-96 media-w-64 w-112' src={category.image} alt={category.name} style={{borderRadius: "10px 10px 0 0"}}/>
+          <Link key={category.id} to={category.path} className='shadow-lg rounded-md w-77 media-w-96 media-w-64 bg-white rounded-md mx-auto text-center cursor-pointer mb-10'>
+            <div className='media-w-96 media-w-64 w-77 mx-auto mb-3'>
+              <img className='media-w-96 media-w-64 w-77' src={category.image} alt={category.name} style={{borderRadius: "10px 10px 0 0"}}/>
             </div>
             <div className='mt-5 space-y-1 mb-3'>
               <h5 className='text-center font-bold'>{category.name}</h5>

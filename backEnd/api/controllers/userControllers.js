@@ -2,6 +2,7 @@ const User = require("../models/User");
 const Recette = require("../models/Recette");
 const createError = require("http-errors");
 const mongoose = require("mongoose");
+
 const bcrypt = require("bcrypt");
 const JWTGenerator = require("../Utils/JWTGenerator");
 
@@ -14,6 +15,23 @@ const getAllUsers = async (req, res, next) => {
     });
   } catch (error) {
     next(createError(500, error.message));
+  }
+
+};const uploadProfileImage = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const profileImagePath = req.file.path;
+
+    const user = await User.findByIdAndUpdate(userId, { profileImage: profileImagePath }, { new: true });
+
+    if (!user) {
+      return res.status(404).send({ message: 'User not found' });
+    }
+
+    res.status(200).send({ message: 'Image uploaded successfully', user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: 'Error uploading image', error });
   }
 };
 
@@ -31,6 +49,7 @@ const getMe = async (req, res, next) => {
     next(createError(500, error.message));
   }
 };
+
 
 const postCommentaire = async (req, res, next) => {
   try {
@@ -225,6 +244,7 @@ module.exports = {
   getAllUsers,
   createUser,
   loginUser,
+  uploadProfileImage,
   updateUser,
   deleteUser,
   deleteAllUsers,

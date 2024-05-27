@@ -1,21 +1,29 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-// PrivateRouter.jsx
-import React from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
-import useAuth from '../hooks/useAuth';
 
-const PrivateRouter = () => {
-  const { user, loading } = useAuth();
+import React, { useContext } from "react";
+import { Navigate, useLocation } from "react-router-dom";
+import { AuthContext } from "../contexts/AuthProvider";
+
+const PrivateRoute = ({ children }) => {
+  const { user, loading } = useContext(AuthContext);
+  const location = useLocation();
 
   if (loading) {
     return <div>Loading...</div>;
   }
 
-  if (!user) {
-    return <Navigate to="/login" />;
+  if (user) {
+    return <>{children}</>;
   }
 
-  return <Outlet />;
+  return (
+    <Navigate
+      to="/login"
+      state={{ from: location }}
+      replace
+    />
+  );
 };
 
-export default PrivateRouter;
+export default PrivateRoute;

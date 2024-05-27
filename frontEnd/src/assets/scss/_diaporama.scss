@@ -1,6 +1,6 @@
 .img-diaporama {
     width: 100%;
-    height: 70vh;
+    // height: 70vh;
     object-fit: cover;
     object-position: 50% 50%;
     position: relative;
@@ -84,4 +84,10 @@
   .swiper-bullet-active {
     color: #fff;
     background: #007aff;
+  }
+
+  @media (min-width: 768px) {
+    .img-diaporama {
+      height: 70vh;
+    }
   }

@@ -20,7 +20,7 @@ function SpecialRecette() {
 
   useEffect(
     () => {
-      fetch('http://localhost:3000/recettes')
+      fetch(`${import.meta.env.VITE_API_URL}/recettes`)
         .then((response) => response.json())
         .then((data) => {
           const specialsCategory = data.filter((recette) => recette.category === 'Pains et viennoiserie');

@@ -1,14 +1,26 @@
 const express = require("express");
 const app = express();
-const cors = require("cors");
-const port = process.env.PORT || 3000;
 require("dotenv").config();
+const port = process.env.PORT
+const cors = require("cors");
 console.log(process.env.DB_USER);
 const mongoose = require("mongoose");
+const jwt = require('jsonwebtoken');
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 // middleware
 app.use(cors());
 app.use(express.json());
+app.use('/uploads', express.static('uploads'));
+
+app.post("/jwt", async (req, res) => {
+  const user = req.body;
+  // console.log(user)
+  const token = jwt.sign(user, process.env.JW_SECRET, {
+    expiresIn: "1h",
+  });
+  res.send({ token });
+});
 
 // ayivorvirginie26
 // wKWrXh7j14xwoID3
@@ -24,19 +36,42 @@ mongoose
 // importation des routes
 const recetteRoutes = require("./api/routes/recette.routes");
 const userRoutes = require("./api/routes/user.routes");
-const adminRoutes = require("./api/routes/admin.routes");
+const adminStats =  require('./api/routes/adminStats.routes');
+const orderStats = require("./api/routes/orderStats.routes");
+const paymentRoutes = require("./api/routes/payment.routes");
+const cartsRoutes = require("./api/routes/cart.routes");
+
 
 
 // routes
 app.use('/recettes', recetteRoutes);
 app.use('/users', userRoutes);
-app.use('/admin', adminRoutes);
+app.use('/admin-stats', adminStats);
+app.use('/order-stats', orderStats);
+app.use('/payments', paymentRoutes);
+app.use('/carts', cartsRoutes);
 
+
+const verifyToken = require("./api/Middleware/verifyToken");
+
+app.post("/create-payment-intent",verifyToken, async (req, res) => {
+  const { price } = req.body;
+  const amount = price*100; 
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: amount,
+    currency: "usd",
+    payment_method_types: ["card"],
+  });
+
+  res.send({
+    clientSecret: paymentIntent.client_secret,
+  });
+});
 
 
 
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.send("Hello World! Voici notre api");
 });
 
 app.listen(port, () => {

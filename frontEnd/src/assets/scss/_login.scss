@@ -1,0 +1,100 @@
+// Variables de couleur
+$primary-color: #ff4747;
+$bg-color: #f8f9fa;
+$text-color: #333;
+$hover-color: #6366f1;
+
+#login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: $bg-color;
+
+  > .login-container {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+
+    > h2 {
+      margin-bottom: 2rem;
+      color: $primary-color;
+    }
+
+    > form {
+      display: flex;
+      flex-direction: column;
+
+      > .form-group {
+        margin-bottom: 1.5rem;
+        text-align: left;
+
+        > label {
+          display: block;
+          margin-bottom: 0.5rem;
+          color: $text-color;
+        }
+
+        > input {
+          width: 100%;
+          padding: 0.75rem;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          font-size: 1rem;
+          &:focus {
+            outline: none;
+            border-color: $primary-color;
+          }
+        }
+      }
+
+      > .btn-primary {
+        padding: 0.75rem 1.5rem;
+        background-color: $primary-color;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background-color 0.3s;
+
+        &:hover {
+          background-color: darken($primary-color, 10%);
+        }
+      }
+    }
+  }
+
+  // Styles pour les écrans plus grands
+  @media (min-width: 768px) {
+    > .login-container {
+      padding: 3rem;
+
+      > h2 {
+        font-size: 2rem;
+      }
+
+      > form {
+        > .form-group {
+          > label {
+            font-size: 1.125rem;
+          }
+
+          > input {
+            padding: 1rem;
+            font-size: 1.125rem;
+          }
+        }
+
+        > .btn-primary {
+          font-size: 1.125rem;
+          padding: 1rem 2rem;
+        }
+      }
+    }
+  }
+}

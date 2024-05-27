@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-// UserDashboard.jsx
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { LikeRecetteContext } from '../../../contexts/LikeRecetteProvider';
@@ -9,14 +8,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
 
 const UserDashboard = () => {
-  const { userId } = useParams(); // Récupère l'ID de l'utilisateur depuis les paramètres de l'URL
+  const { userId } = useParams();
   const { user } = useAuth();
   const { likes, dislikes } = useContext(LikeRecetteContext);
   const [likedRecipes, setLikedRecipes] = useState([]);
   const [dislikedRecipes, setDislikedRecipes] = useState([]);
   const [userRecipes, setUserRecipes] = useState([]);
-  const [email, setEmail] = useState(user.email);
-  const [username, setUsername] = useState(user.username);
+  const [email, setEmail] = useState(user?.email || '');
+  const [username, setUsername] = useState(user?.username || '');
+  const [selectedFile, setSelectedFile] = useState(null);
 
   useEffect(() => {
     const fetchRecipes = async () => {
@@ -29,16 +29,38 @@ const UserDashboard = () => {
         setUserRecipes(userRecipesResponse.data || []);
       } catch (error) {
         console.error("Error fetching user recipes:", error);
-        setUserRecipes([]); // Initialise userRecipes en tant que tableau vide en cas d'erreur
+        setUserRecipes([]);
       }
     };
 
     fetchRecipes();
   }, [userId]);
 
+  const handleFileChange = (e) => {
+    setSelectedFile(e.target.files[0]);
+  };
+
   const handleUpdateProfile = async () => {
-    await axios.put(`/api/users/${userId}`, { email, username });
+    await axios.put(`${import.meta.env.VITE_API_URL}/users/${userId}`, { email, username });
     alert('Profile updated successfully!');
+  };
+
+  const handleImageUpload = async () => {
+    if (!selectedFile) return;
+
+    const formData = new FormData();
+    formData.append('profileImage', selectedFile);
+
+    try {
+      await axios.post(`/api/users/${userId}/upload`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      alert('Image uploaded successfully!');
+    } catch (error) {
+      console.error('Error uploading image:', error);
+    }
   };
 
   return (
@@ -66,6 +88,8 @@ const UserDashboard = () => {
             onChange={(e) => setEmail(e.target.value)}
           />
         </label>
+        <input type="file" onChange={handleFileChange} />
+        <button onClick={handleImageUpload}>Upload Image</button>
         <button onClick={handleUpdateProfile}>Update Profile</button>
       </div>
 

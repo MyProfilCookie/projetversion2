@@ -2,7 +2,8 @@
 /* eslint-disable no-unused-vars */
 import React, { useContext, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUser } from '@fortawesome/free-solid-svg-icons'
+// import { faUser } from '@fortawesome/free-solid-svg-icons'
+import { SiCodechef } from "react-icons/si";
 import { faGoogle, faInstagram, faFacebook, faTiktok } from '@fortawesome/free-brands-svg-icons'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
@@ -74,7 +75,8 @@ const from = location.state?.from?.pathname || '/'
                 onClick={openModal}
                 className='btn-primary-login rounded-full button-modal'
             >
-                <FontAwesomeIcon icon={faUser} /> Login
+                {/* <FontAwesomeIcon icon={faUser} style={{ height: '25px', color:'#fff'}} /> */}
+                <SiCodechef size={30} style={{ color: '#FAF2EA' }} />
             </button>
             {isModalOpen && (
                 <div className="modal-overlay">

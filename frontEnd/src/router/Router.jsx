@@ -18,6 +18,8 @@ import Gourmandise from "../pages/categories/Gourmandise";
 import Chocolat from "../pages/categories/Chocolat";
 import PainsViennoiserie from "../pages/categories/PainsViennoiserie";
 import Fruits from "../pages/categories/Fruits";
+import Erreur404 from "../components/Erreur404"; 
+import Login from "../components/Login";
 
 const router = createBrowserRouter([
   {
@@ -46,7 +48,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/*",
-        element: <div>404</div>
+        element: <Erreur404 />
       },
       {
         path: "/my-recipe",
@@ -96,7 +98,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/login",
-    element: <div>Login</div>
+    element: <Login />
   },
   {
     path: 'dashboard',

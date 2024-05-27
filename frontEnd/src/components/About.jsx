@@ -4,7 +4,7 @@ import React from 'react';
 
 function About() {
   return (
-    <div className='about-container'>
+    <div className='section-container'>
       <div className='hero-section '>
         <h1 className='hero-title'>L'art de la pâtisserie et du code</h1>
         <p className='hero-subtitle'>Quand le sucre et les algorithmes se rencontrent</p>

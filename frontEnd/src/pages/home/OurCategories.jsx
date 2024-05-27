@@ -36,7 +36,7 @@ function OurCategories() {
                     </div>
                 </div>
                 <div className='md-w-half px-8 sd-w-full'>
-                    <div className='grid grid-cols-2 md-grid-cols-4 gap-8'>
+                    <div className='cards-grid2 gap-8'>
                         {
                             categorieLists.map((item, index) => {
                                 return (
