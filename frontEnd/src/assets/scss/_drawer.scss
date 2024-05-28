@@ -102,11 +102,12 @@
 
 .drawer-side {
   position: fixed;
-  top: 6%;  // 4rem = 64px c'etait à 0 à la base
+  top: 7.7%;  // 4rem = 64px c'etait à 0 à la base
   right: 0;
   // height: 100%;
-  background-color: rgb(231, 217, 212);
-  color: #1f2937;
+  background-color: rgb(241, 59, 59);
+  color: #fff;
+  // color: #1f2937;
   transform: translateX(100%);
   transition: transform 0.3s ease;
   border-radius: 1rem;
@@ -164,7 +165,8 @@
 .menu-drawer li a:hover {
   // background-color: #e5e7eb; 
   transition: scale 0.3s;
-  background-color: #de384882;
+  // background-color: #de384882;
+  background-color: #004c97;
 }
 .drawer-button {
   display: flex;

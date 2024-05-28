@@ -57,11 +57,11 @@ $hover-color: #6366f1;
     .dropdown-content {
       display: none;
       position: absolute;
-      top: 100%;
+      top: 110%;
       right: 0;
-      width: 200px;
+      width: 120px;
       left: 10%;
-      background-color: $light-bg-color;
+      background-color: #f3f4f62e;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       padding: 10px;
       border-radius: 4px;

@@ -13,6 +13,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/uploads', express.static('uploads'));
 
+
 app.post("/jwt", async (req, res) => {
   const user = req.body;
   // console.log(user)

@@ -34,8 +34,8 @@ const Navbar = () => {
   ];
 
   return (
-    <header id="navbar-header" className={`sticky top-0 left-0 right-0 transition-all duration-300 ease-in-out z-10000 py-4 ${isSticky ? 'shadow-md' : ''}`}>
-      <div id="navbar" className="navbar" style={{ backgroundColor: 'A7001E' }}>
+    <header id="navbar-header" className={`sticky top-0 left-0 right-0 transition-all duration-300 ease-in-out z-10000 ${isSticky ? 'shadow-md' : ''}`}>
+      <div id="navbar" className="navbar py-2" style={{ backgroundColor: 'A7001E' }}>
         <a href='/' id="navbar-logo">
           <img src={logo} alt="logo" style={{ width: '60px' }} className='logo-react' />
         </a>
