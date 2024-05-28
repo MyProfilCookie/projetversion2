@@ -8,15 +8,19 @@ function PainsViennoiserie() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/recettes?category=Pains et viennoiserie`);
+        const response = await fetch(`${import.meta.env.VITE_API_URL}recettes/category?category=Pains et viennnoiserie`);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
         const data = await response.json();
         setRecettes(data);
       } catch (error) {
-        console.error(error);
+        console.error('Error fetching the recipes:', error);
       }
     };
     fetchData();
   }, []);
+  console.log(recettes)
 
   return (
     <div id="cards-container">
@@ -26,7 +30,7 @@ function PainsViennoiserie() {
           <div id="card-body-cards">
             <h3 className="card-title">{recette.title}</h3>
             <p>{recette.description}</p>
-            <button className="btn-primary"><Link to={`/recettes/${recette.id}`}>Voir plus</Link></button>
+            <button className="btn-primary"><Link to={`/recettes/${recette._id}`}>Voir plus</Link></button>
           </div>
         </div>
       ))}

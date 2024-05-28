@@ -35,18 +35,27 @@ const getAllUsers = async (req, res, next) => {
   }
 };
 
-const getMe = async (req, res, next) => {
+//faire un ajout admin
+
+const makeAdmin = async (req, res) => {
+  const userId = req.params.id;
+  const { name, email, photoURL, role } = req.body;
   try {
-    const me = req.user;
-    if (!me) {
-      next(createError(404, "Utilisateur introuvable"));
-    }
-    res.status(200).json({
-      status: true,
-      me,
-    });
+      const updatedUser = await User.findByIdAndUpdate(
+          userId,
+          {role: 'admin'},
+          { new: true, runValidators: true }
+      );
+
+      // console.log(updatedUser)
+
+      if (!updatedUser) {
+          return res.status(404).json({ message: 'User not found' });
+      }
+
+      res.status(200).json(updatedUser);
   } catch (error) {
-    next(createError(500, error.message));
+      res.status(500).json({ message: error.message });
   }
 };
 
@@ -250,8 +259,8 @@ module.exports = {
   deleteAllUsers,
   logOut,
   getOneUser,
-  getMe,
   postCommentaire,
   getUserRecipes,
-  getUserLikedDislikedRecipes
+  getUserLikedDislikedRecipes,
+  makeAdmin
 };

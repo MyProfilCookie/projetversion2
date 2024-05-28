@@ -11,17 +11,6 @@ const getAllRecettes = async(req, res) => {
     }
 }
 
-const getRecetteById = async(req, res) => {
-    try {
-        const recette = await Recette.findById(req.params.id);
-        res.json(recette);
-        console.log(recette);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
-
-}
-
 const createRecette = async(req, res) => {
 
     const recette = new Recette({
@@ -151,6 +140,31 @@ try {
     res.status(500).json({ message: err.message });
 }
 }
+const getRecettesByCategory = async (req, res) => {
+    try {
+      const category = req.query.category;
+      if (!category) {
+        return res.status(400).json({ message: 'Category is required' });
+      }
+  
+      const recettes = await Recette.find({ category });
+      res.status(200).json(recettes);
+    } catch (error) {
+      res.status(500).json({ message: 'Error fetching recipes', error });
+    }
+  };
+  const getRecetteById = async (req, res) => {
+    try {
+      const recette = await Recette.findById(req.params.id);
+      if (!recette) {
+        return res.status(404).json({ message: 'Recipe not found' });
+      }
+      res.status(200).json(recette);
+    } catch (error) {
+      res.status(500).json({ message: 'Error fetching recipe', error });
+    }
+  };
+  
 
 
 module.exports = {
@@ -162,5 +176,7 @@ module.exports = {
     likeRecette,
     unlikeRecette,
     getCommentaire,
-    postCommentaire
+    postCommentaire,
+    getRecettesByCategory,
+    getRecetteById
 }

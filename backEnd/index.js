@@ -7,11 +7,14 @@ console.log(process.env.DB_USER);
 const mongoose = require("mongoose");
 const jwt = require('jsonwebtoken');
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const compression = require("compression");
+
 
 // middleware
 app.use(cors());
 app.use(express.json());
 app.use('/uploads', express.static('uploads'));
+app.use(compression());
 
 
 app.post("/jwt", async (req, res) => {
@@ -34,6 +37,7 @@ mongoose
   .then(() => console.log("Base de données MongoDB connectée"))
   .catch((err) => console.log(err));
   
+
 // importation des routes
 const recetteRoutes = require("./api/routes/recette.routes");
 const userRoutes = require("./api/routes/user.routes");
@@ -41,9 +45,7 @@ const adminStats =  require('./api/routes/adminStats.routes');
 const orderStats = require("./api/routes/orderStats.routes");
 const paymentRoutes = require("./api/routes/payment.routes");
 const cartsRoutes = require("./api/routes/cart.routes");
-
-
-
+const routerImages = require('./api/routes/images.routes')
 // routes
 app.use('/recettes', recetteRoutes);
 app.use('/users', userRoutes);
@@ -51,6 +53,14 @@ app.use('/admin-stats', adminStats);
 app.use('/order-stats', orderStats);
 app.use('/payments', paymentRoutes);
 app.use('/carts', cartsRoutes);
+app.use('/images', routerImages);
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  next();
+});
+
 
 
 const verifyToken = require("./api/Middleware/verifyToken");
@@ -60,7 +70,7 @@ app.post("/create-payment-intent",verifyToken, async (req, res) => {
   const amount = price*100; 
   const paymentIntent = await stripe.paymentIntents.create({
     amount: amount,
-    currency: "usd",
+    currency: "euro",
     payment_method_types: ["card"],
   });
 

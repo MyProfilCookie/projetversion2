@@ -12,7 +12,7 @@ import {
 } from 'react-icons/fa';
 import { FaCartShopping } from 'react-icons/fa6';
 import useAdmin from '../hooks/useAdmin';
-import Register from '../components/Register';
+import Login from '../components/Login';
 import useAuth from '../hooks/useAuth';
 import logo from '/logo.svg';
 
@@ -47,7 +47,7 @@ const sharedMenu = (
 
 const DashboardLayout = () => {
   // eslint-disable-next-line no-unused-vars
-  const { loading, user } = useAuth();
+  const { loading} = useAuth();
   const [isAdmin, isAdminLoading] = useAdmin();
 
   return (
@@ -116,7 +116,7 @@ const DashboardLayout = () => {
           </div>
         </div>
       ) : loading ? (
-        <Register />
+        <Login />
       ) : (
         <div className="h-screen flex items-center justify-center">
           <Link to="/">Back to Home</Link>

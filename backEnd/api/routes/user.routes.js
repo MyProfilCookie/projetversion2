@@ -1,20 +1,11 @@
 const express = require("express");
 const multer = require("multer");
 const UserController = require("../controllers/userControllers");
-const { verifyToken} = require("../Middleware/verifyToken");
-const { verifyAdmin } = require("../Middleware/verifyAdmin");
+const verifyToken = require("../Middleware/verifyToken");
+const verifyAdmin  = require("../Middleware/verifyAdmin");
 
 const UserRouter = express.Router();
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/');
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`);
-  }
-});
 
-const upload = multer({ storage });
 
 UserRouter.route("/", verifyToken, verifyAdmin)
   .get(UserController.getAllUsers)
@@ -28,8 +19,13 @@ UserRouter.route("/:id")
 UserRouter.post("/register", UserController.createUser);
 UserRouter.post("/login", UserController.loginUser);
 UserRouter.get("/logout", UserController.logOut);
-UserRouter.get("/me", UserController.getMe);
-UserRouter.post("/:userId/upload", upload.single('profileImage'), UserController.uploadProfileImage);
+
+
+UserRouter.post("/:userId/commentaire", UserController.postCommentaire);
+UserRouter.get("/:userId/recettes", UserController.getUserRecipes);
+UserRouter.patch('/admin/:id', verifyToken, verifyAdmin, UserController.makeAdmin);
+// like les recettes
+UserRouter.get("/:userId/liked-disliked-recettes", UserController. getUserLikedDislikedRecipes);
 
 module.exports = UserRouter;
 

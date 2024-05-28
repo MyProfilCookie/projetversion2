@@ -6,10 +6,11 @@ import Register from "../components/Register";
 import PrivateRouter from "../PrivateRouter/PrivateRouter";
 import UserProfil from "../pages/dashboard/user/UserProfile";
 import RecetteDetail from "../pages/recette/RecetteDetail";
-import AdminPanel from "../pages/dashboard/admin/AdminPanel";
+import Order from "../pages/dashboard/user/Order";
 import DashboardLayout from "../layout/DashboardLayout";
 import Dashboard from "../pages/dashboard/admin/Dashboard";
 import UserDashboard from "../pages/dashboard/user/UserDashboard";
+import Payment from "../pages/recette/Payment";
 import Users from "../pages/dashboard/admin/Users";
 import Contact from "../components/Contact";
 import About from "../components/About";
@@ -20,6 +21,7 @@ import PainsViennoiserie from "../pages/categories/PainsViennoiserie";
 import Fruits from "../pages/categories/Fruits";
 import Erreur404 from "../components/Erreur404"; 
 import Login from "../components/Login";
+import CartPage from "../pages/recette/CartPage";
 
 const router = createBrowserRouter([
   {
@@ -35,8 +37,8 @@ const router = createBrowserRouter([
         element: <Recettes />
       },
       {
-        path: "/admin-panel",
-        element: <PrivateRouter><AdminPanel /></PrivateRouter>
+        path: "/order",
+        element: <PrivateRouter><Order /></PrivateRouter>
       },
       {
         path: "/contact",
@@ -53,6 +55,10 @@ const router = createBrowserRouter([
       {
         path: "/my-recipe",
         element: <PrivateRouter><RecipeManagement /></PrivateRouter>
+      },
+      {
+        path: "/process-checkout",
+        element: <Payment/>
       },
       {
         path: "/update-profile",
@@ -89,6 +95,10 @@ const router = createBrowserRouter([
       {
         path: "/categories/fruits",
         element: <Fruits />
+      },
+      {
+        path: "/cart-page",
+        element: <CartPage/>
       }
     ]
   },
@@ -105,7 +115,7 @@ const router = createBrowserRouter([
     element: <PrivateRouter><DashboardLayout /></PrivateRouter>,
     children: [
       {
-        path: ':userId',
+        path: '/dashboard/:userId',
         element: <UserDashboard />
       },
       {
@@ -115,7 +125,8 @@ const router = createBrowserRouter([
       {
         path: '',
         element: <Dashboard />
-      }
+      },
+      {}
     ]
   }
 ]);

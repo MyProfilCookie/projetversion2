@@ -8,7 +8,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
 
 const UserDashboard = () => {
-  const { userId } = useParams();
   const { user } = useAuth();
   const { likes, dislikes } = useContext(LikeRecetteContext);
   const [likedRecipes, setLikedRecipes] = useState([]);
@@ -19,30 +18,40 @@ const UserDashboard = () => {
   const [selectedFile, setSelectedFile] = useState(null);
 
   useEffect(() => {
+    console.log('user.uid:', user.uid); // Ajoutez ceci pour vérifier que user.uid est bien défini
+    if (!user.uid) return;
+
     const fetchRecipes = async () => {
       try {
-        const likedResponse = await axios.get(`/api/users/${userId}/liked-disliked-recipes`);
-        const userRecipesResponse = await axios.get(`/api/users/${userId}/recipes`);
+        const likedResponse = await axios.get(`${import.meta.env.VITE_API_URL}users/${user.uid}/liked-disliked-recettes`);
+        const userRecipesResponse = await axios.get(`${import.meta.env.VITE_API_URL}users/${user.uid}/recettes`);
 
         setLikedRecipes(likedResponse.data.likedRecipes || []);
         setDislikedRecipes(likedResponse.data.dislikedRecipes || []);
         setUserRecipes(userRecipesResponse.data || []);
       } catch (error) {
-        console.error("Error fetching user recipes:", error);
+        console.error("Error fetching user recettes:", error);
         setUserRecipes([]);
       }
     };
 
     fetchRecipes();
-  }, [userId]);
+  }, [user.uid]);
 
   const handleFileChange = (e) => {
     setSelectedFile(e.target.files[0]);
   };
 
   const handleUpdateProfile = async () => {
-    await axios.put(`${import.meta.env.VITE_API_URL}/users/${userId}`, { email, username });
-    alert('Profile updated successfully!');
+    try {
+      const token = "votre_token"; // Utilisez le token correct ici
+      await axios.put(`${import.meta.env.VITE_API_URL}/users/${user.uid}`, { email, username }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      alert('Profile updated successfully!');
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    }
   };
 
   const handleImageUpload = async () => {
@@ -52,9 +61,11 @@ const UserDashboard = () => {
     formData.append('profileImage', selectedFile);
 
     try {
-      await axios.post(`/api/users/${userId}/upload`, formData, {
+      const token = "votre_token"; // Utilisez le token correct ici
+      await axios.post(`${import.meta.env.VITE_API_URL}/users/${user.uid}/upload`, formData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`
         }
       });
       alert('Image uploaded successfully!');

@@ -106,7 +106,8 @@ $hover-color: #6366f1;
         text-transform: uppercase;
 
         &:hover {
-          color: #392E2C;
+          color: #011c96;
+          transition: color 0.3s ease;
         }
       }
     }
