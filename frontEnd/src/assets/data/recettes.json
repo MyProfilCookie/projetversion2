@@ -92,7 +92,7 @@
       "temps_cuisson": "30 minutes",
       "difficulte": "moyenne",
       "category": [
-        "Tartes"
+        "Fruits"
       ],
       "image": "/images/chocolat.jpeg"
     },
@@ -450,7 +450,7 @@
       "temps_preparation": "30 minutes",
       "temps_cuisson": "15 minutes",
       "difficulte": "moyenne",
-      "category": "Tartes",
+      "category": "Fruits",
       "image": "/images/chocolat.jpeg"
     },
     {
@@ -540,7 +540,7 @@
       "temps_preparation": "20 minutes",
       "temps_cuisson": "35 minutes",
       "difficulte": "moyenne",
-      "category": "Tartes et tartelettes",
+      "category": "Fruits",
       "image": "/images/chocolat.jpeg"
     },
     {
@@ -639,7 +639,7 @@
       "temps_preparation": "10 minutes",
       "temps_cuisson": "10 minutes",
       "difficulte": "facile",
-      "category": "Desserts",
+      "category": "Gourmandises",
       "image": "/images/chocolat.jpeg"
     },
     {
@@ -676,7 +676,7 @@
       "temps_preparation": "30 minutes",
       "temps_cuisson": "50 minutes",
       "difficulte": "moyenne",
-      "category": "Desserts",
+      "category": "Gourmandises",
       "image": "/images/chocolat.jpeg"
     },
     {
@@ -703,7 +703,7 @@
       "temps_preparation": "15 minutes",
       "temps_cuisson": "15 minutes",
       "difficulte": "facile",
-      "category": "Biscuits",
+      "category": "Gourmandises",
       "image": "/images/chocolat.jpeg"
     },
     {
@@ -729,7 +729,7 @@
       "temps_preparation": "20 minutes",
       "temps_cuisson": "15 minutes",
       "difficulte": "facile",
-      "category": "Tartes",
+      "category": "Fruits",
       "image": "/images/chocolat.jpeg"
     },
     {
@@ -784,7 +784,7 @@
       "temps_preparation": "30 minutes",
       "temps_cuisson": "30 minutes",
       "difficulte": "difficile",
-      "category": "Pâtisserie française",
+      "category": "Gourmandises",
       "image": "/images/chocolat.jpeg"
     },
     {
@@ -808,7 +808,7 @@
       "temps_preparation": "20 minutes",
       "temps_cuisson": "40 minutes",
       "difficulte": "facile",
-      "category": "Tartes",
+      "category": "Fruits",
       "image": "/images/chocolat.jpeg"
     },
     {
@@ -834,7 +834,7 @@
       "temps_preparation": "30 minutes",
       "temps_cuisson": "30 minutes",
       "difficulte": "moyenne",
-      "category": "Biscuits",
+      "category": "Gourmandises",
       "image": "/images/chocolat.jpeg"
     },
     {
@@ -869,7 +869,7 @@
       "temps_preparation": "30 minutes",
       "temps_cuisson": "60 minutes",
       "difficulte": "moyenne",
-      "category": "Cheesecakes",
+      "category": "Gourmandises",
       "image": "/images/chocolat.jpeg"
     },
     {
@@ -902,7 +902,7 @@
       "temps_preparation": "15 minutes",
       "temps_cuisson": "12 minutes",
       "difficulte": "facile",
-      "category": "Biscuits",
+      "category": "Chocolat",
       "image": "/images/chocolat.jpeg"
     },
     {
@@ -935,7 +935,7 @@
       "temps_preparation": "15 minutes",
       "temps_cuisson": "12 minutes",
       "difficulte": "facile",
-      "category": "Biscuits",
+      "category": "Fruits",
       "image": "/images/chocolat.jpeg"
     },
     {

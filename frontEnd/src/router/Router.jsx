@@ -97,7 +97,7 @@ const router = createBrowserRouter([
         element: <Fruits />
       },
       {
-        path: "/cart-page",
+        path: "/cart",
         element: <CartPage/>
       }
     ]

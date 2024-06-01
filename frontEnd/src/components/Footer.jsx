@@ -2,14 +2,14 @@
 /* eslint-disable no-unused-vars */
 import React from 'react'
 import logo from '/logo.svg'
-import { faUser } from '@fortawesome/free-solid-svg-icons'
+import { faUser, faUserGraduate} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Link } from 'react-router-dom'
 
 function Footer() {
     return (
         <div>
-            <footer className="shadow-footer items-center">
+            <footer className="items-center">
                 <aside className="footer grid-cols media-grid-cols-3 bg-belge text-base-content p-10 items-center mx-auto">
                     <nav>
                         <h6 className="subtitle mt-2"><Link to="/profile"><FontAwesomeIcon icon={faUser} /> Mon profil</Link></h6>
@@ -31,7 +31,7 @@ function Footer() {
                     </nav>
 
                 </aside>
-                <aside className="border-t bg-belge text-base-content border-base-300 flex justify-between">
+                <aside className="footer grid-cols media-grid-cols-3 bg-belge text-base-content p-10 items-center mx-auto">
                     <aside className="items-center grid-flow-col flex">
                         <a href='/'>
                             <img src={logo} alt="logo" width={50} />
@@ -127,6 +127,10 @@ function Footer() {
                             <div className="tooltip">Youtube</div>
                         </li>
                     </ul>
+                    <li className='icon-content' >
+                        <a href='#'>
+                    <FontAwesomeIcon icon={faUserGraduate} size="2xl"style={{color: '#4d4d4d'}}/></a>
+                    </li>
 
                 </aside>
             </footer>

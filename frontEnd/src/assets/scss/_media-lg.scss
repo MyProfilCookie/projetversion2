@@ -8,9 +8,86 @@
         width: 80%;
     }
 }
+.lg-w-3-4 {
+    @media (min-width: 1024px) {
+        width: 75%;
+    }
+}
 .lg-grid-cols-3 {
     @media (min-width: 1024px) {
         grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+.lg-w-32 {
+    @media (min-width: 1024px) {
+        width: 32%;
+    }
+}
+.lg-w-1-6 {
+    @media (min-width: 1024px) {
+        width: 16.666667%;
+    }
+}
+.lg-w-1-4 {
+    @media (min-width: 1024px) {
+        width: 25%;
+    }
+}
+.lg-w-1-2 {
+    @media (min-width: 1024px) {
+        width: 50%;
+    }
+}
+.lg-text-right {
+    @media (min-width: 1024px) {
+        text-align: right;
+    }
+}
+.text-lg {
+    @media (min-width: 1024px) {
+        font-size: 1.125rem;
+        line-height: 1.75rem;
+    }
+}
+.lg-text-left {
+    @media (min-width: 1024px) {
+        text-align: left;
+    }
+}
+.lg-ml-4 {
+    @media (min-width: 1024px) {
+        margin-left: 1rem;
+    }
+}
+.lg-justify-start {
+    @media (min-width: 1024px) {
+        justify-content: flex-start;
+    }
+}
+.lg-text-justify {
+    @media (min-width: 1024px) {
+        text-align: justify;
+    }
+}
+
+.lg-h-32  {
+    @media (min-width: 1024px) {
+        height: 32%;
+    }
+}
+.lg-grid-cols-4 {
+    @media (min-width: 1024px) {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+.lg-flex-row {
+    @media (min-width: 1024px) {
+        flex-direction: row;
+    }
+}
+.lg-grid-cols-5 {
+    @media (min-width: 1024px) {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
     }
 }
 .lg-grid-cols-2 {
@@ -23,3 +100,8 @@
         grid-template-columns: repeat(1, minmax(0, 1fr));
     }
 }
+.lg-col-span-1 {
+    @media (min-width: 1024px) {
+        grid-column: span 1 / span 1;
+    }
+  }

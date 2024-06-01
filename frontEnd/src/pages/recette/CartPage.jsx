@@ -1,17 +1,22 @@
 /* eslint-disable no-unused-vars */
+/* eslint-disable react/no-unescaped-entities */
 import React, { useContext, useEffect, useState } from "react";
-import useCart from "../../hooks/useCart";
 import { AuthContext } from "../../contexts/AuthProvider";
 import Swal from "sweetalert2";
 import { FaTrash } from "react-icons/fa";
 import { Link } from 'react-router-dom';
-import axios from "axios";
 import { useTheme } from "../../hooks/ThemeContext";
+import { useCart } from "../../contexts/CartProvider";
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+import CheckoutForm from './CheckoutForm';
+
+const stripePromise = loadStripe('pk_test_51PJX1EJ9cNEOCcHhPnKT4sBxvL5xs9aQN7VTmRUabgl4khJ6k7KbYIcjJsHIhesao1lhsj0YYfIAjhn9hvAPxwLw008vby1XDo');
 
 const CartPage = () => {
   const { isDarkMode } = useTheme();
   const { user } = useContext(AuthContext);
-  const [cart, refetch] = useCart();
+  const { cart, updateCart } = useCart();
   const [cartItems, setCartItems] = useState([]);
 
   useEffect(() => {
@@ -22,221 +27,150 @@ const CartPage = () => {
     }
   }, [cart]);
 
-  // Calculate the total price for each item in the cart
   const calculateTotalPrice = (item) => {
     return item.price * item.quantity;
   };
 
-  // Handle quantity increase
-  const handleIncrease = async (item) => {
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/carts/${item._id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ quantity: item.quantity + 1 }),
-      });
-
-      if (response.ok) {
-        const updatedCart = cartItems.map((cartItem) => {
-          if (cartItem._id === item._id) {
-            return {
-              ...cartItem,
-              quantity: cartItem.quantity + 1,
-            };
-          }
-          return cartItem;
-        });
-        await refetch();
-        setCartItems(updatedCart);
-      } else {
-        console.error("Failed to update quantity");
-      }
-    } catch (error) {
-      console.error("Error updating quantity:", error);
-    }
+  const calculateTotalItems = () => {
+    return cartItems.reduce((total, item) => total + item.quantity, 0);
   };
 
-  // Handle quantity decrease
-  const handleDecrease = async (item) => {
+  const handleIncrease = (item) => {
+    const updatedCart = cartItems.map((cartItem) => {
+      if (cartItem.id === item.id) {
+        return { ...cartItem, quantity: cartItem.quantity + 1 };
+      }
+      return cartItem;
+    });
+    setCartItems(updatedCart);
+    updateCart(updatedCart);
+  };
+
+  const handleDecrease = (item) => {
     if (item.quantity > 1) {
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/carts/${item._id}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ quantity: item.quantity - 1 }),
-          }
-        );
-
-        if (response.ok) {
-          const updatedCart = cartItems.map((cartItem) => {
-            if (cartItem._id === item._id) {
-              return {
-                ...cartItem,
-                quantity: cartItem.quantity - 1,
-              };
-            }
-            return cartItem;
-          });
-          await refetch();
-          setCartItems(updatedCart);
-        } else {
-          console.error("Failed to update quantity");
+      const updatedCart = cartItems.map((cartItem) => {
+        if (cartItem.id === item.id) {
+          return { ...cartItem, quantity: cartItem.quantity - 1 };
         }
-      } catch (error) {
-        console.error("Error updating quantity:", error);
-      }
+        return cartItem;
+      });
+      setCartItems(updatedCart);
+      updateCart(updatedCart);
     }
   };
 
-  // Calculate the cart subtotal
+  const handleQuantityChange = (item, quantity) => {
+    if (quantity < 1) {
+      return;
+    }
+
+    const updatedCart = cartItems.map((cartItem) => {
+      if (cartItem.id === item.id) {
+        return { ...cartItem, quantity: quantity };
+      }
+      return cartItem;
+    });
+    setCartItems(updatedCart);
+    updateCart(updatedCart);
+  };
+
   const cartSubtotal = cartItems.reduce((total, item) => {
     return total + calculateTotalPrice(item);
   }, 0);
 
-  // Calculate the order total
   const orderTotal = cartSubtotal;
 
-  // delete an item
   const handleDelete = (item) => {
     Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
+      title: "Êtes-vous sûr?",
+      text: "Vous ne pourrez pas revenir en arrière!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonText: "Oui, supprimer!",
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.delete(`${import.meta.env.VITE_API_URL}/carts/${item._id}`).then(response => {
-          if (response) {
-            refetch();
-            Swal.fire("Deleted!", "Your file has been deleted.", "success");
-          }
-        })
-          .catch(error => {
-            console.error(error);
-          });
+        const updatedCart = cartItems.filter(cartItem => cartItem.id !== item.id);
+        setCartItems(updatedCart);
+        updateCart(updatedCart);
+        Swal.fire("Supprimé!", "Votre article a été supprimé.", "success");
       }
     });
   };
 
   return (
-    <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4">
-      {/* banner */}
+    <div className="max-w-screen-2xl container mx-auto xl-px-24 px-4">
       <div className={`bg-gradient-to-r from-0% from-[#FAFAFA] to-[#FCFCFC] to-100% ${isDarkMode ? "dark" : ""}`}>
         <div className="py-28 flex flex-col items-center justify-center">
-          {/* content */}
           <div className="text-center px-4 space-y-7">
-            <h2 className="md:text-5xl text-4xl font-bold md:leading-snug leading-snug">
-              Items Added to The<span className="text-green"> Cart</span>
+            <h2 className="md-text-5xl text-4xl font-bold md-leading-snug leading-snug">
+              Articles ajoutés au<span className="text-green"> Panier</span>
             </h2>
           </div>
         </div>
       </div>
-
-      {/* cart table */}
       {cartItems.length > 0 ? (
-        <div>
-          <div>
-            <div className="overflow-x-auto">
-              <table className="table">
-                {/* head */}
-                <thead className="bg-green text-white rounded-sm">
-                  <tr>
-                    <th>#</th>
-                    <th>Food</th>
-                    <th>Item Name</th>
-                    <th>Quantity</th>
-                    <th>Price</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {cartItems.map((item, index) => (
-                    <tr key={index}>
-                      <td>{index + 1}</td>
-                      <td>
-                        <div className="avatar">
-                          <div className="mask mask-squircle w-12 h-12">
-                            <img
-                              src={item.image}
-                              alt="Avatar Tailwind CSS Component"
-                            />
-                          </div>
-                        </div>
-                      </td>
-                      <td className="font-medium">{item.name}</td>
-                      <td className="flex">
-                        <button
-                          className="btn btn-xs"
-                          onClick={() => handleDecrease(item)}
-                        >
-                          -
-                        </button>
-                        <input
-                          type="number"
-                          value={item.quantity}
-                          onChange={() => console.log(item.quantity)}
-                          className={`w-10 mx-2 text-center overflow-hidden appearance-none ${isDarkMode ? "dark" : ""}`}
-                        />
-                        <button
-                          className="btn btn-xs"
-                          onClick={() => handleIncrease(item)}
-                        >
-                          +
-                        </button>
-                      </td>
-                      <td>${calculateTotalPrice(item).toFixed(2)}</td>
-                      <td>
-                        <button
-                          className="btn btn-sm border-none text-red bg-transparent"
-                          onClick={() => handleDelete(item)}
-                        >
-                          <FaTrash />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-                {/* foot */}
-              </table>
-            </div>
+        <div className="flex flex-col lg-flex-row gap-8">
+          <div className="lg-w-3-4">
+            {cartItems.map((item, index) => (
+              <div key={index} className="flex flex-col lg-flex-row items-center border-b border-gray-200 py-4">
+                <img className="w-24 h-24 object-cover lg-w-32 lg-h-32" src={item.image} alt={item.name} />
+                <div className="flex-grow lg-ml-4 text-center lg-text-left">
+                  <h4 className="text-lg font-semibold">{item.name}</h4>
+                  <p className="text-gray-600">Prix: {item.price.toFixed(2)} €</p>
+                  <div className="flex items-center justify-center lg-justify-start mt-2">
+                    <button
+                      className="px-3 py-1 border border-gray-300" 
+                      onClick={() => handleDecrease(item)}
+                    >
+                      -
+                    </button>
+                    <input
+                      type="number"
+                      value={item.quantity}
+                      onChange={(e) => handleQuantityChange(item, parseInt(e.target.value))}
+                      className="w-12 text-center border-t border-b border-gray-300 mx-2"
+                      min="1"
+                    />
+                    <button
+                      className="px-3 py-1 border border-gray-300"
+                      onClick={() => handleIncrease(item)}
+                    >
+                      +
+                    </button>
+                  </div>
+                  <button
+                    className="mt-2" style={{backgroundColor: "red", color: "white", padding: "5px 5px", borderRadius: "5px", cursor: "pointer", fontWeight: "bold", border: "none"}}
+                    onClick={() => handleDelete(item)}
+                  >
+                    Supprimer
+                  </button>
+                </div>
+                <div className="lg-w-1-6 text-center lg-text-right">
+                  <button className="text-lg btn font-semibold">
+                    Total: {calculateTotalPrice(item).toFixed(2)} €
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
-          <hr />
-          <div className="flex flex-col md:flex-row justify-between items-start my-12 gap-8">
-            <div className="md:w-1/2 space-y-3">
-              <h3 className="text-lg font-semibold">Customer Details</h3>
-              <p>Name: {user?.displayName || "None"}</p>
-              <p>Email: {user?.email}</p>
-              <p>
-                User_id: <span className="text-sm">{user?.uid}</span>
-              </p>
-            </div>
-            <div className="md:w-1/2 space-y-3">
-              <h3 className="text-lg font-semibold">Shopping Details</h3>
-              <p>Total Items: {cartItems.length}</p>
-              <p>
-                Total Price:{" "}
-                <span id="total-price">${orderTotal.toFixed(2)}</span>
-              </p>
-              <Link to="/process-checkout" className="btn btn-md bg-green text-white px-8 py-1">
-                Proceed to Checkout
-              </Link>
-            </div>
+          <div className="lg-w-1-4 p-4 border border-gray-200">
+            <h3 className="text-xl font-semibold">Détails de la commande</h3>
+            <p>Articles au total: {calculateTotalItems()}</p>
+            <p>
+              Prix total: <span id="total-price">{orderTotal.toFixed(2)} €</span>
+            </p>
+            <Elements stripe={stripePromise}>
+              <CheckoutForm price={orderTotal} />
+            </Elements>
           </div>
         </div>
       ) : (
         <div className="text-center mt-20">
-          <p>Cart is empty. Please add products.</p>
-          <Link to="/menu">
-            <button className="btn bg-green text-white mt-3">Back to Menu</button>
+          <p>Le panier est vide. Veuillez ajouter des produits.</p>
+          <Link to="/">
+            <button className="btn bg-green text-white mt-3">Retour à l'accueil</button>
           </Link>
         </div>
       )}
@@ -245,3 +179,7 @@ const CartPage = () => {
 };
 
 export default CartPage;
+
+
+
+

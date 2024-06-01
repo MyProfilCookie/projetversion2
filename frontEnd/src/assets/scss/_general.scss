@@ -1,7 +1,10 @@
 @import "./mixin.scss";
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
+
 
 body {
-  font-family: "Inter", sans-serif;
+  background: #f9f7f3;
+  font-family: "Lora", serif;
 }
 * {
   box-sizing: border-box;
@@ -303,6 +306,23 @@ h6 {
   color: #fff;
   cursor: pointer;
 }
+.border-t {
+  border-top: 1px solid #dee2e6;
+}
+
+.border-b {
+  border-bottom: 1px solid #dee2e6;
+}
+
+.border-l {
+  border-left: 1px solid #dee2e6;
+}
+
+.border-r {
+  border-right: 1px solid #dee2e6;
+}
+
+.border-gray-300
 
 .btn-secondary {
   background-color: #fff;
@@ -751,7 +771,7 @@ h6 {
   text-align: center;
 }
 .section-container {
-  max-width: 1200px;
+  max-width: 1300px;
   margin: 0 auto;
 }
 .uppercase {
@@ -767,6 +787,7 @@ h6 {
   letter-spacing: 0.1em;
 }
 
+
 .text-lg {
   font-size: 1.125rem;
 }
@@ -781,6 +802,12 @@ h6 {
 }
 .text-xs {
   font-size: 0.75rem;
+}
+.text-red-500 {
+  color: #ef4444;
+}
+.text-green-500 {
+  color: #22c55e;
 }
 .text-center {
   text-align: center;
@@ -1083,6 +1110,14 @@ h6 {
 .rounded-remi {
   border-radius: 15px 15px 0 0;
 }
+.px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+.py-4 {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
 
 figure {
   padding: 0;
@@ -1305,9 +1340,9 @@ a {
 }
 .active {
   color: #ff4747;
-  border-bottom: 2px solid #ff4747;
+  padding: 1rem 0;
   font-weight: 900;
-  transition: all 0.3s ease-in-out;
+  transition: border-top 0.5s ease-in-out;
 }
 .px-4 {
   padding-left: 1rem;
@@ -1333,4 +1368,19 @@ a {
 }
 .right-2 {
   right: 0.5rem;
+}
+.sm-grid-cols-6 {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+.sm-col-start-2 {
+  grid-column-start: 2;
+}
+.col-span-2 {
+  grid-column: span 2 / span 2;
+}
+.max-h-12 {
+  max-height: 3rem;
+}
+.object-contain {
+  object-fit: contain;
 }

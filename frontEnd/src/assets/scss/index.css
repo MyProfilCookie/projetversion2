@@ -2409,11 +2409,15 @@ img[alt=logo]:hover {
     font-size: 1.5rem;
     line-height: 2rem;
   }
+
 }
 
 @media (max-width: 768px) {
   .md-w-4-5 {
     width: 80%;
+  }
+  .md-w-2-3 {
+    width: 67%;
   }
 }
 

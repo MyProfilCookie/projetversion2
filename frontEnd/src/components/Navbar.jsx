@@ -1,21 +1,20 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useContext } from 'react';
-import logo from '/logo2.svg';
+import logo from '/logo.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
-import { NavLink } from 'react-router-dom';
+import { faBars, faTimes, faShop } from '@fortawesome/free-solid-svg-icons';
+import { NavLink, Link } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthProvider';
 import Modal from './Modal';
 import Profile from './Profile';
-import useCart from "../hooks/useCart";
-import { useTheme } from "../hooks/ThemeContext";
-import { Link } from "react-router-dom";
+import { useCart } from '../contexts/CartProvider';
+import { useTheme } from '../hooks/ThemeContext';
 
 const Navbar = () => {
   const [isSticky, setIsSticky] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const { user, loading } = useContext(AuthContext);
-  const [cart, refetch] = useCart();
+  const { user } = useContext(AuthContext);
+  const { cart } = useCart();
   const { isDarkMode } = useTheme();
 
   useEffect(() => {
@@ -39,54 +38,40 @@ const Navbar = () => {
   ];
 
   return (
-    <header id="navbar-header" className={`sticky top-0 left-0 right-0 transition-all duration-300 ease-in-out z-10000 ${isSticky ? 'shadow-md' : ''}`}>
-      <div id="navbar" className="navbar py-2" style={{ backgroundColor: 'A7001E' }}>
-        <a href='/' id="navbar-logo">
+    <header id="navbar-header" style={{ maxWidth: '1568px', margin: '0 auto' }} className={`top-0 left-0 right-0 transition-all duration-300 ease-in-out z-10000 ${isSticky ? 'shadow-md' : ''} ${isDarkMode ? 'bg-dark text-white' : 'bg-light text-black'}`}>
+      <div id="navbar" className="navbar py-2">
+        <Link to="/" id="navbar-logo">
           <img src={logo} alt="logo" style={{ width: '60px' }} className='logo-react' />
-        </a>
+        </Link>
         <div id="navbar-start" className="navbar-start">
           <div id="navbar-dropdown" className={`dropdown ${isOpen ? 'open' : ''}`}>
             <div tabIndex={0} role="button" className="btn btn-ghost" onClick={toggleMenu}>
-              <FontAwesomeIcon icon={isOpen ? faTimes : faBars} size="2xl" style={{height: '25px', color: '#FAF2EA' }} className='md-hidden' />
+              <FontAwesomeIcon icon={isOpen ? faTimes : faBars} size="2xl" style={{ height: '25px' }} className='md-hidden' />
             </div>
-            <ul tabIndex={0} className="dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
-              {navItems.map(item => (
-                <li key={item.id} className="py-1 mt-3 mb-3">
-                  <NavLink to={item.link} onClick={() => setIsOpen(false)}>{item.name}</NavLink>
-                </li>
-              ))}
-            </ul>
+            {isOpen && (
+              <ul tabIndex={0} className="dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
+                {navItems.map(item => (
+                  <li key={item.id} className="py-1 mt-3 mb-3">
+                    <NavLink to={item.link} onClick={() => setIsOpen(false)}>{item.name}</NavLink>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </div>
-        <Link to="/cart-page">
-         <label
-            tabIndex={0}
-            className="btn btn-ghost btn-circle  lg:flex items-center justify-center mr-3"
-          >
-            <div className="indicator">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                />
-              </svg>
-              <span className="badge badge-sm indicator-item">{cart.length || 0}</span>
+        <Link to="/cart">
+          <label tabIndex={0} className="btn btn-circle flex items-center justify-center mr-3">
+            <div className="indicator" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <FontAwesomeIcon icon={faShop} />
+              <span className="badge badge-sm btn-sm-ghost indicator-item" style={{ width: '30px', height: '30px' }}>{cart.reduce((acc, item) => acc + item.quantity, 0) || 0}</span>
             </div>
           </label>
-         </Link>
-        <div id="navbar-center" className="navbar-center hidden lg:flex px-4">
+        </Link>
+        <div id="navbar-center" className="navbar-center hidden lg-flex px-4">
           <ul className="menu menu-horizontal px-1">
             {navItems.map(item => (
               <li key={item.id}>
-                <NavLink to={item.link} style={{ fontSize: '1.1rem', fontWeight: 'bold', textTransform: 'uppercase' }}>{item.name}</NavLink>
+                <NavLink to={item.link} style={{ fontSize: '1.1rem', fontWeight: 'bold', textTransform: 'uppercase', color: 'inherit' }}>{item.name}</NavLink>
               </li>
             ))}
           </ul>

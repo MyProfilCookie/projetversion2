@@ -28,7 +28,7 @@ const Contact = () => {
     }
 
     try {
-      const response = await axios.post('http://127.0.0.1:3000/contact', { name, email, subject, message });
+      const response = await axios.post('http://127.0.0.1:3001/contact', { name, email, subject, message });
       if (response.data.success) {
         setSuccess(true);
         setName('');
@@ -61,7 +61,7 @@ const Contact = () => {
       <div className='container mx-auto max-w-screen-2xl'>
         <div className='
         flex flex-col items-center justify-center gap-8'>
-          <div className='text-center space-y-7 px-4'>
+          <div className='text-center space-y-7 py-4'>
             <h2 className='media-text-5xl text-4xl font-bold media-leading-snug leading-snug'>
               Contactez <span className='text-red'>Nous</span>
             </h2>

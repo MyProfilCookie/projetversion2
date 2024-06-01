@@ -14,6 +14,7 @@ import {
 } from '@tanstack/react-query'
 import { LikeRecetteProvider } from './contexts/LikeRecetteProvider.jsx'
 import { ThemeProvider } from "./hooks/ThemeContext.jsx";
+import { CartProvider } from "./contexts/CartProvider.jsx";
 
 const queryClient = new QueryClient()
 
@@ -22,7 +23,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <LikeRecetteProvider>
             <QueryClientProvider client={queryClient}>
                 <ThemeProvider>
-                    <RouterProvider router={router} />
+                    <CartProvider>
+                        <RouterProvider router={router} />
+                    </CartProvider>
                 </ThemeProvider>
             </QueryClientProvider>
         </LikeRecetteProvider>

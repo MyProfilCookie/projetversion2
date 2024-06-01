@@ -113,6 +113,7 @@
 .confirm {
   background-color: #38ada9;
   border: 1px solid #38ada9;
+  transition: all 0.3s ease-in-out;
 }
 
 .confirm:hover {
@@ -122,14 +123,15 @@
 }
 
 .cancel {
-  background-color: #f6b93b;
-  border: 1px solid #f6b93b;
+  background-color: tomato;
+  border: 1px solid tomato;
+  transition: all 0.3s ease-in-out;
 }
 
 .cancel:hover {
-  color: #f6b93b;
+  color: tomato;
   background-color: #ffffff;
-  border: 1px solid #f6b93b;
+  border: 1px solid tomato;
 }
 
 .btn3 {
@@ -147,4 +149,8 @@
 
 .margin-right {
   margin-right: 1rem;
+}
+.outline-none {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
 }

@@ -1,27 +1,23 @@
 .about-container {
-    font-family: 'Arial, sans-serif';
     padding: 20px;
     // background-color: #f5f5f5;
   }
   
   .hero-section {
-    // background-color:  rgb(75, 32, 65);
-    @include gradient-northern-lights-reverse;
     padding: 50px;
     text-align: center;
-    color: white;
     border-radius: 8px;
     margin-bottom: 40px;
-    transform: translateY(-50px);
   }
   .hero-section:hover {
-    @include gradient-northern-lights;
     padding: 50px;
     text-align: center;
-    color: white;
+    color: tomato;
     border-radius: 8px;
+    font-weight: 900;
+    font-size: larger;
     margin-bottom: 40px;
-    transform: translateY(-50px);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
     
   }
   

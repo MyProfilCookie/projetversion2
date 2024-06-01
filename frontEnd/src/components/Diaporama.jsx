@@ -4,16 +4,15 @@ import React from 'react';
 import { useRef, useState } from 'react';
 import { Autoplay, Pagination, Navigation, EffectCoverflow } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import img from '/images/chocolat.jpeg';
-import img2 from '/images/chocolat.jpeg';
-import img3 from '/images/chocolat.jpeg';
-import img4 from '/images/chocolat.jpeg';
-import img5 from '/images/chocolat.jpeg';
-import img6 from '/images/chocolat.jpeg';
-import img7 from '/images/chocolat.jpeg';
-import img8 from '/images/chocolat.jpeg';
-import img9 from '/images/chocolat.jpeg';
-// import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
+import img from '/muffin/muffinmyrtille.webp';
+import img2 from '/gourmandise/eclairs.webp';
+import img3 from '/gourmandise/cakefruits.webp';
+import img4 from '/tartecitron/tartelettesframboises.webp';
+import img5 from '/tartecitron/tartemeringue.jpeg';
+import img6 from '/viennoiserie/croissant.webp';
+import img7 from '/viennoiserie/painauraisin.webp';
+import img8 from '/viennoiserie/macaronsamandes.webp';
+import img9 from '/viennoiserie/chaussonauxpommes.webp';
 
 
 // Import Swiper styles
@@ -27,23 +26,27 @@ function Diaporama() {
  
     return (
         <Swiper
-        slidesPerView={1}
-        spaceBetween={10}
-        // effect={'coverflow'}
-        grabCursor={true}
-        centeredSlides={true}
-        // slidesPerView={'auto'}
-        // coverflowEffect={{
-        //   rotate: 20,
-        //   stretch: 0,
-        //   depth: 100,
-        //   modifier: 1,
-        //   slideShadows: true,
-        // }}
         autoplay={true}
         pagination={true}
-        modules={[EffectCoverflow, Pagination, Autoplay]}
-        className="mySwiper section-container mt-20"
+        navigation={true}
+        modules={[EffectCoverflow, Pagination, Autoplay, Navigation]}
+        
+        breakpoints={{
+            640: {
+                slidesPerView: 1,
+                spaceBetween: 10,
+            },
+            768: {
+                slidesPerView: 2,
+                spaceBetween: 10,
+            },
+            1024: {
+                slidesPerView: 3,
+                spaceBetween: 10,
+            },
+        }}
+        className="mySwiper section-container"
+        
        
       >
             <SwiperSlide><img src={img} className='img-diaporama' /></SwiperSlide>

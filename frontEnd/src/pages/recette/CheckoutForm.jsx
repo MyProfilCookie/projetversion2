@@ -1,47 +1,42 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import {  FaPaypal } from "react-icons/fa";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
-import useAuth from "../../hooks/useAuth";
+import { FaPaypal } from "react-icons/fa";
+import axios from "axios";
 import { useTheme } from "../../hooks/ThemeContext";
+import useAuth from "../../hooks/useAuth";
+import { useCart } from "../../contexts/CartProvider";
 
-const CheckoutForm = ({price, cart}) => {
+const CheckoutForm = ({ price }) => {
   const { isDarkMode } = useTheme();
   const stripe = useStripe();
   const elements = useElements();
-  const [cardError, setcardError] = useState('');
+  const [cardError, setCardError] = useState('');
   const [clientSecret, setClientSecret] = useState("");
 
-  const axiosSecure = useAxiosSecure();
-  const {user} = useAuth();
+  const { user } = useAuth();
+  const { cart } = useCart();
   const navigate = useNavigate();
-
-  console.log(user.email)
 
   useEffect(() => {
     if (typeof price !== 'number' || price < 1) {
       console.error('Invalid price value. Must be a number greater than or equal to 1.');
       return;
     }
-  
-    axiosSecure.post('/create-payment-intent', { price })
+
+    axios.post('/api/create-payment-intent', { price }) // Update URL to match your backend server
       .then(res => {
-        console.log(res.data.clientSecret);
-        console.log(price);
         setClientSecret(res.data.clientSecret);
       })
-  }, [price, axiosSecure]);
+  }, [price]);
 
-  // handleSubmit btn click
   const handleSubmit = async (event) => {
-    // Block native form submission.
     event.preventDefault();
 
     if (!stripe || !elements) {
-      // Stripe.js has not loaded yet. Make sure to disable
       return;
     }
 
@@ -51,21 +46,18 @@ const CheckoutForm = ({price, cart}) => {
       return;
     }
 
-    // console.log('card: ', card)
-    const {error, paymentMethod} = await stripe.createPaymentMethod({
+    const { error, paymentMethod } = await stripe.createPaymentMethod({
       type: 'card',
       card,
     });
 
     if (error) {
-      console.log('[error]', error);
-      setcardError(error.message);
+      setCardError(error.message);
     } else {
-      // setcardError('Success!');
-      // console.log('[PaymentMethod]', paymentMethod);
+      setCardError('');
     }
 
-    const {paymentIntent, error:confirmError} = await stripe.confirmCardPayment(
+    const { paymentIntent, error: confirmError } = await stripe.confirmCardPayment(
       clientSecret,
       {
         payment_method: {
@@ -78,83 +70,82 @@ const CheckoutForm = ({price, cart}) => {
       },
     );
 
-    if(confirmError){
+    if (confirmError) {
       console.log(confirmError)
     }
 
-    console.log('paymentIntent', paymentIntent)
+    if (paymentIntent?.status === "succeeded") {
+      const transactionId = paymentIntent.id;
+      setCardError(`Your transactionId is: ${transactionId}`)
 
-    if(paymentIntent.status ==="succeeded") {
-      const transitionId =paymentIntent.id;
-      setcardError(`Your transitionId is: ${transitionId}`)
+      const paymentInfo = {
+        email: user.email,
+        transactionId: paymentIntent.id,
+        price,
+        quantity: cart.reduce((total, item) => total + item.quantity, 0),
+        status: "order pending",
+        itemsName: cart.map(item => item.name),
+        cartItems: cart.map(item => item._id),
+        menuItems: cart.map(item => item.menuItemId)
+      };
 
-      // save payment info to server
-      const paymentInfo ={email: user.email, transitionId: paymentIntent.id, price, quantity: cart.length,
-        status: "order pending", itemsName: cart.map(item => item.name), cartItems: cart.map(item => item._id), menuItems: cart.map(item => item.menuItemId)}
-
-      // send payment info
-      axiosSecure.post('/payments', paymentInfo)
-      .then( res => {
-        console.log(res.data)
-        if(res.data){
-          alert('Payment info sent successfully!')
-          navigate('/order')
-        }
-      })
+      axios.post('/api/payments', paymentInfo)
+        .then(res => {
+          if (res.data) {
+            alert('Payment info sent successfully!')
+            navigate('/order')
+          }
+        })
     }
-
-
   };
+
   return (
     <div className="flex flex-col sm:flex-row justify-start items-start gap-8">
       <div className="md:w-1/2 space-y-3">
-        <h4 className="text-lg font-semibold">Order Summary</h4>
-        <p>Total Price: ${price}</p>
-        <p>Number of Items: {cart.length}</p>
+        <h4 className="text-lg font-semibold">Résumé de la commande</h4>
+        <p>Prix total: {price} €</p>
+        <p>Nombre d'articles: {cart.reduce((total, item) => total + item.quantity, 0)}</p>
       </div>
-      <div className={`md:w-1/3 w-full border space-y-5  card shrink-0 max-w-sm shadow-2xl bg-base-100 px-4 py-8 ${isDarkMode ? 'dark' : ''}`}>
-        <h4 className="text-lg font-semibold">Process your Payment!</h4>
-        <h5 className="font-medium">Credit/Debit Card</h5>
+      <div className={`md:w-1/3 w-full border space-y-5 card shrink-0 max-w-sm shadow-2xl bg-base-100 px-4 py-8 ${isDarkMode ? 'dark' : ''}`}>
+        <h4 className="text-lg font-semibold">Procédez à votre paiement!</h4>
+        <h5 className="font-medium">Carte de crédit/débit</h5>
         <form onSubmit={handleSubmit}>
-        <CardElement
-          options={{
-            style: {
-              base: {
-                fontSize: "16px",
-                color: "#424770",
-                "::placeholder": {
-                  color: "#aab7c4",
+          <CardElement
+            options={{
+              style: {
+                base: {
+                  fontSize: "16px",
+                  color: "#424770",
+                  "::placeholder": {
+                    color: "#aab7c4",
+                  },
+                },
+                invalid: {
+                  color: "#9e2146",
                 },
               },
-              invalid: {
-                color: "#9e2146",
-              },
-            },
-          }}
-        />
-        <button
-          type="submit"
-          disabled={!stripe || !clientSecret}
-          className="btn btn-primary btn-sm mt-5 w-full"
-        >
-          Pay
-        </button>
+            }}
+          />
+          <button
+            type="submit"
+            disabled={!stripe || !clientSecret}
+            className="btn btn-primary btn-sm mt-5 w-full"
+          >
+            Payer
+          </button>
         </form>
-      {cardError ? <p className="text-red text-xs italic">{cardError}</p> : ''}
-     
-      <div className="mt-5 text-center">
-      <hr />
-      <button
-          type="submit"
-    
-          className="btn  btn-sm mt-5 bg-orange-500 text-white"
-        >
-         <FaPaypal /> Pay with Paypal
-        </button>
-      </div>
+        {cardError ? <p className="text-red text-xs italic">{cardError}</p> : ''}
+
+        <div className="mt-5 text-center">
+          <hr />
+          <button className="btn btn-sm mt-5 bg-orange-500 text-white">
+            <FaPaypal /> Payer avec Paypal
+          </button>
+        </div>
       </div>
     </div>
   );
 };
 
 export default CheckoutForm;
+

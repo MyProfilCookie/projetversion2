@@ -2,9 +2,11 @@
 import React from 'react'
 import Banner from '../../components/Banner'
 import Categories from './Categories'
-// import SpecialRecette from './SpecialRecette'
+import CartePreview from './CartePreview'
 import SectionRecette from './SectionRecette'
 import OurServices from './OurCategories'
+import CompanyLogo from './CompanyLogo'
+import NewsLetter from './NewsLetter'
 
 import Diaporama from '../../components/Diaporama'
 
@@ -12,11 +14,13 @@ const Home = () => {
   return (
     <div>
       <Banner />
+      <NewsLetter />
       <Diaporama />
       <Categories />
-      {/* <SpecialRecette /> */}
       <SectionRecette />
+      <CompanyLogo />
       <OurServices />
+      <CartePreview />
     </div>
    
     

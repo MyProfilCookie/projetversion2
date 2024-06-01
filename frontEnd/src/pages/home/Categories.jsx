@@ -25,7 +25,7 @@ function Categories() {
             </div>
             <div className='mt-5 space-y-1 mb-3'>
               <h5 className='text-center font-bold'>{category.name}</h5>
-              <button className='btn-primary px-8 py-3 font-semibold rounded-full mt-10'>Voir plus</button>
+              <button className='btn-primary font-semibold rounded-full mt-10'>Voir plus</button>
             </div>
           </Link>
         ))}

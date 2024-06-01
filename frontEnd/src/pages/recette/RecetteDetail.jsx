@@ -26,7 +26,7 @@ function RecetteDetail() {
 
     const fetchComments = async (recetteId) => {
         try {
-            const response = await axios.get(`/api/recettes/${recetteId}/comments`);
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/recettes/${recetteId}/comments`);
             setComments(response.data || []); // Ensure it's an array
         } catch (error) {
             console.error('Error fetching comments:', error);

@@ -32,7 +32,7 @@ function OurCategories() {
                         <p className='my-5 text-secondary text-lg leading-30  '>
                             Votre site est composé de plusieurs catégories et de nombreuses recettes. Vous pouvez trouver la recette qui vous convient le plus. Vous pouvez également consulter les avis des autres utilisateurs pour vous aider à choisir la recette qui vous convient le mieux.
                         </p>
-                        <Link to="/register" className='btn-primary px-8 py-3 font-semibold rounded-full mt-12 hover-scale-110 transition duration-300'><button type='button' className='btn btn-primary'>S'inscrire</button></Link>
+                        {/* <Link to="/register" className='btn-primary px-8 py-3 font-semibold rounded-full mt-12 hover-scale-110 transition duration-300'><button type='button' className='btn btn-primary'>S'inscrire</button></Link> */}
                     </div>
                 </div>
                 <div className='md-w-half px-8 sd-w-full'>

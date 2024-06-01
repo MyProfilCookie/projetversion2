@@ -11,7 +11,12 @@ const compression = require("compression");
 
 
 // middleware
-app.use(cors());
+app.use(cors(
+  {
+    origin: 'http://localhost:5174',
+    credentials: true
+  }
+));
 app.use(express.json());
 app.use('/uploads', express.static('uploads'));
 app.use(compression());

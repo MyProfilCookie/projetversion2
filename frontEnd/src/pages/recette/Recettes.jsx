@@ -14,7 +14,7 @@ function Recettes() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}recettes`);
+        const response = await fetch(`/api/recettes`);
         const data = await response.json();
         const normalizedData = data.map(item => ({
           ...item,
@@ -105,7 +105,7 @@ function Recettes() {
           </div>
         </div>
 
-        <div className="section-container align-center mx-auto">
+        <div className="section-container align-center mx-auto" style={{ maxWidth: '1400px' }}>
           <div className="text-center mb-10"><p className="subtitle">Trouver une recette</p></div>
           <div className="container">
             <div className="search-bar">

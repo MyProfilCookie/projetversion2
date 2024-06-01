@@ -9,7 +9,7 @@ import LoadingScreen from '../components/LoadingScreen'
 const Main = () => {
     const { loading } = useContext(AuthContext);
     return (
-        <div className='bg-chocolat-blanc2'>
+        <div style={{ backgroundColor: 'rgb(244, 242, 237)', fontFamily: 'Lora' }}>
             {
                 loading ? <LoadingScreen /> :
                     <div><Navbar />

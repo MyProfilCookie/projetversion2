@@ -69,6 +69,21 @@
     justify-content: center;
     align-items: center;
   }
+  .swiper-container {
+    width: 480px;
+  }
+  
+  @media screen and (min-width: 640px) {
+    .swiper-container {
+      width: 640px;
+    }
+  }
+  
+  @media screen and (min-width: 768px) {
+    .swiper-container {
+      width: 768px;
+    }
+  }
   
   .swiper-bullet {
     width: 20px;
@@ -88,6 +103,6 @@
 
   @media (min-width: 768px) {
     .img-diaporama {
-      height: 70vh;
+      height: 50vh;
     }
   }

@@ -91,6 +91,17 @@
     @media (min-width: 768px) {
         width: 80%;
     }
+
+}
+.media-w-2-3 {
+    @media (min-width: 768px) {
+        width: 67%;
+    }
+}
+.media-flex-row {
+    @media (min-width: 768px) {
+        flex-direction: row;
+    }
 }
 
 
