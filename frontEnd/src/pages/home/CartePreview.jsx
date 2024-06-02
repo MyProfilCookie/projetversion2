@@ -1,18 +1,26 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/no-unescaped-entities */
-// src/components/SpecialRecette.js
-// eslint-disable-next-line no-unused-vars
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../../contexts/CartProvider';
 
 function CartePreview() {
   const { addToCart } = useCart();
+  const [notification, setNotification] = useState(null);
 
   const items = [
-    { id: 1, name: "Tablier", image: "/achat/tablier.webp", path: "/cart", price: 20 },
-    { id: 2, name: "Fouet", image: "/achat/fouet.webp", path: "/cart", price: 10 },
-    { id: 3, name: "Rouleau à pâtisserie", image: "/achat/rouleau.webp", path: "/cart", price: 15 },
+    { id: 1, name: "Tablier", image: "/images/achat/tablier.webp", path: "/cart", price: 20 },
+    { id: 2, name: "Fouet", image: "/images/achat/fouet.webp", path: "/cart", price: 10 },
+    { id: 3, name: "Rouleau à pâtisserie", image: "/images/achat/rouleau.webp", path: "/cart", price: 15 },
   ];
+
+  const handleAddToCart = (item) => {
+    addToCart(item);
+    setNotification(`L'article ${item.name} a été ajouté au panier.`);
+    setTimeout(() => {
+      setNotification(null);
+    }, 3000);
+  };
 
   return (
     <div className='section-container my-20 relative'>
@@ -29,12 +37,18 @@ function CartePreview() {
             <div className='mt-5 space-y-1 mb-3'>
               <h5 className='text-center font-bold'>{item.name}</h5>
               <p className='text-center font-medium'>Prix: {item.price}€</p>
-              <button className='btn-primary font-semibold rounded-full mt-10' onClick={() => addToCart(item)}>Ajouter au panier</button>
+              <button className='btn-primary font-semibold rounded-full mt-10' onClick={() => handleAddToCart(item)}>Ajouter au panier</button>
             </div>
           </div>
         ))}
       </div>
       <Link to='/cart' className='btn-secondary font-semibold rounded-full mt-10 flex justify-center' style={{position: "absolute", left: "50%", transform: "translateX(-50%)" }}>Voir le panier</Link>
+      
+      {notification && (
+        <div className='notifications'>
+          {notification}
+        </div>
+      )}
     </div>
   );
 }

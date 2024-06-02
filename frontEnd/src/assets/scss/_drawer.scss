@@ -102,10 +102,12 @@
 
 .drawer-side {
   position: fixed;
-  top: 7.7%;  // 4rem = 64px c'etait à 0 à la base
+  top: 50%;  // 4rem = 64px c'etait à 0 à la base
   right: 0;
-  // height: 100%;
-  background-color: rgb(241, 59, 59);
+  height: 100%;
+  width: 100%;
+  background-color: rgba(18, 18, 18, 0.91);
+  // background-color: rgb(241, 59, 59);
   color: #fff;
   // color: #1f2937;
   transform: translateX(100%);
@@ -188,4 +190,12 @@
   padding: .5rem 1rem;
   text-align: start;
   cursor: pointer;
+}
+
+.drawer-side {
+  @media (min-width: 992px) {
+   top: 7.7%;
+   height: 50%;
+   width: 20%;
+  }
 }

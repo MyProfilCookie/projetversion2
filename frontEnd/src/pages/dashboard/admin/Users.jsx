@@ -1,134 +1,117 @@
 /* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from 'react';
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import React from "react";
+import { FaTrashAlt, FaUsers } from "react-icons/fa";
+import Swal from "sweetalert2";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
-function Users() {
-const [recettes, setRecettes] = useState([]);
-    const [users, setUsers] = useState([]);
-    const [selectedRecette, setSelectedRecette] = useState(null);
-    const [selectedUser, setSelectedUser] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-
-    // Fonctions pour les interactions de sélection
-    const toggleSelectedRecette = (recette) => {
-        setSelectedRecette(selectedRecette && selectedRecette.id === recette.id ? null : recette);
-        setSelectedUser(null);
-    };
-
-
-    const toggleSelectedUser = (user) => {
-        setSelectedUser(selectedUser && selectedUser.id === user.id ? null : user);
-    };
-
-    // Fonctions pour les actions de gestion des recettes
-    const updateRecette = (id, newDetails) => {
-        setRecettes(recettes.map(recette => recette.id === id ? { ...recette, ...newDetails } : recette));
-    };
-
-    const deleteRecette = (id) => {
-        setRecettes(recettes.filter(recette => recette.id !== id));
-    };
-
-    // Fonctions pour les actions de gestion des utilisateurs
-    const deleteUser = (userId) => {
-        setUsers(users.filter(user => user.id !== userId));
-        setSelectedUser(null);
-    };
-
-    const changeUserRole = async (userId, newRole) => {
-        setUsers(users.map(user => user.id === userId ? { ...user, role: newRole } : user));
-        setSelectedUser(null);
-      
-        try {
-          const response = await fetch(`${import.meta.env.VITE_API_URL}/users/${userId}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ role: newRole }) 
-          });
-      
-          const data = await response.json();
-          if (!response.ok) {
-            throw new Error(data.message || "Failed to update the user role");
-          }
-          console.log("Updated successfully:", data);
-        } catch (error) {
-          console.error("Error updating user role:", error);
+const Users = () => {
+  const axiosSecure = useAxiosSecure();
+    const { data: users = [], refetch } = useQuery({
+        queryKey: ['users'],
+        queryFn: async () => {
+            const res = await axiosSecure.get('/users');
+            return res.data;
         }
-      };
+    })
 
-    // Chargement des données depuis l'API
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-            try {
-                const resRecettes = await fetch(`${import.meta.env.VITE_API_URL}/recettes`);
-                const dataRecettes = await resRecettes.json();
-                if (Array.isArray(dataRecettes)) {
-                    setRecettes(dataRecettes);
-                } else {
-                    console.error('Data fetched for recettes is not an array:', dataRecettes);
-                }
+    const handleMakeAdmin = user =>{
+      axiosSecure.patch(`/users/admin/${user.id}`)
+      .then(res =>{
+          console.log(res.data)
+          Swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: `${user.name} is an Admin Now!`,
+              showConfirmButton: false,
+              timer: 1500
+            });
+            refetch();
+      })
+  };
 
-                const resUsers = await fetch(`${import.meta.env.VITE_API_URL}/users`);
-            const dataUsers = await resUsers.json();
-            if (dataUsers.status && Array.isArray(dataUsers.result)) {
-                setUsers(dataUsers.result);
-            } else {
-                console.error('Data fetched for users is not an array:', dataUsers);
-                setUsers([]); // Définir users comme un tableau vide pour éviter les erreurs lors de l'utilisation de .map()
-            }
-        } catch (err) {
-            setError(err.message);
-        } finally {
-            setLoading(false);
+  const handleDeleteUser = user => {
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+        if (result.isConfirmed) {
+
+            axiosSecure.delete(`/users/${user._id}`)
+                .then(res => {
+                  console.log(res)
+                  Swal.fire({
+                    title: "Deleted!",
+                    text: "Your file has been deleted.",
+                    icon: "success"
+                });
+                })
+                refetch();
         }
-    };
-    fetchData();
-}, []);
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>Error: {error}</div>;
-
-    return (
-      <div className="admin-panel">
-          <h1>Panel Administrateur - Blog de Pâtisserie</h1>
-          <div className="section">
-              <h2>Gestion des Recettes</h2>
-              {recettes.map(recette => (
-                  <div key={recette.id} className="item">
-                      <p onClick={() => toggleSelectedRecette(recette)}> {recette.title}</p>
-                      {selectedRecette && selectedRecette.id === recette.id && (
-                          <div className="details">
-                              <p>Description: {selectedRecette.description}</p>
-                              <p>Contenu: {selectedRecette.content}</p>
-                          </div>
-                      )}
-                      <div>
-                          <button className="update button-panel" onClick={() => updateRecette(recette.id, { title: 'Nouveau titre' })}>Mettre à jour</button>
-                          <button className="delete button-panel" onClick={() => deleteRecette(recette.id)}>Supprimer</button>
-                      </div>
-                  </div>
-              ))}
-          </div>
-          <div className="section">
-              <h2>Gestion des utilisateurs</h2>
-              {users.map((user, index) => (
-                  <div key={index} className="item">
-                      <p onClick={() => toggleSelectedUser(user)}>{user.username}</p>
-                      {selectedUser && selectedUser.id === user.id && (
-                          <div className="details">
-                              <p>Email: {selectedUser.email}</p>
-                              <p>Role: {selectedUser.role}</p>
-                          </div>
-                      )}
-                      <div>
-                          <button className="update button-panel" onClick={() => changeUserRole(user.id, 'admin')}>Mettre à jour</button>
-                          <button className="delete button-panel" onClick={() => deleteUser(user.id)}>Supprimer</button>
-                      </div>
-                  </div>
-              ))}
-          </div>
-      </div>
-    );
+    });
 }
+
+  return (
+    <div>
+      <div className="flex justify-between mx-4 my-4">
+        <h2 className="text-2xl">All Users</h2>
+        <h2 className="text-2xl">Total Users: {users.length}</h2>
+      </div>
+
+      {/* table */}
+      <div>
+      <div className="overflow-x-auto">
+          <table className="table table-zebra md:w-[870px]">
+            {/* head */}
+            <thead className="bg-green text-white">
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {users.map((user, index) => (
+                <tr key={user._id}>
+                  <th>{index + 1}</th>
+                  <td>{user.name}</td>
+                  <td>{user.email}</td>
+                  <td>
+                    {user.role === "admin" ? (
+                      "Admin"
+                    ) : (
+                      <button
+                        onClick={() => handleMakeAdmin(user)}
+                        className="btn btn-xs btn-circle bg-indigo-500"
+                      >
+                        <FaUsers className="text-white"></FaUsers>
+                      </button>
+                    )}
+                  </td>
+                  <td>
+                    <button
+                      onClick={() => handleDeleteUser(user)}
+                      className="btn bg-orange-500 btn-xs"
+                    >
+                      <FaTrashAlt className="text-white" />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default Users;

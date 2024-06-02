@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
-import recettes from '../../../public/recettes';
 import { LikeRecetteContext } from '../../contexts/LikeRecetteProvider';
 import useAuth from '../../hooks/useAuth';
 import axios from 'axios';
@@ -14,23 +13,31 @@ function RecetteDetail() {
     const { user } = useAuth();
     const [recette, setRecette] = useState(null);
     const [comment, setComment] = useState('');
-    const [comments, setComments] = useState([]); // Initialize as an array
+    const [comments, setComments] = useState([]);
     const [checkedSteps, setCheckedSteps] = useState([]);
 
     useEffect(() => {
-        const recetteId = parseInt(id, 10);
-        const foundRecette = recettes.find(r => r.id === recetteId);
-        setRecette(foundRecette);
-        fetchComments(recetteId);
+        const fetchRecette = async () => {
+            try {
+                console.log(`Requête pour l'ID: ${id}`); // Journal de l'ID utilisé
+                const response = await axios.get(`/api/recettes/${id}`);
+                console.log(`Réponse reçue: ${response.data}`); // Journal de la réponse reçue
+                setRecette(response.data);
+            } catch (error) {
+                console.error('Erreur lors de la récupération de la recette:', error);
+            }
+        };
+        fetchRecette();
+        fetchComments(id);
     }, [id]);
 
     const fetchComments = async (recetteId) => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_API_URL}/recettes/${recetteId}/comments`);
-            setComments(response.data || []); // Ensure it's an array
+            const response = await axios.get(`/api/recettes/${recetteId}/comments`);
+            setComments(response.data || []);
         } catch (error) {
-            console.error('Error fetching comments:', error);
-            setComments([]); // Ensure it's an array even in case of error
+            console.error('Erreur lors de la récupération des commentaires:', error);
+            setComments([]);
         }
     };
 
@@ -41,11 +48,11 @@ function RecetteDetail() {
             return;
         }
         try {
-            const response = await axios.post(`/api/recettes/${recette.id}/comments`, { comment });
+            const response = await axios.post(`/api/recettes/${recette._id}/comments`, { comment });
             setComments([...comments, response.data]);
             setComment('');
         } catch (error) {
-            console.error('Error posting comment:', error);
+            console.error('Erreur lors de l\'envoi du commentaire:', error);
         }
     };
 
@@ -70,18 +77,18 @@ function RecetteDetail() {
             <div className="header">
                 <h1 className='title'>{recette.titre}</h1>
                 <div className="like-dislike">
-                    <button className={`like-button ${likes[recette.id] ? 'liked' : ''}`} onClick={() => toggleLike(recette.id)}>
+                    <button className={`like-button ${likes[recette._id] ? 'liked' : ''}`} onClick={() => toggleLike(recette._id)}>
                         <FontAwesomeIcon icon={faThumbsUp} />
                     </button>
-                    <button className={`dislike-button ${dislikes[recette.id] ? 'disliked' : ''}`} onClick={() => toggleDislike(recette.id)}>
+                    <button className={`dislike-button ${dislikes[recette._id] ? 'disliked' : ''}`} onClick={() => toggleDislike(recette._id)}>
                         <FontAwesomeIcon icon={faThumbsDown} />
                     </button>
                 </div>
-                {likes[recette.id] && <p className="like-message">Cette recette a été liké</p>}
-                {dislikes[recette.id] && <p className="dislike-message">Cette recette a été disliké</p>}
+                {likes[recette._id] && <p className="like-message">Cette recette a été likée</p>}
+                {dislikes[recette._id] && <p className="dislike-message">Cette recette a été dislikée</p>}
             </div>
             <div className="left-column">
-                <img src={recette.image} alt={recette.titre} />
+                <img src={`${recette.image}`} alt={recette.titre} />
                 <div className="details">
                     <p>Temps de préparation : {recette.temps_preparation}</p>
                     <p>Temps de cuisson : {recette.temps_cuisson}</p>
@@ -129,7 +136,7 @@ function RecetteDetail() {
                                 cols={30}
                                 rows={5}
                             />
-                            <button type="submit" style={{ alignSelf: 'center', padding: '0.5rem 1rem', borderRadius: '0.5rem', fontWeight: 'bold', cursor: 'pointer', transition: 'background-color 0.3s',backgroundColor: '#ff6347', color: '#fff', border: 'none' }}>Envoyer</button>
+                            <button type="submit" style={{ alignSelf: 'center', padding: '0.5rem 1rem', borderRadius: '0.5rem', fontWeight: 'bold', cursor: 'pointer', transition: 'background-color 0.3s', backgroundColor: '#ff6347', color: '#fff', border: 'none' }}>Envoyer</button>
                         </form>
                     )}
                 </div>

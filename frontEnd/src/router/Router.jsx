@@ -9,7 +9,6 @@ import RecetteDetail from "../pages/recette/RecetteDetail";
 import Order from "../pages/dashboard/user/Order";
 import DashboardLayout from "../layout/DashboardLayout";
 import Dashboard from "../pages/dashboard/admin/Dashboard";
-import UserDashboard from "../pages/dashboard/user/UserDashboard";
 import Payment from "../pages/recette/Payment";
 import Users from "../pages/dashboard/admin/Users";
 import Contact from "../components/Contact";
@@ -22,6 +21,10 @@ import Fruits from "../pages/categories/Fruits";
 import Erreur404 from "../components/Erreur404"; 
 import Login from "../components/Login";
 import CartPage from "../pages/recette/CartPage";
+import AddRecette from "../pages/dashboard/admin/AddRecette";
+import UpdateRecette from "../pages/dashboard/admin/UpdateRecette";
+import ManageItems from "../pages/dashboard/admin/ManageItems";
+import ManageBookings from "../pages/dashboard/admin/ManegeBookings";
 
 const router = createBrowserRouter([
   {
@@ -115,18 +118,30 @@ const router = createBrowserRouter([
     element: <PrivateRouter><DashboardLayout /></PrivateRouter>,
     children: [
       {
-        path: '/dashboard/:userId',
-        element: <UserDashboard />
+        path: '',
+        element: <Dashboard />
       },
       {
         path: 'users',
         element: <Users />
       },
       {
-        path: '',
-        element: <Dashboard />
+        path: 'add-recette',
+        element: <AddRecette />
       },
-      {}
+      {
+        path: 'manage-items',
+        element: <ManageItems />
+      },
+      {
+        path: 'update-recette/:id',
+        element: <UpdateRecette />,
+        loader : ({params}) => fetch(`http://localhost:3001/recettes/${params.id}`).then(res => res.json())
+      },
+      {
+        path: 'bookings',
+        element: <ManageBookings />
+      }
     ]
   }
 ]);

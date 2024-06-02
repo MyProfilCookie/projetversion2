@@ -18,7 +18,7 @@ app.use(cors(
   }
 ));
 app.use(express.json());
-app.use('/uploads', express.static('uploads'));
+app.use('/public', express.static('public'));
 app.use(compression());
 
 
@@ -28,7 +28,13 @@ app.post("/jwt", async (req, res) => {
   const token = jwt.sign(user, process.env.JW_SECRET, {
     expiresIn: "1h",
   });
-  res.send({ token });
+  res.send({ 
+    token: token
+    ,
+    user: user
+    ,
+    email: user.email
+   });
 });
 
 // ayivorvirginie26

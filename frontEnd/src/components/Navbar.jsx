@@ -46,7 +46,7 @@ const Navbar = () => {
         <div id="navbar-start" className="navbar-start">
           <div id="navbar-dropdown" className={`dropdown ${isOpen ? 'open' : ''}`}>
             <div tabIndex={0} role="button" className="btn btn-ghost" onClick={toggleMenu}>
-              <FontAwesomeIcon icon={isOpen ? faTimes : faBars} size="2xl" style={{ height: '25px' }} className='md-hidden' />
+              <FontAwesomeIcon icon={isOpen ? faTimes : faBars} size="2xl" style={{ height: '25px', color: 'black' }} className='md-hidden' />
             </div>
             {isOpen && (
               <ul tabIndex={0} className="dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
@@ -63,7 +63,7 @@ const Navbar = () => {
           <label tabIndex={0} className="btn btn-circle flex items-center justify-center mr-3">
             <div className="indicator" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <FontAwesomeIcon icon={faShop} />
-              <span className="badge badge-sm btn-sm-ghost indicator-item" style={{ width: '30px', height: '30px' }}>{cart.reduce((acc, item) => acc + item.quantity, 0) || 0}</span>
+              <span className="badge badge-sm indicator-item" style={{ width: '30px', height: '30px' }}>{cart.reduce((acc, item) => acc + item.quantity, 0) || 0}</span>
             </div>
           </label>
         </Link>

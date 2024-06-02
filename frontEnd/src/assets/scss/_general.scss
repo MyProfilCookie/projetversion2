@@ -1347,6 +1347,7 @@ a {
 .px-4 {
   padding-left: 1rem;
   padding-right: 1rem;
+  
 }
 .py-12 {
   padding-top: 3rem;
@@ -1383,4 +1384,8 @@ a {
 }
 .object-contain {
   object-fit: contain;
+}
+
+.notifications {
+  @include notification-style;
 }

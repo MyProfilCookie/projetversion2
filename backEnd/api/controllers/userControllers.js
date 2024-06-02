@@ -2,7 +2,6 @@ const User = require("../models/User");
 const Recette = require("../models/Recette");
 const createError = require("http-errors");
 const mongoose = require("mongoose");
-
 const bcrypt = require("bcrypt");
 const JWTGenerator = require("../Utils/JWTGenerator");
 
@@ -16,50 +15,59 @@ const getAllUsers = async (req, res, next) => {
   } catch (error) {
     next(createError(500, error.message));
   }
+};
 
-};const uploadProfileImage = async (req, res) => {
+const makeAdminByEmail = async (req, res) => {
+  const email = req.params.email;
+    if (!email) {
+        return res.status(400).json({ message: "Email parameter is required" });
+    }
+    try {
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        user.role = 'admin';
+        await user.save();
+        res.status(200).json({ message: "User promoted to admin", user });
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error });
+    }
+};
+
+const getOneAdminByEmail = async (req, res, next) => {
+    try {
+      const admin = await User.findOne({ email: req.params.email });
+      if (!admin) {
+        return res.status(404).json({ message: 'Admin not found' });
+      }
+      res.status(200).json({ admin: admin.role === 'admin' });
+    } catch (error) {
+      next(createError(500, error.message));
+    }
+  };
+
+const uploadProfileImage = async (req, res) => {
   try {
     const userId = req.params.id;
     const profileImagePath = req.file.path;
 
-    const user = await User.findByIdAndUpdate(userId, { profileImage: profileImagePath }, { new: true });
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { profileImage: profileImagePath },
+      { new: true }
+    );
 
     if (!user) {
-      return res.status(404).send({ message: 'User not found' });
+      return res.status(404).send({ message: "User not found" });
     }
 
-    res.status(200).send({ message: 'Image uploaded successfully', user });
+    res.status(200).send({ message: "Image uploaded successfully", user });
   } catch (error) {
     console.error(error);
-    res.status(500).send({ message: 'Error uploading image', error });
+    res.status(500).send({ message: "Error uploading image", error });
   }
 };
-
-//faire un ajout admin
-
-const makeAdmin = async (req, res) => {
-  const userId = req.params.id;
-  const { name, email, photoURL, role } = req.body;
-  try {
-      const updatedUser = await User.findByIdAndUpdate(
-          userId,
-          {role: 'admin'},
-          { new: true, runValidators: true }
-      );
-
-      // console.log(updatedUser)
-
-      if (!updatedUser) {
-          return res.status(404).json({ message: 'User not found' });
-      }
-
-      res.status(200).json(updatedUser);
-  } catch (error) {
-      res.status(500).json({ message: error.message });
-  }
-};
-
-
 const postCommentaire = async (req, res, next) => {
   try {
     const newCommentaire = new Commentaire({
@@ -90,7 +98,7 @@ const logOut = async (req, res, next) => {
       .status(200)
       .json({
         status: true,
-        message: "Utilisateur deconnecté",
+        message: "Utilisateur déconnecté",
       });
   } catch (error) {
     next(createError(500, error.message));
@@ -100,6 +108,9 @@ const logOut = async (req, res, next) => {
 const getOneUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
     res.json(user);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -122,39 +133,27 @@ const createUser = async (req, res, next) => {
   }
 };
 
-const loginUser = async (req, res) => {
+const loginUser = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    const isUserEmailExists = await User.findOne({ email });
-    const isUserUsernameExists = await User.findOne({
-      username: username,
-    });
+    const user = await User.findOne({ email });
 
-    if (isUserEmailExists && !isUserUsernameExists) {
-      const isPasswordCorrect = await bcrypt.compare(
-        password,
-        isUserEmailExists.password
-      );
-      if (isPasswordCorrect) {
-        const TOKEN = JWTGenerator(
-          isUserEmailExists._id,
-          isUserEmailExists.role
-        );
-        res.status(200).json({
-          status: true,
-          message: "Login avec succes",
-          result: isUserEmailExists,
-          TOKEN,
-        });
-        console.log(isUserEmailExists);
-      } else {
-        next(createError(500, "Mot de passe incorrect"));
-      }
-    } else if (!isUserEmailExists && isUserUsernameExists) {
-      next(createError(500, "Email incorrect"));
-    } else {
-      next(createError(500, "Email ou mot de passe incorrect"));
+    if (!user) {
+      return next(createError(500, "Email incorrect"));
     }
+
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+    if (!isPasswordCorrect) {
+      return next(createError(500, "Mot de passe incorrect"));
+    }
+
+    const TOKEN = JWTGenerator(user._id, user.role);
+    res.status(200).json({
+      status: true,
+      message: "Login avec succès",
+      result: user,
+      TOKEN,
+    });
   } catch (error) {
     next(createError(500, error.message));
   }
@@ -165,29 +164,22 @@ const updateUser = async (req, res, next) => {
   try {
     if (req?.user?._id !== req.params.id) {
       return next(createError(400, "Vous n'avez pas les droits"));
-    } else {
-      const updatedUser = await User.findByIdAndUpdate(
-        req.params.id,
-        { $set: data },
-        { new: true }
-      );
-      if (updateUser.nModified > 0) {
-        const updatedUser = await User.findById(req.params.id).select(
-          "-password"
-        );
-        res.status(200).json({
-          status: true,
-          message: "Utilisateur mis à jour avec succes",
-          result: updatedUser,
-        });
-      } else {
-        res.status(200).json({
-          status: false,
-          message: "Aucun changement",
-          result: null,
-        });
-      }
     }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      { $set: data },
+      { new: true }
+    );
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({
+      status: true,
+      message: "Utilisateur mis à jour avec succès",
+      result: updatedUser,
+    });
   } catch (error) {
     next(createError(500, error.message));
   }
@@ -197,18 +189,19 @@ const deleteUser = async (req, res, next) => {
   const { id } = req.params;
   try {
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      next(createError(400, "ID n'existe pas"));
+      return next(createError(400, "ID n'existe pas"));
     }
-    const isUserExists = await User.findById(id);
-    if (!isUserExists) {
-      next(createError(400, "Cet utilisateur n'existe pas"));
-    } else {
-      await User.findByIdAndDelete(id);
-      res.status(200).json({
-        status: true,
-        message: "Utilisateur supprimé avec succes",
-      });
+
+    const user = await User.findById(id);
+    if (!user) {
+      return next(createError(400, "Cet utilisateur n'existe pas"));
     }
+
+    await User.findByIdAndDelete(id);
+    res.status(200).json({
+      status: true,
+      message: "Utilisateur supprimé avec succès",
+    });
   } catch (error) {
     next(createError(500, error.message));
   }
@@ -222,11 +215,10 @@ const deleteAllUsers = async (req, res, next) => {
       message: "Tous les utilisateurs ont bien été supprimés",
     });
   } catch (error) {
-    next(createError(500, `quelque chose s'est mal passe: ${error.message}`));
+    next(createError(500, `quelque chose s'est mal passé: ${error.message}`));
   }
 };
 
-// Nouvelle fonction pour obtenir les recettes publiées par l'utilisateur
 const getUserRecipes = async (req, res, next) => {
   try {
     const userRecipes = await Recette.find({ user: req.params.id });
@@ -238,16 +230,25 @@ const getUserRecipes = async (req, res, next) => {
 
 const getUserLikedDislikedRecipes = async (req, res, next) => {
   try {
-    const user = await User.findById(req.params.id).populate('likedRecipes').populate('dislikedRecipes');
+    const user = await User.findById(req.params.id)
+      .populate("likedRecipes")
+      .populate("dislikedRecipes");
     res.status(200).json({
       likedRecipes: user.likedRecipes || [],
-      dislikedRecipes: user.dislikedRecipes || []
+      dislikedRecipes: user.dislikedRecipes || [],
     });
   } catch (error) {
     next(createError(500, error.message));
   }
 };
-
+const getAllAdmins = async (req, res, next) => {
+  try {
+    const admins = await User.find({ role: "admin" });
+    res.status(200).json(admins);
+  } catch (error) {
+    next(createError(500, error.message));
+  }
+};
 
 module.exports = {
   getAllUsers,
@@ -262,5 +263,7 @@ module.exports = {
   postCommentaire,
   getUserRecipes,
   getUserLikedDislikedRecipes,
-  makeAdmin
+  makeAdminByEmail,
+  getOneAdminByEmail,
+  getAllAdmins,
 };

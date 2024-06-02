@@ -4,15 +4,15 @@ import React from 'react';
 import { useRef, useState } from 'react';
 import { Autoplay, Pagination, Navigation, EffectCoverflow } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import img from '/muffin/muffinmyrtille.webp';
-import img2 from '/gourmandise/eclairs.webp';
-import img3 from '/gourmandise/cakefruits.webp';
-import img4 from '/tartecitron/tartelettesframboises.webp';
-import img5 from '/tartecitron/tartemeringue.jpeg';
-import img6 from '/viennoiserie/croissant.webp';
-import img7 from '/viennoiserie/painauraisin.webp';
-import img8 from '/viennoiserie/macaronsamandes.webp';
-import img9 from '/viennoiserie/chaussonauxpommes.webp';
+import img from '/images/muffin/muffinmyrtille.webp';
+import img2 from '/images/gourmandise/eclairs.webp';
+import img3 from '/images/gourmandise/cakefruits.webp';
+import img4 from '/images/tartecitron/tartelettesframboises.webp';
+import img5 from '/images/tartecitron/tartemeringue.jpeg';
+import img6 from '/images/viennoiserie/croissant.webp';
+import img7 from '/images/viennoiserie/painauraisin.webp';
+import img8 from '/images/viennoiserie/macaronsamandes.webp';
+import img9 from '/images/viennoiserie/chaussonauxpommes.webp';
 
 
 // Import Swiper styles

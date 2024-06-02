@@ -17,6 +17,11 @@ function Profile({ user }) {
     const closeModal = () => {
         setIsModalOpen(false);
     };
+    //  const pour dashboard
+
+    const handleDashboard = () => {
+        setIsModalOpen(false);
+    };
 
     const handleLogout = () => {
         logOut().then(() => {
@@ -49,7 +54,7 @@ function Profile({ user }) {
                                 <img src={user.photoURL} alt="avatar" className="w-12 rounded-full" />
                             ) : (
                                 // Dans le cas où l'utilisateur n'a pas de photo de profil, on affiche une icône par défaut
-                                <RiCake3Line style={{ height: '2.5rem', width: '2.5rem', color: '#fff' }} />
+                                <RiCake3Line style={{ height: '3rem', width: '1.8rem', color: 'black' }} />
                             )}
                         </div>
                     </label>
@@ -59,7 +64,7 @@ function Profile({ user }) {
                     <ul className="menu-drawer min-h-full">
                         {/* Sidebar content here */}
                         <li style={{ fontSize: '1rem' }}>
-                            <Link to={`/dashboard/${user.uid}`}>
+                            <Link to={`/update-profile`}>
                                 <FontAwesomeIcon icon={faUser} size='2xl' /> Profile
                             </Link>
                         </li>
@@ -68,6 +73,13 @@ function Profile({ user }) {
                                 <FontAwesomeIcon icon={faClipboardList} size='2xl' /> Mes recettes
                             </Link>
                         </li>
+                        <li style={{ fontSize: '1rem' }}>
+                            <Link to={`/dashboard/`}>
+                                <FontAwesomeIcon icon={faCircleUser} size='2xl' /> Dashboard
+                            </Link>
+
+                        </li>
+                       
                         <li style={{ fontSize: '1rem' }}>
                             <a onClick={handleLogout}>
                                 <FontAwesomeIcon icon={faRightFromBracket} size='2xl' /> Logout

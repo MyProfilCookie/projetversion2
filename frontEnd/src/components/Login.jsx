@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable no-unused-vars */
 import React, { useContext, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -47,7 +48,7 @@ const Login = () => {
       })
       .catch((error) => {
         const errorMessage = error.message;
-        seterrorMessage("Please provide valid email & password!");
+        seterrorMessage("Error: " + errorMessage);
       });
       reset()
 
@@ -71,14 +72,14 @@ const Login = () => {
   })
   };
   return (
-    <div className="max-w-md bg-white shadow w-full mx-auto flex items-center justify-center my-20">
+    <div className="max-w-md shadow w-full mx-auto flex items-center justify-center my-20">
     <div className="mb-5">
     <form
             className="card-body"
             method="dialog"
             onSubmit={handleSubmit(onSubmit)}
           >
-            <h3 className="font-bold text-lg">Please Login!</h3>
+            <h3 className="font-bold text-lg">Merci de vous connecter</h3>
 
             {/* email */}
             <div className="form-control">
@@ -106,7 +107,7 @@ const Login = () => {
               />
               <label className="label">
                 <a href="#" className="label-text-alt link link-hover mt-2">
-                  Forgot password?
+                  Mot de passe oublie ?
                 </a>
               </label>
             </div>
@@ -114,7 +115,7 @@ const Login = () => {
             {/* show errors */}
             {errorMessage ? (
               <p className="text-red text-xs italic">
-                Provide a correct username & password.
+                Merci verifier votre email et mot de passe
               </p>
             ) : (
               ""
@@ -126,15 +127,16 @@ const Login = () => {
                 type="submit"
                 className="btn bg-green text-white"
                 value="Login"
+                style={{ width: "100%", height: "40px", fontSize: "16px", fontWeight: "bold", cursor: "pointer", backdropFilter: "blur(2px)", backgroundColor: "rgba(0, 0, 0, 0.05)" }}
               />
             </div>
 
     
 
             <p className="text-center my-2">
-              Donot have an account?
-              <Link to="/signup" className="underline text-red ml-1">
-                Signup Now
+             Vous n'avez pas de compte ?{" "}
+              <Link to="/register" className="underline text-red ml-1">
+                S'enregistrer
               </Link>
             </p>
           </form>

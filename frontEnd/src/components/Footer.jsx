@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 import React from 'react'
 import logo from '/logo.svg'
-import { faUser, faUserGraduate} from '@fortawesome/free-solid-svg-icons'
+import { faUser, faUserGraduate } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Link } from 'react-router-dom'
 
@@ -126,11 +126,11 @@ function Footer() {
                             </a>
                             <div className="tooltip">Youtube</div>
                         </li>
+                        <li className='icon-content' >
+                            <a href='#'>
+                                <FontAwesomeIcon icon={faUserGraduate} size="2xl" style={{ color: '#4d4d4d' }} /></a>
+                        </li>
                     </ul>
-                    <li className='icon-content' >
-                        <a href='#'>
-                    <FontAwesomeIcon icon={faUserGraduate} size="2xl"style={{color: '#4d4d4d'}}/></a>
-                    </li>
 
                 </aside>
             </footer>

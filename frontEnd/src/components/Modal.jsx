@@ -8,9 +8,22 @@ import { faGoogle, faInstagram, faFacebook, faTiktok } from '@fortawesome/free-b
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { AuthContext } from '../contexts/AuthProvider'
+import useAxiosPublic from '../hooks/useAxiosPublic';
 
 function Modal() {
+    const axiosPublic = useAxiosPublic();
+    const {signUpWithGmail, login} = useContext(AuthContext)
+    const [errorMessage, setErrorMessage] = useState('')
+    
+    //  redirection vers la page d'accueil après connexion
+    const location = useLocation()
+    const navigate = useNavigate()
+    //  redirection vers la page d'accueil après connexion
+    const from = location.state?.from?.pathname || '/'
+    
+
     const {
+
         register,
         handleSubmit,
         formState: { errors },
@@ -19,41 +32,51 @@ function Modal() {
     
     
     const onSubmit = (data) => {
-        const email = data.email
-        const password = data.password
-        // console.log(email, password)
-        login(email, password).then((result) => {
+        const email = data.email;
+        const password = data.password;
+        login(email, password)
+          .then((result) => {
+            // Signed in
             const user = result.user;
-            alert('Connexion effectuée avec succès!');
-            setIsModalOpen(false);
-            // on ferme la modal
-            navigate(from, { replace: true }); //  redirection vers la page d’accueil après connexion '/')
-        }
-    ).catch((error) => {
-        const errorMessage = error.message;
-        setErrorMessage("Email ou mot de passe incorrect")
-    })
     
-}
-const handleLogin = () =>{
-    signUpWithGmail().then((result) => {
-        const user = result.user;
-        alert('Connexion avec Google effectuée avec succès!')
-        // on ferme la modal
-        setIsModalOpen(false);
-        navigate(from, { replace: true });
-    }).catch((error) => {
-        console.log(error)
-    });
-}
-const {signUpWithGmail, login} = useContext(AuthContext)
-const [errorMessage, setErrorMessage] = useState('')
-
-//  redirection vers la page d'accueil après connexion
-const location = useLocation()
-const navigate = useNavigate()
-//  redirection vers la page d'accueil après connexion
-const from = location.state?.from?.pathname || '/'
+            const userInfo = {
+              email: result.user?.email,
+              name: result.user?.displayName
+          }
+          axiosPublic.post('/users', userInfo)
+          .then(res =>{
+              console.log(res.data);
+            
+          })
+            // console.log(user);
+            alert("Login successful!");
+            navigate("/");
+            console.log("Modal Open:", isModalOpen);
+            closeModal(); 
+            // ...
+          })
+          .catch((error) => {
+            const errorMessage = error.message;
+            seterrorMessage("Please provide valid email & password!");
+          });
+          reset()
+    
+      };
+      const handleRegister = () => {
+        signUpWithGmail().then((result) => {
+          console.log(result.user);
+          const userInfo = {
+            email: result.user?.email,
+            name: result.user?.displayName,
+          };
+          axiosPublic.post("/users", userInfo).then((res) => {
+            console.log(res.data);
+            navigate("/");
+            closeModal();
+          });
+        });
+      };
+    
 
 
 
@@ -119,7 +142,7 @@ const from = location.state?.from?.pathname || '/'
                                     </div>
                                 </form>
                                 <div className='flex justify-center'>
-                                    <button className="butn btn-circle bton-outline-google hover-scale-110 mx-1" onClick={handleLogin}>
+                                    <button className="butn btn-circle bton-outline-google hover-scale-110 mx-1" onClick={handleRegister}>
                                         <FontAwesomeIcon icon={faGoogle} size='2xl' />
                                     </button>
                                     <button className="butn btn-circle bton-outline-instagram hover-scale-110 mx-1">

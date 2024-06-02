@@ -6,12 +6,13 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
 import { LikeRecetteContext } from '../contexts/LikeRecetteProvider';
+import { post } from 'jquery';
 
 
 function Cards({ item }) {
     const { likes, dislikes, toggleLike, toggleDislike } = useContext(LikeRecetteContext);
-    const isLiked = likes[item.id];
-    const isDisliked = dislikes[item.id];
+    const isLiked = likes[item._id];
+    const isDisliked = dislikes[item._id];
 
     const [notification, setNotification] = useState('');
 
@@ -35,7 +36,7 @@ function Cards({ item }) {
                 </div>
             )}
 
-            <figure style={{margin: 0}}>
+            <figure style={{ margin: 0 }}>
                 <img
                     src={item.image}
                     alt={item.titre}
@@ -43,21 +44,21 @@ function Cards({ item }) {
                 />
             </figure>
 
-            <div to={`/recettes/${item.id}`} className="card-body-cards" style={{scrollMarginTop: 0}}>
-                <Link to={`/recettes/${item.id}`} className="mx-auto">
+            <div to={`/recettes/${item._id}`} className="card-body-cards" style={{ scrollMarginTop: 0 }}>
+                <Link to={`/recettes/${item._id}`} className="mx-auto">
                     <h3 className="card-title">{item.titre}</h3>
                 </Link>
                 <p>{item.description.slice(0, 200)}...</p>
                 <div className="card-actions justify-center">
                     <div
                         className={`like-button ${isLiked ? 'liked' : ''}`}
-                        onClick={() => handleLike(item.id)}
+                        onClick={() => handleLike(item._id)}
                     >
                         <FontAwesomeIcon icon={faHeart} />
                     </div>
                     <div
                         className={`dislike-button ${isDisliked ? 'disliked' : ''}`}
-                        onClick={() => handleDislike(item.id)}
+                        onClick={() => handleDislike(item._id)}
                     >
                         <FontAwesomeIcon icon={faThumbsDown} />
                     </div>

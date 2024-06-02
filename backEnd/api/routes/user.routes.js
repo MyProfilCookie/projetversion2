@@ -1,3 +1,4 @@
+// routes/UserRouter.js
 const express = require("express");
 const multer = require("multer");
 const UserController = require("../controllers/userControllers");
@@ -6,7 +7,7 @@ const verifyAdmin  = require("../Middleware/verifyAdmin");
 
 const UserRouter = express.Router();
 
-
+// Routes for users
 UserRouter.route("/", verifyToken, verifyAdmin)
   .get(UserController.getAllUsers)
   .patch(UserController.updateUser)
@@ -20,22 +21,17 @@ UserRouter.post("/register", UserController.createUser);
 UserRouter.post("/login", UserController.loginUser);
 UserRouter.get("/logout", UserController.logOut);
 
-
 UserRouter.post("/:userId/commentaire", UserController.postCommentaire);
 UserRouter.get("/:userId/recettes", UserController.getUserRecipes);
-UserRouter.patch('/admin/:id', verifyToken, verifyAdmin, UserController.makeAdmin);
-// like les recettes
+
+UserRouter.patch('/admin/:email', verifyToken, verifyAdmin, UserController.makeAdminByEmail);
+// UserRouter.delete('/admin/:email', verifyToken, verifyAdmin, UserController.deleteAdminByEmail);
+// get list of admins
+UserRouter.get('/admin', verifyToken, verifyAdmin, UserController.getAllAdmins);
+// verify an admin by email
+UserRouter.get('/admin/:email', verifyToken, verifyAdmin, UserController.getOneAdminByEmail);
+
+// like recipes
 UserRouter.get("/:userId/liked-disliked-recettes", UserController. getUserLikedDislikedRecipes);
 
 module.exports = UserRouter;
-
-
-// _id
-// 6626b2860723d637fb207d86
-// username
-// "johndoe"
-// password
-// "securePassword123"
-// email
-// "johndoe@example.com"
-
