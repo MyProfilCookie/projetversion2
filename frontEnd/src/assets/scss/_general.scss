@@ -1373,6 +1373,15 @@ a {
 .sm-grid-cols-6 {
   grid-template-columns: repeat(6, minmax(0, 1fr));
 }
+.bg-dark {
+  background-color: #090101;
+}
+.text-white {
+  color: #fff;
+}
+.text-black {
+  color: #000;
+}
 .sm-col-start-2 {
   grid-column-start: 2;
 }
@@ -1384,6 +1393,9 @@ a {
 }
 .object-contain {
   object-fit: contain;
+}
+.bg-primaryBG{
+  background: rgb(244, 242, 237);
 }
 
 .notifications {

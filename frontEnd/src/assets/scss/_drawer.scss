@@ -112,7 +112,7 @@
   // color: #1f2937;
   transform: translateX(100%);
   transition: transform 0.3s ease;
-  border-radius: 1rem;
+  border-radius: 1rem 0 0 1rem;
 }
 
 #my-drawer-4:checked ~ .drawer-side {
@@ -148,6 +148,7 @@
 }
 
 .menu-drawer li a {
+  text-align: center;
   // display: block;
   margin: 1rem;
   padding: 10px;
@@ -168,7 +169,7 @@
   // background-color: #e5e7eb; 
   transition: scale 0.3s;
   // background-color: #de384882;
-  background-color: #004c97;
+  background-color: #f87e7e;
 }
 .drawer-button {
   display: flex;

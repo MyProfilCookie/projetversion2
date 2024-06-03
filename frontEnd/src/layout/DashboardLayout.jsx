@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+import React from 'react';
 import { Link, Outlet } from 'react-router-dom';
 import { MdDashboard, MdOutlineDashboardCustomize } from 'react-icons/md';
 import {
@@ -31,13 +33,13 @@ const sharedMenu = (
       </Link>
     </li>
     <li>
-      <Link to="/menu">
+      <Link to="/orders-tracking">
         <FaLocationArrow />
         Orders Tracking
       </Link>
     </li>
     <li>
-      <Link to="/menu">
+      <Link to="/customer-support">
         <FaQuestionCircle />
         Customer Support
       </Link>
@@ -46,24 +48,33 @@ const sharedMenu = (
 );
 
 const DashboardLayout = () => {
-  // eslint-disable-next-line no-unused-vars
-  const { loading} = useAuth();
+  const { user, loading } = useAuth();
   const [isAdmin, isAdminLoading] = useAdmin();
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!user) {
+    return <Login />;
+  }
 
   return (
     <div>
-      {isAdminLoading || isAdmin ? (
+      {isAdminLoading ? (
+        <div>Loading...</div>
+      ) : isAdmin ? (
         <div className="drawer sm:drawer-open">
           <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
           <div className="drawer-content flex flex-col sm:items-start sm:justify-start my-2">
             <div className="flex items-center justify-between mx-4">
               <label
                 htmlFor="my-drawer-2"
-                className="btn btn-primary drawer-button sm:hidden"
+                className="btn btn-primary drawer-button2 sm-hidden"
               >
                 <MdOutlineDashboardCustomize />
               </label>
-              <button className="btn flex items-center gap-2 rounded-full px-6 bg-green text-white sm:hidden">
+              <button className="btn flex items-center gap-2 rounded-full px-6 btn-primary text-white sm-hidden">
                 <FaRegUser /> Logout
               </button>
             </div>
@@ -71,42 +82,42 @@ const DashboardLayout = () => {
               <Outlet />
             </div>
           </div>
-          <div className="drawer-side">
+          <div className="drawer-side3">
             <label
               htmlFor="my-drawer-2"
               aria-label="close sidebar"
               className="drawer-overlay"
             ></label>
-            <ul className="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
-              <li>
-                <Link to="/dashboard" className="flex justify-start mb-3">
-                  <img src={logo} alt="" className="w-20" />
-                  <span className="indicator-item badge badge-primary">Admin</span>
+            <ul className="menu-drawer2 p-4 w-full bg-base-200 text-base-content">
+              <li className="mb-3">
+                <Link to="/dashboard" className="flex items-center gap-2">
+                  <img src={logo} alt="logo" className="w-10 h-10" />
+                  <span className="badge badge-primary">Admin</span>
                 </Link>
               </li>
               <hr />
               <li className="mt-3">
-                <Link to="/dashboard">
+                <Link to="/dashboard" className="flex items-center gap-2">
                   <MdDashboard /> Dashboard
                 </Link>
               </li>
               <li>
-                <Link to="/dashboard/bookings">
+                <Link to="/dashboard/bookings" className="flex items-center gap-2">
                   <FaShoppingBag /> Manage Bookings
                 </Link>
               </li>
               <li>
-                <Link to="/dashboard/add-menu">
+                <Link to="/dashboard/add-menu" className="flex items-center gap-2">
                   <FaPlusCircle /> Add Menu
                 </Link>
               </li>
               <li>
-                <Link to="/dashboard/manage-items">
+                <Link to="/dashboard/manage-items" className="flex items-center gap-2">
                   <FaEdit /> Manage Items
                 </Link>
               </li>
               <li className="mb-3">
-                <Link to="/dashboard/users">
+                <Link to="/dashboard/users" className="flex items-center gap-2">
                   <FaUsers /> Users
                 </Link>
               </li>
@@ -115,8 +126,6 @@ const DashboardLayout = () => {
             </ul>
           </div>
         </div>
-      ) : loading ? (
-        <Login />
       ) : (
         <div className="h-screen flex items-center justify-center">
           <Link to="/">Back to Home</Link>

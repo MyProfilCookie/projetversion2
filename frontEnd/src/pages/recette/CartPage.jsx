@@ -110,6 +110,27 @@ const CartPage = () => {
           </div>
         </div>
       </div>
+      <div className="flex flex-col md:flex-row justify-between items-start my-12 gap-8">
+          <div className="md:w-1/2 space-y-3">
+            <h3 className="text-lg font-semibold">Customer Details</h3>
+            <p>Name: {user?.usernames || "None"}</p>
+            <p>Email: {user?.email}</p>
+            <p>
+              User_id: <span className="text-sm">{user?.uid}</span>
+            </p>
+          </div>
+          <div className="md:w-1/2 space-y-3">
+            <h3 className="text-lg font-semibold">Shopping Details</h3>
+            <p>Total Items: {cart.length}</p>
+            <p>
+              Total Price:{" "}
+              <span id="total-price">${orderTotal.toFixed(2)}</span>
+            </p>
+            <Link to="/process-checkout" className="btn btn-md bg-green text-white px-8 py-1">
+              Procceed to Checkout
+            </Link>
+          </div>
+        </div>
       {cartItems.length > 0 ? (
         <div className="flex flex-col lg-flex-row gap-8">
           <div className="lg-w-3-4">

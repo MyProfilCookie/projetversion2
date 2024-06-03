@@ -1,5 +1,3 @@
-// src/pages/dashboard/admin/Dashboard.jsx
-/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import React from "react";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
@@ -39,7 +37,6 @@ const Dashboard = () => {
     },
   });
 
-  console.log(stats);
   const { data: chartData = [] } = useQuery({
     queryKey: ["order-stats"],
     queryFn: async () => {
@@ -48,26 +45,9 @@ const Dashboard = () => {
     },
   });
 
-  // custom shape for the bar chart
-  const getPath = (x, y, width, height) => {
-    return `M${x},${y + height}C${x + width / 3},${y + height} ${
-      x + width / 2
-    },${y + height / 3}
-    ${x + width / 2}, ${y}
-    C${x + width / 2},${y + height / 3} ${x + (2 * width) / 3},${y + height} ${
-      x + width
-    }, ${y + height}
-    Z`;
-  };
+  console.log("Stats:", stats);
+  console.log("Chart Data:", chartData);
 
-  const TriangleBar = (props) => {
-    const { fill, x, y, width, height } = props;
-
-    return <path d={getPath(x, y, width, height)} stroke="none" fill={fill} />;
-  };
-
-  // custom shape for the pie chart
-  const RADIAN = Math.PI / 180;
   const renderCustomizedLabel = ({
     cx,
     cy,
@@ -75,7 +55,9 @@ const Dashboard = () => {
     innerRadius,
     outerRadius,
     percent,
+    index,
   }) => {
+    const RADIAN = Math.PI / 180;
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
@@ -93,24 +75,21 @@ const Dashboard = () => {
     );
   };
 
-  const pieChartData = chartData.map((data) => {
-    return { name: data.category, value: data.revenue };
-  });
-
-  if (!user) {
-    return <div>Loading...</div>; // Ou un autre indicateur de chargement approprié
-  }
+  const pieChartData = chartData.map((data) => ({
+    name: data.category,
+    value: data.revenue,
+  }));
 
   return (
-    <div className="w-full md:w-[870px] mx-auto px-4 ">
-      <h2 className="text-2xl font-semibold my-4">
-        Hi, {user.displayName}
-      </h2>
-      {/* stats */}
-      <div className="stats shadow flex flex-col md:flex-row">
+    <div className="dashboard">
+      <div className="header">
+        <h2>Bonjour, {user.displayName}</h2>
+      </div>
+
+      <div className="stats">
         <div className="stat bg-emerald-200">
-          <div className="stat-figure text-secondary">
-            <FaDollarSign className="text-3xl"></FaDollarSign>
+          <div className="stat-figure">
+            <FaDollarSign />
           </div>
           <div className="stat-title">Revenue</div>
           <div className="stat-value">${stats.revenue}</div>
@@ -118,8 +97,8 @@ const Dashboard = () => {
         </div>
 
         <div className="stat bg-orange-200">
-          <div className="stat-figure text-secondary">
-            <FaUsers className="text-3xl"></FaUsers>
+          <div className="stat-figure">
+            <FaUsers />
           </div>
           <div className="stat-title">Users</div>
           <div className="stat-value">{stats.users}</div>
@@ -127,8 +106,8 @@ const Dashboard = () => {
         </div>
 
         <div className="stat bg-indigo-400">
-          <div className="stat-figure text-secondary">
-            <FaBook className="text-3xl"></FaBook>
+          <div className="stat-figure">
+            <FaBook />
           </div>
           <div className="stat-title">Menu Items</div>
           <div className="stat-value">{stats.menuItems}</div>
@@ -136,12 +115,13 @@ const Dashboard = () => {
         </div>
 
         <div className="stat bg-purple-300">
-          <div className="stat-figure text-secondary">
+          <div className="stat-figure">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
               className="inline-block w-8 h-8 stroke-current"
+              style={{ width: "24px", height: "24px", fill: "currentColor" }}
             >
               <path
                 strokeLinecap="round"
@@ -157,12 +137,11 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* bar & pie chart */}
       <div className="mt-16 flex flex-col sm:flex-row">
-        {/* bar chart */}
+        {/* area chart */}
         <div className="sm:w-1/2 w-full">
           <div style={{ width: "100%", height: 300 }}>
-            <ResponsiveContainer>
+            <ResponsiveContainer width="100%" height="100%">
               <AreaChart
                 data={chartData}
                 margin={{
@@ -188,28 +167,29 @@ const Dashboard = () => {
         </div>
 
         {/* pie chart */}
-        <div className="sm:w-1/2 w-full">
-        <div style={{ width: '100%', height: 300 }}>
-        <ResponsiveContainer width="100%" height="100%">
-        <PieChart width={400} height={400}>
-          <Pie
-            data={pieChartData}
-            cx="50%"
-            cy="50%"
-            labelLine={false}
-            label={renderCustomizedLabel}
-            outerRadius={80}
-            fill="#8884d8"
-            dataKey="value"
-          >
-            {pieChartData.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-            ))}
-          </Pie>
-          <Legend/>
-        </PieChart>
-      </ResponsiveContainer>
-      </div>
+        <div className="sm-w-1/2 w-full">
+          <div style={{ width: '100%', height: 300 }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart width={400} height={400}>
+                <Pie
+                  data={pieChartData}
+                  cx="50%"
+                  cy="50%"
+                  labelLine={false}
+                  label={renderCustomizedLabel}
+                  outerRadius={80}
+                  fill="#8884d8"
+                  dataKey="value"
+                >
+                  {pieChartData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Legend />
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       </div>
     </div>
