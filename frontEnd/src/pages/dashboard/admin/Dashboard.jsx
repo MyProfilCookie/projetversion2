@@ -3,7 +3,9 @@ import React from "react";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import useAuth from "../../../hooks/useAuth";
-import { FaBook, FaDollarSign, FaUsers } from "react-icons/fa";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCcVisa } from "@fortawesome/free-brands-svg-icons";
+import { FaBook, FaEuroSign, FaUsers } from "react-icons/fa";
 import {
   BarChart,
   Bar,
@@ -36,6 +38,15 @@ const Dashboard = () => {
       return res.data;
     },
   });
+  // recuperer les données d'un user
+  const { data: users = [] } = useQuery({
+    queryKey: ["users"],
+    queryFn: async () => {
+      const res = await axiosSecure.get("/users");
+      return res.data;
+    },
+  });
+  console.log("Users:", users);
 
   const { data: chartData = [] } = useQuery({
     queryKey: ["order-stats"],
@@ -48,52 +59,52 @@ const Dashboard = () => {
   console.log("Stats:", stats);
   console.log("Chart Data:", chartData);
 
-  const renderCustomizedLabel = ({
-    cx,
-    cy,
-    midAngle,
-    innerRadius,
-    outerRadius,
-    percent,
-    index,
-  }) => {
-    const RADIAN = Math.PI / 180;
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-    const x = cx + radius * Math.cos(-midAngle * RADIAN);
-    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+  // const renderCustomizedLabel = ({
+  //   cx,
+  //   cy,
+  //   midAngle,
+  //   innerRadius,
+  //   outerRadius,
+  //   percent,
+  //   index,
+  // }) => {
+  //   const RADIAN = Math.PI / 180;
+  //   const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+  //   const x = cx + radius * Math.cos(-midAngle * RADIAN);
+  //   const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
-    return (
-      <text
-        x={x}
-        y={y}
-        fill="white"
-        textAnchor={x > cx ? "start" : "end"}
-        dominantBaseline="central"
-      >
-        {`${(percent * 100).toFixed(0)}%`}
-      </text>
-    );
-  };
+  //   return (
+  //     <text
+  //       x={x}
+  //       y={y}
+  //       fill="white"
+  //       textAnchor={x > cx ? "start" : "end"}
+  //       dominantBaseline="central"
+  //     >
+  //       {`${(percent * 100).toFixed(0)}%`}
+  //     </text>
+  //   );
+  // };
 
-  const pieChartData = chartData.map((data) => ({
-    name: data.category,
-    value: data.revenue,
-  }));
+  // const pieChartData = chartData.map((data) => ({
+  //   name: data.category,
+  //   value: data.revenue,
+  // }));
 
   return (
     <div className="dashboard">
       <div className="header">
-        <h2>Bonjour, {user.displayName}</h2>
+        <h2>Bonjour, {user.username}</h2>
       </div>
 
       <div className="stats">
         <div className="stat bg-emerald-200">
           <div className="stat-figure">
-            <FaDollarSign />
+            <FaEuroSign />
           </div>
           <div className="stat-title">Revenue</div>
-          <div className="stat-value">${stats.revenue}</div>
-          <div className="stat-desc">Jan 1st - Feb 1st</div>
+          <div className="stat-value">{stats.revenue} €</div>
+          <div className="stat-desc">Jan 1ier - Feb 1ier</div>
         </div>
 
         <div className="stat bg-orange-200">
@@ -109,27 +120,14 @@ const Dashboard = () => {
           <div className="stat-figure">
             <FaBook />
           </div>
-          <div className="stat-title">Menu Items</div>
-          <div className="stat-value">{stats.menuItems}</div>
+          <div className="stat-title">Recettes</div>
+          <div className="stat-value">{stats.recetteItems}</div>
           <div className="stat-desc">↗︎ 400 (22%)</div>
         </div>
 
         <div className="stat bg-purple-300">
           <div className="stat-figure">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              className="inline-block w-8 h-8 stroke-current"
-              style={{ width: "24px", height: "24px", fill: "currentColor" }}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"
-              ></path>
-            </svg>
+            <FontAwesomeIcon icon={faCcVisa} />
           </div>
           <div className="stat-title">Orders</div>
           <div className="stat-value">{stats.orders}</div>
@@ -137,9 +135,9 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <div className="mt-16 flex flex-col sm:flex-row">
-        {/* area chart */}
-        <div className="sm:w-1/2 w-full">
+      {/* <div className="mt-16 flex flex-col sm-flex-row"> */}
+      {/* area chart */}
+      {/* <div className="sm-w-1-2 w-full">
           <div style={{ width: "100%", height: 300 }}>
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart
@@ -164,10 +162,10 @@ const Dashboard = () => {
               </AreaChart>
             </ResponsiveContainer>
           </div>
-        </div>
+        </div> */}
 
-        {/* pie chart */}
-        <div className="sm-w-1/2 w-full">
+      {/* pie chart */}
+      {/* <div className="sm-w-1-2 w-full">
           <div style={{ width: '100%', height: 300 }}>
             <ResponsiveContainer width="100%" height="100%">
               <PieChart width={400} height={400}>
@@ -191,7 +189,7 @@ const Dashboard = () => {
             </ResponsiveContainer>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

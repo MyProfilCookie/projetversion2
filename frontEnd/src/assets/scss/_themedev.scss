@@ -1,0 +1,65 @@
+// Variables for light and dark themes
+$light-background: #f0f0f000;
+$light-text: #333;
+$dark-background: #333;
+$dark-text: #f0f0f0;
+$primary-color: #4caf50;
+
+// Mixin for theme styles
+@mixin theme($background, $text) {
+  background-color: $background;
+  color: $text;
+}
+
+// Styles for the theme switcher container
+.themediv {
+  @include theme($light-background, $light-text);
+  position: fixed;
+  top: 10rem;
+  right: 0;
+  padding: 1rem;
+  z-index: 1000;
+  transition: all 0.3s ease;
+  @media (min-width: 1024px) {
+    top: 0;
+  }
+}
+
+.toggle {
+  appearance: none;
+  width: 50px;
+  height: 25px;
+  background-color: $primary-color;
+  border-radius: 25px;
+  position: relative;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.3s ease;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 19px;
+    height: 19px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+  }
+
+  // Dark mode styles
+  &:checked {
+    background-color: $dark-background;
+
+    &::before {
+      transform: translateX(25px);
+      background-color: $dark-text;
+    }
+  }
+}
+
+// Dark mode styles for the container
+body.dark-mode .themediv {
+  @include theme($dark-background, $dark-text);
+}

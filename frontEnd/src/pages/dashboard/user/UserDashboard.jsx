@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-vars */
-import React, { useState, useEffect, useContext } from 'react';
-import { useParams } from 'react-router-dom';
-import { LikeRecetteContext } from '../../../contexts/LikeRecetteProvider';
-import useAuth from '../../../hooks/useAuth';
-import axios from 'axios';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import React, { useState, useEffect, useContext } from "react";
+import { useParams } from "react-router-dom";
+import { LikeRecetteContext } from "../../../contexts/LikeRecetteProvider";
+import useAuth from "../../../hooks/useAuth";
+import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 
 const UserDashboard = () => {
   const { user } = useAuth();
@@ -13,18 +13,22 @@ const UserDashboard = () => {
   const [likedRecipes, setLikedRecipes] = useState([]);
   const [dislikedRecipes, setDislikedRecipes] = useState([]);
   const [userRecipes, setUserRecipes] = useState([]);
-  const [email, setEmail] = useState(user?.email || '');
-  const [username, setUsername] = useState(user?.username || '');
+  const [email, setEmail] = useState(user?.email || "");
+  const [username, setUsername] = useState(user?.username || "");
   const [selectedFile, setSelectedFile] = useState(null);
 
   useEffect(() => {
-    console.log('user.uid:', user.uid); // Ajoutez ceci pour vérifier que user.uid est bien défini
+    console.log("user.uid:", user.uid); // Ajoutez ceci pour vérifier que user.uid est bien défini
     if (!user.uid) return;
 
     const fetchRecipes = async () => {
       try {
-        const likedResponse = await axios.get(`${import.meta.env.VITE_API_URL}users/${user.uid}/liked-disliked-recettes`);
-        const userRecipesResponse = await axios.get(`${import.meta.env.VITE_API_URL}users/${user.uid}/recettes`);
+        const likedResponse = await axios.get(
+          `${import.meta.env.VITE_API_URL}users/${user.uid}/liked-disliked-recettes`,
+        );
+        const userRecipesResponse = await axios.get(
+          `${import.meta.env.VITE_API_URL}users/${user.uid}/recettes`,
+        );
 
         setLikedRecipes(likedResponse.data.likedRecipes || []);
         setDislikedRecipes(likedResponse.data.dislikedRecipes || []);
@@ -45,12 +49,16 @@ const UserDashboard = () => {
   const handleUpdateProfile = async () => {
     try {
       const token = "votre_token"; // Utilisez le token correct ici
-      await axios.put(`${import.meta.env.VITE_API_URL}/users/${user.uid}`, { email, username }, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      alert('Profile updated successfully!');
+      await axios.put(
+        `${import.meta.env.VITE_API_URL}/users/${user.uid}`,
+        { email, username },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+      alert("Profile updated successfully!");
     } catch (error) {
-      console.error('Error updating profile:', error);
+      console.error("Error updating profile:", error);
     }
   };
 
@@ -58,19 +66,23 @@ const UserDashboard = () => {
     if (!selectedFile) return;
 
     const formData = new FormData();
-    formData.append('profileImage', selectedFile);
+    formData.append("profileImage", selectedFile);
 
     try {
       const token = "votre_token"; // Utilisez le token correct ici
-      await axios.post(`${import.meta.env.VITE_API_URL}/users/${user.uid}/upload`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${token}`
-        }
-      });
-      alert('Image uploaded successfully!');
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/users/${user.uid}/upload`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      alert("Image uploaded successfully!");
     } catch (error) {
-      console.error('Error uploading image:', error);
+      console.error("Error uploading image:", error);
     }
   };
 
@@ -125,9 +137,10 @@ const UserDashboard = () => {
       <div className="recipes-section">
         <h2>My Recipes</h2>
         <ul>
-          {Array.isArray(userRecipes) && userRecipes.map((recipe) => (
-            <li key={recipe._id}>{recipe.title}</li>
-          ))}
+          {Array.isArray(userRecipes) &&
+            userRecipes.map((recipe) => (
+              <li key={recipe._id}>{recipe.title}</li>
+            ))}
         </ul>
       </div>
     </div>

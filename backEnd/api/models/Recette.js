@@ -68,7 +68,7 @@ const recetteSchema = new Schema(
     image: {
       type: String,
       trim: true,
-      required: false,
+      required: true,
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,

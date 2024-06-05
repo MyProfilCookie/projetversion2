@@ -1,6 +1,5 @@
 // routes/UserRouter.js
 const express = require("express");
-const multer = require("multer");
 const UserController = require("../controllers/userControllers");
 const verifyToken = require("../Middleware/verifyToken");
 const verifyAdmin  = require("../Middleware/verifyAdmin");
@@ -20,6 +19,7 @@ UserRouter.route("/:id")
 UserRouter.post("/register", UserController.createUser);
 UserRouter.post("/login", UserController.loginUser);
 UserRouter.get("/logout", UserController.logOut);
+
 
 UserRouter.post("/:userId/commentaire", UserController.postCommentaire);
 UserRouter.get("/:userId/recettes", UserController.getUserRecipes);

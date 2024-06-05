@@ -1,0 +1,116 @@
+.manage-items-container {
+  .header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem; /* 14px */
+    line-height: 1.25rem; /* 20px */
+    border-radius: 0.25rem; /* 4px */
+  }
+
+  /* Background Green */
+  .bg-green {
+    background-color: #28a745;
+    color: #fff;
+  }
+
+  .bg-green:hover {
+    background-color: #218838;
+  }
+
+  /* Warning Button */
+  .btn-warning {
+    background-color: #ffc107;
+    color: #212529;
+  }
+
+  .btn-warning:hover {
+    background-color: #e0a800;
+  }
+
+  .table-container {
+    width: 100%;
+    margin-top: 20px;
+
+    .table {
+    //   width: 100%;
+      border-collapse: collapse;
+
+      th,
+      td {
+        // width: 100%;
+        text-align: center;
+        border-bottom: 1px solid #ddd;
+        @media (min-width: 768px) {
+          padding: 3rem;
+            
+        }
+
+        .avatar {
+          .mask {
+            display: block;
+            width: 48px;
+            height: 48px;
+            overflow: hidden;
+            position: relative;
+            background-color: #f3f4f6;
+            border-radius: 50%;
+          }
+        }
+      }
+
+      th {
+        background-color: #f3f4f6;
+        font-weight: bold;
+      }
+
+      tbody tr:hover {
+        background-color: #f1f1f1;
+      }
+    }
+
+    .btn {
+      &.btn-warning {
+        background-color: #ffcc00;
+        color: #fff;
+
+        &:hover {
+          background-color: #e6b800;
+        }
+      }
+
+      &.bg-green {
+        background-color: #28a745;
+        color: #fff;
+
+        &:hover {
+          background-color: #218838;
+        }
+      }
+
+      &.bg-orange-500 {
+        background-color: #fd7e14;
+        color: #fff;
+
+        &:hover {
+          background-color: #e06c10;
+        }
+      }
+
+      &.btn-ghost {
+        background-color: transparent;
+        border: none;
+
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        &.text-red {
+          color: #dc3545;
+        }
+      }
+    }
+  }
+}

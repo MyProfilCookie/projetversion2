@@ -2,15 +2,14 @@
 import { Link } from "react-router-dom";
 
 function Recette(props) {
-    return (
-        <div className="recette">
-            <Link to={`/recettes/${props._id}`}>
-                <img src={props.image} alt={props.titre} />
-                <h4>{props.titre}</h4>
-            </Link>
-        
-        </div>
-    );
+  return (
+    <div className="recette">
+      <Link to={`/recettes/${props._id}`}>
+        <img src={props.image} alt={props.titre} />
+        <h4>{props.titre}</h4>
+      </Link>
+    </div>
+  );
 }
 
 export default Recette;

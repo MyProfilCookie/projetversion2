@@ -7,7 +7,7 @@ import { initializeApp } from "firebase/app";
 
 // Initialize Firebase
 // Your web app's Firebase configuration
-console.log(import.meta.env.VITE_apiKey)
+console.log(import.meta.env.VITE_apiKey);
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_apiKey,
@@ -16,9 +16,9 @@ const firebaseConfig = {
   storageBucket: import.meta.env.VITE_storageBucket,
   messagingSenderId: import.meta.env.VITE_messagingSenderId,
   appId: import.meta.env.VITE_appId,
-  measurementId: import.meta.env.measurementId
+  measurementId: import.meta.env.measurementId,
 };
-const app = initializeApp(firebaseConfig)
+const app = initializeApp(firebaseConfig);
 
 // Initialize Firebase
 

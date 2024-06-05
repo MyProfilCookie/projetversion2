@@ -1,0 +1,74 @@
+.update-recette-container {
+   max-width: 600px;
+    margin: 0 auto;
+    padding: 16px;
+    box-sizing: border-box;
+  
+    .title {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 16px;
+  
+      .highlight {
+        color: #38a169; // green color
+      }
+    }
+  
+    .form-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 600px;
+      margin: 0 auto;
+  
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+  
+        label {
+          font-size: 12px;
+          font-weight: 700;
+          text-transform: uppercase;
+          color: #4a5568; // gray-700
+        }
+  
+        input,
+        textarea,
+        select {
+          padding: 12px;
+          border-radius: 8px;
+          border: 1px solid #e2e8f0; // gray-200
+          background-color: #edf2f7; // gray-100
+          color: #2d3748; // gray-700
+          transition: background-color 0.2s;
+  
+          &:focus {
+            outline: none;
+            background-color: #fff;
+            border-color: #a0aec0; // gray-400
+          }
+        }
+      }
+  
+      .btn-submit {
+        padding: 12px;
+        border-radius: 8px;
+        background-color: #4299e1; // blue-500
+        color: #fff;
+        font-weight: 700;
+        transition: background-color 0.2s;
+  
+        &:hover {
+          background-color: #2b6cb0; // blue-700
+        }
+      }
+    }
+  
+    @media (min-width: 768px) {
+      .form-container {
+        width: 800px;
+      }
+    }
+  }
+  

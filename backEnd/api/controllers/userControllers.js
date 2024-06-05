@@ -3,6 +3,7 @@ const Recette = require("../models/Recette");
 const createError = require("http-errors");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+// const { getAuth, createUserWithEmailAndPassword, updateProfile } = require('firebase/auth');
 const JWTGenerator = require("../Utils/JWTGenerator");
 
 const getAllUsers = async (req, res, next) => {
@@ -117,45 +118,91 @@ const getOneUser = async (req, res, next) => {
   }
 };
 
+// const createUser = async (req, res, next) => {
+//   try {
+//     const salt = await bcrypt.genSalt();
+//     const hashedPassword = await bcrypt.hash(req.body.password, salt);
+//     const newUser = new User({
+//       username: req.body.username,
+//       email: req.body.email,
+//       password: hashedPassword,
+//     });
+//     const user = await newUser.save();
+//     res.status(201).json(user);
+//   } catch (error) {
+//     next(createError(500, error.message));
+//   }
+// };
 const createUser = async (req, res, next) => {
+  const auth = getAuth();
   try {
+    // Créer un utilisateur avec Firebase Auth
+    const { email, password, username } = req.body;
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
+    // Mettre à jour le profil de l'utilisateur avec le `displayName`
+    await updateProfile(userCredential.user, { displayName: username });
+
+    // Hacher le mot de passe pour le stockage dans MongoDB
     const salt = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // Enregistrer l'utilisateur dans la base de données MongoDB
     const newUser = new User({
-      username: req.body.username,
-      email: req.body.email,
+      username: username,
+      email: email,
       password: hashedPassword,
     });
-    const user = await newUser.save();
-    res.status(201).json(user);
+    const savedUser = await newUser.save();
+
+    res.status(201).json(savedUser);
   } catch (error) {
     next(createError(500, error.message));
   }
 };
 
-const loginUser = async (req, res, next) => {
+// const loginUser = async (req, res, next) => {
+//   try {
+//     const { email, password } = req.body;
+//     const user = await User.findOne({ email });
+
+//     if (!user) {
+//       return next(createError(500, "Email incorrect"));
+//     }
+
+//     const isPasswordCorrect = await bcrypt.compare(password, user.password);
+//     if (!isPasswordCorrect) {
+//       return next(createError(500, "Mot de passe incorrect"));
+//     }
+
+//     const TOKEN = JWTGenerator(user._id, user.role);
+//     res.status(200).json({
+//       status: true,
+//       message: "Login avec succès",
+//       result: user,
+//       TOKEN,
+//     });
+//   } catch (error) {
+//     next(createError(500, error.message));
+//   }
+// };
+const loginUser = async (email, password) => {
+  setLoading(true);
   try {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email });
-
-    if (!user) {
-      return next(createError(500, "Email incorrect"));
+    const response = await signInWithEmailAndPassword(auth, email, password);
+    const userInfo = { email: response.user.email };
+    const tokenResponse = await axiosPublic.post('/jwt', userInfo);
+    if (tokenResponse.data.token) {
+      localStorage.setItem('access_token', tokenResponse.data.token);
     }
-
-    const isPasswordCorrect = await bcrypt.compare(password, user.password);
-    if (!isPasswordCorrect) {
-      return next(createError(500, "Mot de passe incorrect"));
-    }
-
-    const TOKEN = JWTGenerator(user._id, user.role);
-    res.status(200).json({
-      status: true,
-      message: "Login avec succès",
-      result: user,
-      TOKEN,
-    });
+    // Mettre à jour l'état de l'utilisateur après la connexion
+    setUser(auth.currentUser);
+    return response;
   } catch (error) {
-    next(createError(500, error.message));
+    console.error(error);
+    throw error;
+  } finally {
+    setLoading(false);
   }
 };
 
@@ -249,6 +296,7 @@ const getAllAdmins = async (req, res, next) => {
     next(createError(500, error.message));
   }
 };
+
 
 module.exports = {
   getAllUsers,

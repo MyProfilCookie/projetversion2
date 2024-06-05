@@ -17,7 +17,7 @@ const Order = () => {
           headers: {
             authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
       return res.json();
     },
@@ -29,7 +29,7 @@ const Order = () => {
   const formatDate = (createdAt) => {
     const createdAtDate = new Date(createdAt);
     // Ajouter l'opérateur `toLocaleDateString()` pour formater la date
-    return createdAtDate.toLocaleDateString(); 
+    return createdAtDate.toLocaleDateString();
   };
   return (
     <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4">

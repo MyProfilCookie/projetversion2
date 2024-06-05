@@ -18,7 +18,7 @@ import Gourmandise from "../pages/categories/Gourmandise";
 import Chocolat from "../pages/categories/Chocolat";
 import PainsViennoiserie from "../pages/categories/PainsViennoiserie";
 import Fruits from "../pages/categories/Fruits";
-import Erreur404 from "../components/Erreur404"; 
+import Erreur404 from "../components/Erreur404";
 import Login from "../components/Login";
 import CartPage from "../pages/recette/CartPage";
 import AddRecette from "../pages/dashboard/admin/AddRecette";
@@ -33,117 +33,132 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Home />
+        element: <Home />,
       },
       {
         path: "/recettes",
-        element: <Recettes />
+        element: <Recettes />,
       },
       {
         path: "/order",
-        element: <PrivateRouter><Order /></PrivateRouter>
+        element: (
+          <PrivateRouter>
+            <Order />
+          </PrivateRouter>
+        ),
       },
       {
         path: "/contact",
-        element: <Contact />
+        element: <Contact />,
       },
       {
         path: "/about",
-        element: <About />
+        element: <About />,
       },
       {
         path: "/*",
-        element: <Erreur404 />
+        element: <Erreur404 />,
       },
       {
         path: "/my-recipe",
-        element: <PrivateRouter><RecipeManagement /></PrivateRouter>
+        element: (
+          <PrivateRouter>
+            <RecipeManagement />
+          </PrivateRouter>
+        ),
       },
       {
         path: "/process-checkout",
-        element: <Payment/>
+        element: <Payment />,
       },
       {
         path: "/update-profile",
-        element: <UserProfil />
+        element: <UserProfil />,
       },
       {
         path: "/recettes/nouvelles",
-        element: <div>Nouvelle</div>
+        element: <div>Nouvelle</div>,
       },
       {
         path: "/recettes/populaires",
-        element: <div>Populaire</div>
+        element: <div>Populaire</div>,
       },
       {
         path: "/recettes/best",
-        element: <div>Best</div>
+        element: <div>Best</div>,
       },
       {
         path: "/recettes/:id",
-        element: <RecetteDetail />
+        element: <RecetteDetail />,
       },
       {
         path: "/categories/gourmandise",
-        element: <Gourmandise />
+        element: <Gourmandise />,
       },
       {
         path: "/categories/chocolat",
-        element: <Chocolat />
+        element: <Chocolat />,
       },
       {
         path: "/categories/pains-viennoiserie",
-        element: <PainsViennoiserie />
+        element: <PainsViennoiserie />,
       },
       {
         path: "/categories/fruits",
-        element: <Fruits />
+        element: <Fruits />,
       },
       {
         path: "/cart",
-        element: <CartPage/>
-      }
-    ]
+        element: <CartPage />,
+      },
+    ],
   },
   {
     path: "/register",
-    element: <Register />
+    element: <Register />,
   },
   {
     path: "/login",
-    element: <Login />
+    element: <Login />,
   },
   {
-    path: 'dashboard',
-    element: <PrivateRouter><DashboardLayout /></PrivateRouter>,
+    path: "dashboard",
+    element: (
+      <PrivateRouter>
+        <DashboardLayout />
+      </PrivateRouter>
+    ),
     children: [
       {
-        path: '',
-        element: <Dashboard />
+        path: "",
+        element: <Dashboard />,
       },
       {
-        path: 'users',
-        element: <Users />
+        path: "users",
+        element: <Users />,
       },
       {
-        path: 'add-recette',
-        element: <AddRecette />
+        path: "add-recette",
+        element: <AddRecette />,
       },
       {
-        path: 'manage-items',
-        element: <ManageItems />
+        path: "manage-items",
+        element: <ManageItems />,
       },
       {
-        path: 'update-recette/:id',
+        path: "update-recette/:id",
         element: <UpdateRecette />,
-        loader : ({params}) => fetch(`http://localhost:3001/recettes/${params.id}`).then(res => res.json())
+        loader: ({ params }) =>
+          fetch(`http://localhost:3001/recettes/${params.id}`).then((res) =>
+            res.json(),
+          ),
       },
       {
-        path: 'bookings',
-        element: <ManageBookings />
-      }
-    ]
-  }
+        path: "bookings",
+        element: <ManageBookings />,
+      },
+    ],
+  },
 ]);
 
 export default router;

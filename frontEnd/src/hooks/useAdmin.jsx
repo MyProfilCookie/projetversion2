@@ -6,8 +6,12 @@ const useAdmin = () => {
   const { user, loading } = useAuth();
   const axiosSecure = useAxiosSecure();
 
-  const { data: isAdmin = false, isLoading: isAdminLoading, error } = useQuery({
-    queryKey: [user?.email, 'isAdmin'],
+  const {
+    data: isAdmin = false,
+    isLoading: isAdminLoading,
+    error,
+  } = useQuery({
+    queryKey: [user?.email, "isAdmin"],
     enabled: !loading && !!user?.email,
     queryFn: async () => {
       if (user?.email) {
@@ -17,7 +21,7 @@ const useAdmin = () => {
       return false;
     },
     onError: (error) => {
-      console.error('Error fetching admin status:', error);
+      console.error("Error fetching admin status:", error);
     },
   });
 

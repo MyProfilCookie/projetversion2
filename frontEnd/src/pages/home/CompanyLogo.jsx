@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
-import React from 'react'
+import React from "react";
 
 const CompanyLogo = () => {
   return (
     <div className=" py-24 mt-12">
-        {/* this is taken from tailwindcss Logo Clouds component */}
+      {/* this is taken from tailwindcss Logo Clouds component */}
       <div className="mx-auto max-w-7xl px-6 lg-px-8">
         <h2 className="text-center text-lg font-semibold leading-8 text-secondary">
           Trusted by the world’s most innovative teams
@@ -48,7 +48,7 @@ const CompanyLogo = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default CompanyLogo
+export default CompanyLogo;

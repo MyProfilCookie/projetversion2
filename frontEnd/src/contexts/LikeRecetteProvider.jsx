@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { createContext, useState } from 'react';
+import { createContext, useState } from "react";
 
 const LikeRecetteContext = createContext();
 
@@ -34,7 +34,9 @@ const LikeRecetteProvider = ({ children }) => {
   };
 
   return (
-    <LikeRecetteContext.Provider value={{ likes, dislikes, toggleLike, toggleDislike }}>
+    <LikeRecetteContext.Provider
+      value={{ likes, dislikes, toggleLike, toggleDislike }}
+    >
       {children}
     </LikeRecetteContext.Provider>
   );

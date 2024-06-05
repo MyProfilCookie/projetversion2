@@ -3,15 +3,16 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../contexts/AuthProvider";
 import Swal from "sweetalert2";
-import { FaTrash } from "react-icons/fa";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import { useTheme } from "../../hooks/ThemeContext";
 import { useCart } from "../../contexts/CartProvider";
-import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
-import CheckoutForm from './CheckoutForm';
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import CheckoutForm from "./CheckoutForm";
 
-const stripePromise = loadStripe('pk_test_51PJX1EJ9cNEOCcHhPnKT4sBxvL5xs9aQN7VTmRUabgl4khJ6k7KbYIcjJsHIhesao1lhsj0YYfIAjhn9hvAPxwLw008vby1XDo');
+const stripePromise = loadStripe(
+  "pk_test_51PJX1EJ9cNEOCcHhPnKT4sBxvL5xs9aQN7VTmRUabgl4khJ6k7KbYIcjJsHIhesao1lhsj0YYfIAjhn9hvAPxwLw008vby1XDo"
+);
 
 const CartPage = () => {
   const { isDarkMode } = useTheme();
@@ -91,7 +92,9 @@ const CartPage = () => {
       confirmButtonText: "Oui, supprimer!",
     }).then((result) => {
       if (result.isConfirmed) {
-        const updatedCart = cartItems.filter(cartItem => cartItem.id !== item.id);
+        const updatedCart = cartItems.filter(
+          (cartItem) => cartItem.id !== item.id
+        );
         setCartItems(updatedCart);
         updateCart(updatedCart);
         Swal.fire("Supprimé!", "Votre article a été supprimé.", "success");
@@ -99,9 +102,27 @@ const CartPage = () => {
     });
   };
 
+  const getFormattedName = (email) => {
+    if (!email) return "None";
+    // on récupère le premier nom de l'utilisateur
+    const [firstPart] = email.split("@");
+    return firstPart.split(".").join(" ");
+  };
+
+  const formatUserId = (userId) => {
+    if (!userId) return "";
+    const visiblePart = userId.slice(0, 5);
+    const hiddenPart = userId.slice(5).replace(/./g, "*");
+    return `${visiblePart}${hiddenPart}`;
+  };
+
   return (
     <div className="max-w-screen-2xl container mx-auto xl-px-24 px-4">
-      <div className={`bg-gradient-to-r from-0% from-[#FAFAFA] to-[#FCFCFC] to-100% ${isDarkMode ? "dark" : ""}`}>
+      <div
+        className={`bg-gradient-to-r from-0% from-[#FAFAFA] to-[#FCFCFC] to-100% ${
+          isDarkMode ? "dark" : ""
+        }`}
+      >
         <div className="py-28 flex flex-col items-center justify-center">
           <div className="text-center px-4 space-y-7">
             <h2 className="md-text-5xl text-4xl font-bold md-leading-snug leading-snug">
@@ -111,38 +132,55 @@ const CartPage = () => {
         </div>
       </div>
       <div className="flex flex-col md:flex-row justify-between items-start my-12 gap-8">
-          <div className="md:w-1/2 space-y-3">
-            <h3 className="text-lg font-semibold">Customer Details</h3>
-            <p>Name: {user?.usernames || "None"}</p>
-            <p>Email: {user?.email}</p>
-            <p>
-              User_id: <span className="text-sm">{user?.uid}</span>
-            </p>
-          </div>
-          <div className="md:w-1/2 space-y-3">
-            <h3 className="text-lg font-semibold">Shopping Details</h3>
-            <p>Total Items: {cart.length}</p>
-            <p>
-              Total Price:{" "}
-              <span id="total-price">${orderTotal.toFixed(2)}</span>
-            </p>
-            <Link to="/process-checkout" className="btn btn-md bg-green text-white px-8 py-1">
-              Procceed to Checkout
-            </Link>
-          </div>
+        <div className="md:w-1/2 space-y-3">
+          <h3 className="text-lg font-semibold">Détail de l'utilisateur</h3>
+          <p>Nom: {getFormattedName(user?.email)}</p>
+          <p>Email: {user?.email}</p>
+          <p>
+            Identifiant:{" "}
+            <span
+              className="text-sm"
+              style={{ fontWeight: "bold", color: "green" }}
+            >
+              {formatUserId(user?.uid)}
+            </span>
+          </p>
         </div>
+        <div className="md:w-1/2 space-y-3">
+          <h3 className="text-lg font-semibold">Détail de la commande</h3>
+          <p>Nombre d'articles: {cart.length}</p>
+          <p>
+            Total: <span id="total-price">{orderTotal.toFixed(2)}€</span>
+          </p>
+          <Link
+            to="/process-checkout"
+            className="btn btn-md bg-green text-white px-8 py-1"
+          >
+            Passer la commande
+          </Link>
+        </div>
+      </div>
       {cartItems.length > 0 ? (
         <div className="flex flex-col lg-flex-row gap-8">
           <div className="lg-w-3-4">
             {cartItems.map((item, index) => (
-              <div key={index} className="flex flex-col lg-flex-row items-center border-b border-gray-200 py-4">
-                <img className="w-24 h-24 object-cover lg-w-32 lg-h-32" src={item.image} alt={item.name} />
+              <div
+                key={index}
+                className="flex flex-col lg-flex-row items-center border-b border-gray-200 py-4"
+              >
+                <img
+                  className="w-24 h-24 object-cover lg-w-32 lg-h-32"
+                  src={item.image}
+                  alt={item.name}
+                />
                 <div className="flex-grow lg-ml-4 text-center lg-text-left">
                   <h4 className="text-lg font-semibold">{item.name}</h4>
-                  <p className="text-gray-600">Prix: {item.price.toFixed(2)} €</p>
+                  <p className="text-gray-600">
+                    Prix: {item.price.toFixed(2)} €
+                  </p>
                   <div className="flex items-center justify-center lg-justify-start mt-2">
                     <button
-                      className="px-3 py-1 border border-gray-300" 
+                      className="px-3 py-1 border border-gray-300"
                       onClick={() => handleDecrease(item)}
                     >
                       -
@@ -150,7 +188,9 @@ const CartPage = () => {
                     <input
                       type="number"
                       value={item.quantity}
-                      onChange={(e) => handleQuantityChange(item, parseInt(e.target.value))}
+                      onChange={(e) =>
+                        handleQuantityChange(item, parseInt(e.target.value))
+                      }
                       className="w-12 text-center border-t border-b border-gray-300 mx-2"
                       min="1"
                     />
@@ -162,7 +202,16 @@ const CartPage = () => {
                     </button>
                   </div>
                   <button
-                    className="mt-2" style={{backgroundColor: "red", color: "white", padding: "5px 5px", borderRadius: "5px", cursor: "pointer", fontWeight: "bold", border: "none"}}
+                    className="mt-2"
+                    style={{
+                      backgroundColor: "red",
+                      color: "white",
+                      padding: "5px 5px",
+                      borderRadius: "5px",
+                      cursor: "pointer",
+                      fontWeight: "bold",
+                      border: "none",
+                    }}
                     onClick={() => handleDelete(item)}
                   >
                     Supprimer
@@ -180,7 +229,8 @@ const CartPage = () => {
             <h3 className="text-xl font-semibold">Détails de la commande</h3>
             <p>Articles au total: {calculateTotalItems()}</p>
             <p>
-              Prix total: <span id="total-price">{orderTotal.toFixed(2)} €</span>
+              Prix total:{" "}
+              <span id="total-price">{orderTotal.toFixed(2)} €</span>
             </p>
             <Elements stripe={stripePromise}>
               <CheckoutForm price={orderTotal} />
@@ -191,7 +241,9 @@ const CartPage = () => {
         <div className="text-center mt-20">
           <p>Le panier est vide. Veuillez ajouter des produits.</p>
           <Link to="/">
-            <button className="btn bg-green text-white mt-3">Retour à l'accueil</button>
+            <button className="btn bg-green text-white mt-3">
+              Retour à l'accueil
+            </button>
           </Link>
         </div>
       )}
@@ -200,7 +252,3 @@ const CartPage = () => {
 };
 
 export default CartPage;
-
-
-
-

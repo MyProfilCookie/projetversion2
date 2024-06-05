@@ -1,32 +1,34 @@
 /* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import Categories from './Categories'; 
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import Categories from "./Categories";
 
 function Chocolat() {
   const [recettes, setRecettes] = useState([]);
   const location = useLocation();
-  const currentCategory = 'Chocolat';
+  const currentCategory = "Chocolat";
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`/api/recettes/category?category=Chocolat`);
+        const response = await fetch(
+          `/api/recettes/category?category=Chocolat`,
+        );
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw new Error("Network response was not ok");
         }
         const data = await response.json();
         setRecettes(data);
       } catch (error) {
-        console.error('Error fetching the recipes:', error);
+        console.error("Error fetching the recipes:", error);
       }
     };
     fetchData();
   }, [location]);
 
   console.log(recettes); // Vérifier les données reçues
-  const ids = recettes.map(recette => recette._id);
-  console.log('IDs:', ids);
+  const ids = recettes.map((recette) => recette._id);
+  console.log("IDs:", ids);
 
   return (
     <div>
@@ -38,7 +40,9 @@ function Chocolat() {
             <div id="card-body-cards">
               <h3 className="card-title">{recette.title}</h3>
               <p>{recette.description}</p>
-              <button className="btn-primary"><Link to={`/recettes/${recette._id}`}>Voir plus</Link></button>
+              <button className="btn-primary">
+                <Link to={`/recettes/${recette._id}`}>Voir plus</Link>
+              </button>
             </div>
           </div>
         ))}
