@@ -11,14 +11,14 @@ const Users = () => {
     queryKey: ["users"],
     queryFn: async () => {
       const res = await axiosSecure.get("/users");
-      console.log("API Response:", res.data); // Log the response data
+      console.log("API Response:", res.data); 
       return res.data;
     },
   });
 
   const users = data?.result || [];
 
-  console.log("Users:", users); // Log the users data
+  console.log("Users:", users); 
 
   const handleMakeAdmin = (user) => {
     axiosSecure.patch(`/users/admin/${user.id}`).then((res) => {

@@ -1,108 +1,112 @@
+// Variables
+$color-white: #fff;
+$color-black: #000;
+$color-blue: #007aff;
+$font-size-medium: 18px;
+$font-weight-bold: bold;
+$z-index-negative: -1;
+$z-index-positive: 10;
+$background-opacity-dark: rgba(0, 0, 0, 0.6);
+$stroke-width: 4px;
+$progress: 125.6;
+
+// Mixins
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin transition($properties...) {
+  transition: $properties;
+}
+
+// Styles
 .img-diaporama {
-    width: 100%;
-    // height: 70vh;
-    object-fit: cover;
-    object-position: 50% 50%;
-    position: relative;
-    top: 0;
-    left: 0;
-    z-index: -1;
+  width: 100%;
+  object-fit: cover;
+  object-position: 50% 50%;
+  position: relative;
+  top: 0;
+  left: 0;
+  z-index: $z-index-negative;
+
+  @media (min-width: 768px) {
+    height: 50vh;
   }
-  .swiper-slide {
-    text-align: center;
-    font-size: 18px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .swiper-slide img {
+}
+
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide {
+  text-align: center;
+  font-size: $font-size-medium;
+  background: $color-white;
+  @include flex-center;
+
+  img {
     display: block;
     width: 100%;
     object-fit: cover;
-  
   }
-  
-  .autoplay-progress {
-    position: absolute;
-    right: 16px;
-    bottom: 16px;
-    z-index: 10;
-    width: 48px;
-    height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    color: #fff;
-    background: rgba(0, 0, 0, 0.6);
+}
+
+.swiper-container {
+  width: 480px;
+
+  @media screen and (min-width: 640px) {
+    width: 640px;
   }
-  
-  .autoplay-progress svg {
+
+  @media screen and (min-width: 768px) {
+    width: 768px;
+  }
+}
+
+.autoplay-progress {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  z-index: $z-index-positive;
+  width: 48px;
+  height: 48px;
+  @include flex-center;
+  font-weight: $font-weight-bold;
+  color: $color-white;
+  background: $background-opacity-dark;
+
+  svg {
     --progress: 0;
     position: absolute;
     left: 0;
-    top: 0px;
-    z-index: 10;
+    top: 0;
+    z-index: $z-index-positive;
     width: 100%;
     height: 100%;
-    stroke-width: 4px;
-    stroke: #fff;
+    stroke-width: $stroke-width;
+    stroke: $color-white;
     fill: none;
-    stroke-dashoffset: calc(125.6 * (1 - var(--progress)));
-    stroke-dasharray: 125.6;
+    stroke-dashoffset: calc(#{$progress} * (1 - var(--progress)));
+    stroke-dasharray: $progress;
     transform: rotate(-90deg);
   }
+}
 
-  .swiper {
-    width: 100%;
-    height: 100%;
-  }
-  
-  .swiper-slide {
-    text-align: center;
-    font-size: 18px;
-    background: #fff;
-  
-    /* Center slide text vertically */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .swiper-container {
-    width: 480px;
-  }
-  
-  @media screen and (min-width: 640px) {
-    .swiper-container {
-      width: 640px;
-    }
-  }
-  
-  @media screen and (min-width: 768px) {
-    .swiper-container {
-      width: 768px;
-    }
-  }
-  
-  .swiper-bullet {
-    width: 20px;
-    height: 20px;
-    text-align: center;
-    line-height: 20px;
-    font-size: 12px;
-    color: #000;
-    opacity: 1;
-    background: rgba(0, 0, 0, 0.2);
-  }
-  
-  .swiper-bullet-active {
-    color: #fff;
-    background: #007aff;
-  }
+.swiper-bullet {
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  line-height: 20px;
+  font-size: 12px;
+  color: $color-black;
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.2);
 
-  @media (min-width: 768px) {
-    .img-diaporama {
-      height: 50vh;
-    }
+  &.swiper-bullet-active {
+    color: $color-white;
+    background: $color-blue;
   }
+}

@@ -1,22 +1,46 @@
-/* Mise en page de la grille */
-.cards-grid {
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  // grid-template-rows: repeat(2, 1fr);
-  gap: 1.5rem;
+// Variables
+$gap: 1.5rem;
+$border-radius: 15px;
+$background-color-card: rgba(239, 218, 218, 0.35);
+$box-shadow-card: 0 4px 8px rgba(0, 0, 0, 0.54);
+$transition-duration: 0.3s;
+$padding-card: 1rem;
+$font-size-title: 1.25rem;
+$font-weight-title: 600;
+$padding-button: 10px;
+$font-size-button: 1.5rem;
+$color-gray: gray;
+$color-red: red;
+$color-white: white;
+$color-green: green;
+$color-lightcoral: lightcoral;
+$color-lightgreen: lightgreen;
+$color-primary-badge: #ff4747;
+$color-secondary-badge: #6365f15a;
+$color-accent-badge: #28a745;
+$padding-notification: 8px;
+$background-color-notification: blue;
+$color-notification: white;
+
+// Mixins
+@mixin box-shadow($shadow) {
+  box-shadow: $shadow;
 }
 
+@mixin transition($properties...) {
+  transition: $properties;
+}
+
+// Styles
+.cards-grid,
 .cards-grid2 {
   display: grid;
   grid-template-columns: repeat(1, 1fr);
-  // grid-template-rows: repeat(2, 1fr);
-  gap: 1.5rem;
+  gap: $gap;
 }
 
 @media (min-width: 576px) {
-  .cards-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  .cards-grid,
   .cards-grid2 {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -26,97 +50,93 @@
   .cards-grid {
     grid-template-columns: repeat(3, 1fr);
   }
+
   .cards-grid2 {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-/* Styles pour les cartes */
+// Styles pour les cartes
 .card {
   position: relative;
   display: flex;
   flex-direction: column;
-  border-radius: 15px; /* Ajout du border-radius */
-  background-color: rgba(239, 218, 218, 0.35); /* Couleur de fond douce */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.54);
-  transition: transform 0.3s;
+  border-radius: $border-radius;
+  background-color: $background-color-card;
+  @include box-shadow($box-shadow-card);
+  @include transition(transform $transition-duration);
   overflow: hidden;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  img {
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+  }
+
+  .card-body-cards {
+    padding: $padding-card;
+    text-align: center;
+  }
+
+  .card-title {
+    font-size: $font-size-title;
+    font-weight: $font-weight-title;
+    margin-bottom: 0.5rem;
+  }
+
+  .card-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: $gap;
+    margin-top: $gap;
+  }
 }
 
-.card:hover {
-  transform: scale(1.05);
-}
-
-.card img {
-  // border-top-left-radius: 15px;
-  // border-top-right-radius: 15px;
-  object-fit: cover;
-  height: 100%;
-  width: 100%;
-}
-
-.card-body-cards {
-  padding: 1rem;
-  text-align: center;
-}
-
-.card-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-}
-
-.card-actions {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-.like-button, .dislike-button {
-  padding: 10px;
+.like-button,
+.dislike-button {
+  padding: $padding-button;
   border-radius: 50%;
-  transition: background-color 0.3s, color 0.3s;
+  @include transition(background-color $transition-duration, color $transition-duration);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
-}
+  font-size: $font-size-button;
 
-.like-button {
-  // background-color: white;
-  color: gray;
-  // border: 2px solid gray;
-}
+  &.like-button {
+    color: $color-gray;
 
-.like-button.liked {
-  background-color: red;
-  color: white;
-  border-color: red;
-}
+    &.liked {
+      background-color: $color-red;
+      color: $color-white;
+      border-color: $color-red;
+    }
 
-.like-button:hover {
-  background-color: lightcoral;
-  color: white;
-}
+    &:hover {
+      background-color: $color-lightcoral;
+      color: $color-white;
+    }
+  }
 
-.dislike-button {
-  // background-color: white;
-  color: gray;
-  // border: 2px solid gray;
-}
+  &.dislike-button {
+    color: $color-gray;
 
-.dislike-button.disliked {
-  background-color: green;
-  color: white;
-  border-color: green;
-}
+    &.disliked {
+      background-color: $color-green;
+      color: $color-white;
+      border-color: $color-green;
+    }
 
-.dislike-button:hover {
-  background-color: lightgreen;
-  color: white;
+    &:hover {
+      background-color: $color-lightgreen;
+      color: $color-white;
+    }
+  }
 }
 
 .badge {
@@ -128,48 +148,47 @@
   white-space: nowrap;
   vertical-align: baseline;
   border-radius: 0.25rem;
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  @include transition(color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out);
+
+  &.badge-primary {
+    color: $color-white;
+    background-color: $color-primary-badge;
+
+    &:hover {
+      color: $color-white;
+      background-color: $color-primary-badge;
+    }
+  }
+
+  &.badge-secondary {
+    color: $color-white;
+    background-color: $color-secondary-badge;
+
+    &:hover {
+      color: $color-white;
+      background-color: $color-secondary-badge;
+    }
+  }
+
+  &.badge-accent {
+    color: $color-white;
+    background-color: $color-accent-badge;
+
+    &:hover {
+      color: $color-white;
+      background-color: $color-accent-badge;
+    }
+  }
 }
 
-.badge-primary {
-  color: #fff;
-  background-color: #ff4747;
-}
-
-.badge-primary:hover {
-  color: #fff;
-  background-color: #ff4747;
-}
-
-.badge-secondary {
-  color: #fff;
-  background-color: #6365f15a;
-}
-
-.badge-secondary:hover {
-  color: #fff;
-  background-color: #6365f15a;
-}
-
-.badge-accent {
-  color: #fff;
-  background-color: #28a745;
-}
-
-.badge-accent:hover {
-  color: #fff;
-  background-color: #28a745;
-}
-
-/* Style pour la notification */
 .notification {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  background-color: blue;
-  color: white;
+  background-color: $background-color-notification;
+  color: $color-notification;
   text-align: center;
-  padding: 8px;
+  padding: $padding-notification;
   z-index: 10;
 }

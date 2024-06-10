@@ -1,5 +1,5 @@
 {
-  "name": "projetresto",
+  "name": "projetblog",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -24,6 +24,7 @@
     "dotenv": "^16.4.5",
     "firebase": "^10.11.0",
     "joi": "^17.12.3",
+    "js-cookie": "^3.0.5",
     "loader": "^2.1.1",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.4",
@@ -38,6 +39,7 @@
     "sass": "^1.74.1",
     "slick-carousel": "^1.8.1",
     "sort-by": "^0.0.2",
+    "sweetalert2": "^11.11.1",
     "swiper": "^11.1.1"
   },
   "devDependencies": {

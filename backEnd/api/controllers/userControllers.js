@@ -3,8 +3,7 @@ const Recette = require("../models/Recette");
 const createError = require("http-errors");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-// const { getAuth, createUserWithEmailAndPassword, updateProfile } = require('firebase/auth');
-const JWTGenerator = require("../Utils/JWTGenerator");
+const jwt = require("jsonwebtoken");
 
 const getAllUsers = async (req, res, next) => {
   try {
@@ -20,33 +19,64 @@ const getAllUsers = async (req, res, next) => {
 
 const makeAdminByEmail = async (req, res) => {
   const email = req.params.email;
-    if (!email) {
-        return res.status(400).json({ message: "Email parameter is required" });
+  if (!email) {
+    return res.status(400).json({ message: "Email parameter is required" });
+  }
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
-    try {
-        const user = await User.findOne({ email });
-        if (!user) {
-            return res.status(404).json({ message: "User not found" });
-        }
-        user.role = 'admin';
-        await user.save();
-        res.status(200).json({ message: "User promoted to admin", user });
-    } catch (error) {
-        res.status(500).json({ message: "Server error", error });
-    }
+    user.role = 'admin';
+    await user.save();
+    res.status(200).json({ message: "User promoted to admin", user });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
 };
 
 const getOneAdminByEmail = async (req, res, next) => {
-    try {
-      const admin = await User.findOne({ email: req.params.email });
-      if (!admin) {
-        return res.status(404).json({ message: 'Admin not found' });
-      }
-      res.status(200).json({ admin: admin.role === 'admin' });
-    } catch (error) {
-      next(createError(500, error.message));
+   try {
+    const email = req.params.email;
+    const user = await User.findOne({ email });
+    if (!user) {
+      return next(createError(404, 'Utilisateur non trouvé'));
     }
-  };
+    res.status(200).json({ admin: user.role === 'admin' });
+  } catch (error) {
+    next(createError(500, error.message));
+  }
+};
+
+const validateToken = async (req, res) => {
+  const token = req.headers['authorization'].split(' ')[1];
+  if (!token) {
+    return res.status(403).send({ message: "No token provided" });
+  }
+  try {
+    const decoded = jwt.verify(token, process.env.JW_SECRET);
+    const user = await User.findById(decoded.id);
+    if (!user) {
+      return res.status(404).send({ message: "User not found" });
+    }
+    res.status(200).send({ user });
+  } catch (err) {
+    res.status(500).send({ message: "Failed to authenticate token" });
+  }
+};
+const getProfile = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.decoded.id);
+    if (!user) {
+      return next(createError(404, 'User not found'));
+    }
+    res.status(200).json({ user });
+  } catch (error) {
+    next(createError(500, 'Server error'));
+  }
+};
+
+
 
 const uploadProfileImage = async (req, res) => {
   try {
@@ -69,6 +99,7 @@ const uploadProfileImage = async (req, res) => {
     res.status(500).send({ message: "Error uploading image", error });
   }
 };
+
 const postCommentaire = async (req, res, next) => {
   try {
     const newCommentaire = new Commentaire({
@@ -118,91 +149,87 @@ const getOneUser = async (req, res, next) => {
   }
 };
 
-// const createUser = async (req, res, next) => {
-//   try {
-//     const salt = await bcrypt.genSalt();
-//     const hashedPassword = await bcrypt.hash(req.body.password, salt);
-//     const newUser = new User({
-//       username: req.body.username,
-//       email: req.body.email,
-//       password: hashedPassword,
-//     });
-//     const user = await newUser.save();
-//     res.status(201).json(user);
-//   } catch (error) {
-//     next(createError(500, error.message));
-//   }
-// };
 const createUser = async (req, res, next) => {
-  const auth = getAuth();
   try {
-    // Créer un utilisateur avec Firebase Auth
     const { email, password, username } = req.body;
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 
-    // Mettre à jour le profil de l'utilisateur avec le `displayName`
-    await updateProfile(userCredential.user, { displayName: username });
-
-    // Hacher le mot de passe pour le stockage dans MongoDB
-    const salt = await bcrypt.genSalt();
+    if (!email || !password || !username) {
+      return next(createError(400, "Tous les champs sont obligatoires"));
+    }
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return next(createError(400, "Un utilisateur avec cet e-mail existe déjà"));
+    }
+    const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-
-    // Enregistrer l'utilisateur dans la base de données MongoDB
     const newUser = new User({
-      username: username,
-      email: email,
+      username,
+      email,
       password: hashedPassword,
     });
     const savedUser = await newUser.save();
 
-    res.status(201).json(savedUser);
+    res.status(201).json({ user: savedUser });
   } catch (error) {
     next(createError(500, error.message));
   }
 };
 
-// const loginUser = async (req, res, next) => {
-//   try {
-//     const { email, password } = req.body;
-//     const user = await User.findOne({ email });
+const loginUser = async (req, res, next) => {
+  const { email, password } = req.body;
 
-//     if (!user) {
-//       return next(createError(500, "Email incorrect"));
-//     }
+  if (!email || !password) {
+    return next(createError(400, 'Email et mot de passe sont requis'));
+  }
 
-//     const isPasswordCorrect = await bcrypt.compare(password, user.password);
-//     if (!isPasswordCorrect) {
-//       return next(createError(500, "Mot de passe incorrect"));
-//     }
-
-//     const TOKEN = JWTGenerator(user._id, user.role);
-//     res.status(200).json({
-//       status: true,
-//       message: "Login avec succès",
-//       result: user,
-//       TOKEN,
-//     });
-//   } catch (error) {
-//     next(createError(500, error.message));
-//   }
-// };
-const loginUser = async (email, password) => {
-  setLoading(true);
   try {
-    const response = await signInWithEmailAndPassword(auth, email, password);
-    const userInfo = { email: response.user.email };
-    const tokenResponse = await axiosPublic.post('/jwt', userInfo);
-    if (tokenResponse.data.token) {
-      localStorage.setItem('access_token', tokenResponse.data.token);
+    const user = await User.findOne({ email });
+    if (!user) {
+      return next(createError(400, 'Utilisateur non trouvé'));
     }
-    // Mettre à jour l'état de l'utilisateur après la connexion
-    setUser(auth.currentUser);
-    return response;
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return next(createError(400, 'Mot de passe incorrect'));
+    }
+
+    const token = jwt.sign({ id: user._id, email: user.email }, process.env.JW_SECRET, {
+      expiresIn: '1h',
+    });
+
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // Utiliser des cookies sécurisés en production
+      maxAge: 3600000, // 1 heure en millisecondes
+      sameSite: 'Strict',
+    });
+
+    console.log("Cookie set: ", res.cookies);
+
+    res.status(200).json({
+      user: { id: user._id, email: user.email, username: user.username },
+      token,
+    });
   } catch (error) {
-    console.error(error);
-    throw error;
-  } finally {
-    setLoading(false);
+    next(createError(500, error.message));
+  }
+};
+
+
+
+
+
+
+const getLastUser = async (req, res, next) => {
+  try {
+    const lastUser = await User.findOne().sort({ createdAt: -1 });
+    if (!lastUser) {
+      return res.status(404).json({ message: 'No users found' });
+    }
+    res.status(200).json({ id: lastUser._id, email: lastUser.email });
+  } catch (error) {
+    console.error('Error fetching the last user:', error); 
+    next(createError(500, error.message));
   }
 };
 
@@ -288,6 +315,7 @@ const getUserLikedDislikedRecipes = async (req, res, next) => {
     next(createError(500, error.message));
   }
 };
+
 const getAllAdmins = async (req, res, next) => {
   try {
     const admins = await User.find({ role: "admin" });
@@ -296,7 +324,6 @@ const getAllAdmins = async (req, res, next) => {
     next(createError(500, error.message));
   }
 };
-
 
 module.exports = {
   getAllUsers,
@@ -314,4 +341,7 @@ module.exports = {
   makeAdminByEmail,
   getOneAdminByEmail,
   getAllAdmins,
+  getLastUser,
+  validateToken,
+  getProfile,
 };

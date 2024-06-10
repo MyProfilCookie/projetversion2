@@ -1,34 +1,53 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react";
-import useRecette from "../../../hooks/useRecette";
-import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { FaArrowLeft, FaArrowRight, FaEdit, FaTrashAlt } from "react-icons/fa";
 import Swal from "sweetalert2";
+import { AuthContext } from "../../../contexts/AuthProvider";
 
 const ManageItems = () => {
-  const [recette, , refetch] = useRecette();
-  const axiosSecure = useAxiosSecure();
-
-  // Pagination
+  const { user } = useContext(AuthContext);
+  const [recette, setRecette] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = recette.slice(indexOfFirstItem, indexOfLastItem);
 
-  // Function to truncate instructions to 100 words
-  const truncateInstructions = (instructions) => {
-    const words = instructions.split(" ");
-    if (words.length > 100) {
-      return words.slice(0, 100).join(" ") + "...";
+  // Fetch recettes
+  const fetchRecettes = async () => {
+    const token = localStorage.getItem("access_token");
+    if (!token) {
+      console.error("Token non trouvé, veuillez vous reconnecter");
+      return;
     }
-    return instructions;
+
+    try {
+      const response = await fetch("http://localhost:3001/recettes", {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error("Erreur lors de la récupération des recettes");
+      }
+
+      const data = await response.json();
+      setRecette(data);
+    } catch (error) {
+      console.error("Erreur:", error);
+    }
   };
 
-  // Delete item
+  useEffect(() => {
+    fetchRecettes();
+  }, []);
+
+  // Supprimer une recette
   const handleDeleteItem = (item) => {
-    console.log(item._id);
     Swal.fire({
       title: "Êtes-vous sûr?",
       text: "Vous ne pourrez pas revenir en arrière!",
@@ -39,15 +58,41 @@ const ManageItems = () => {
       confirmButtonText: "Oui, supprimez-le!",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const res = await axiosSecure.delete(`/recettes/${item._id}`);
-        refetch();
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: `${item.titre} a été supprimé`,
-          showConfirmButton: false,
-          timer: 1500,
-        });
+        try {
+          const token = localStorage.getItem("access_token");
+          if (!token) {
+            console.error("Token non trouvé, veuillez vous reconnecter");
+            return;
+          }
+
+          const response = await fetch(`http://localhost:3001/recettes/${item._id}`, {
+            method: "DELETE",
+            headers: {
+              "Authorization": `Bearer ${token}`,
+              "Content-Type": "application/json"
+            }
+          });
+
+          if (!response.ok) {
+            throw new Error("Erreur lors de la suppression de la recette");
+          }
+
+          setRecette(recette.filter((rec) => rec._id !== item._id));
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: `${item.titre} a été supprimé`,
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        } catch (error) {
+          console.error("Erreur:", error);
+          Swal.fire({
+            icon: "error",
+            title: "Erreur",
+            text: "Une erreur est survenue lors de la suppression de la recette.",
+          });
+        }
       }
     });
   };
@@ -86,10 +131,16 @@ const ManageItems = () => {
                             borderRadius: "5px",
                           }}
                         >
-                          <img
-                            src={`${import.meta.env.VITE_API_URL}uploads/${item.image}`}
-                            alt="recette image"
-                          />
+                          {item.image ? (
+                            <img
+                              src={`${import.meta.env.VITE_API_URL}uploads/${item.image}`}
+                              alt="recette image"
+                            />
+                          ) : (
+                            <div className="w-12 h-12 flex items-center justify-center text-white">
+                              No Image
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -103,7 +154,6 @@ const ManageItems = () => {
                           borderRadius: "5px",
                         }}
                         className="btn btn-ghost btn-xs"
-                        onClick={() => refetch()}
                       >
                         <FaEdit className="text-white"></FaEdit>
                       </button>
@@ -147,3 +197,5 @@ const ManageItems = () => {
 };
 
 export default ManageItems;
+
+

@@ -3,15 +3,15 @@ $light-background: #f0f0f000;
 $light-text: #333;
 $dark-background: #333;
 $dark-text: #f0f0f0;
-$primary-color: #4caf50;
+$primary-color: #ff4747;
 
-// Mixin for theme styles
+
 @mixin theme($background, $text) {
   background-color: $background;
   color: $text;
 }
 
-// Styles for the theme switcher container
+// style pour le theme dark
 .themediv {
   @include theme($light-background, $light-text);
   position: fixed;

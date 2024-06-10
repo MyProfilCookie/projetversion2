@@ -2,59 +2,17 @@ const Recette = require("../models/Recette");
 const Commentaire = require("../models/Commentaire");
 const LikeSchema = require("../models/Like");
 
-// const getAllRecettes = async (req, res) => {
-//     try {
-//         const recettes = await Recette.find({});
-//         res.json(recettes);
-//     } catch (err) {
-//         res.status(500).json({ message: err.message });
-//     }
-// }
-
-// const createRecette = async (req, res) => {
-//     try {
-//         const { titre, description, ingredients, instructions, temps_preparation, temps_cuisson, difficulte, category } = req.body;
-//         const image = req.file ? req.file.filename : 'default.jpg'; 
-
-//         const newRecette = new Recette({
-//             titre,
-//             description,
-//             ingredients: ingredients.split(',').map(ingredient => ingredient.trim()),
-//             instructions: instructions.split(',').map(instruction => instruction.trim()),
-//             temps_preparation,
-//             temps_cuisson,
-//             difficulte,
-//             category,
-//             image
-//         });
-
-//         const savedRecette = await newRecette.save();
-//         res.status(201).json(savedRecette);
-//     } catch (error) {
-//         res.status(500).json({ message: error.message });
-//     }
-// };
-
-// const updateRecette = async (req, res, next) => {
-//     try {
-//       const recetteId = req.params.id;
-//       const updateData = req.body;
-//       if (req.file) {
-//         updateData.image = req.file.filename; // Mettre à jour le champ image si un fichier est envoyé
-//       }
-  
-//       const updatedRecette = await Recette.findByIdAndUpdate(recetteId, updateData, { new: true });
-  
-//       if (!updatedRecette) {
-//         return res.status(404).json({ message: "Recette non trouvée" });
-//       }
-  
-//       res.status(200).json(updatedRecette);
-//     } catch (error) {
-//       next(error);
-//     }
-//   };
-
+const getLastRecette = async (req, res) => {
+  try {
+    const lastRecette = await Recette.findOne().sort({ createdAt: -1 });
+    if (!lastRecette) {
+      return res.status(404).json({ message: 'No recettes found' });
+    }
+    res.status(200).json({ id: lastRecette._id });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
+  }
+};
 const deleteRecette = async (req, res) => {
     try {
         const deletedRecette = await Recette.findByIdAndDelete(req.params.id);
@@ -66,6 +24,36 @@ const deleteRecette = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 };
+
+const updateRecette = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updateData = req.body;
+    
+    console.log('Update data before checking file:', updateData);
+
+    if (req.file) {
+      console.log('File received:', req.file);
+      updateData.image = req.file.filename;
+    } else {
+      console.log('No file received');
+    }
+
+    const updatedRecette = await Recette.findByIdAndUpdate(id, updateData, { new: true });
+
+    if (!updatedRecette) {
+      return res.status(404).send({ message: 'Recette non trouvée' });
+    }
+
+    console.log('Updated recette:', updatedRecette);
+    res.status(200).json(updatedRecette);
+  } catch (error) {
+    console.error('Error updating recette:', error);
+    res.status(500).send({ message: error.message });
+  }
+}
+
+
 
 const unlikeRecette = async (req, res) => {
     if (!req.body.userId || !req.body.recetteId) {
@@ -154,19 +142,6 @@ const getRecettesByCategory = async (req, res) => {
     }
 };
 
-// const getRecetteById = async (req, res) => {
-//     try {
-//         const recette = await Recette.findById(req.params.id);
-//         if (!recette) {
-//             return res.status(404).json({ message: 'Recette non trouvée' });
-//         }
-//         recette.imageUrl = `${req.protocol}://${req.get('host')}/uploads/${recette.image}`;
-
-//         res.status(200).json(recette);
-//     } catch (error) {
-//         res.status(500).json({ message: error.message });
-//     }
-// };
 const getAllRecettes = async (req, res) => {
     try {
       const recettes = await Recette.find({});
@@ -221,58 +196,19 @@ const getAllRecettes = async (req, res) => {
       res.status(500).json({ message: error.message });
     }
   };
-  
-  const updateRecette = async (req, res) => {
-    try {
-      const { id } = req.params;
-      const {
-        titre,
-        description,
-        ingredients,
-        instructions,
-        temps_preparation,
-        temps_cuisson,
-        difficulte,
-        category,
-      } = req.body;
-      const image = req.file ? req.file.filename : null;
-  
-      const updatedData = {
-        titre,
-        description,
-        ingredients: ingredients.split(",").map((ingredient) => ingredient.trim()),
-        instructions: instructions.split(",").map((instruction) => instruction.trim()),
-        temps_preparation,
-        temps_cuisson,
-        difficulte,
-        category,
-      };
-  
-      if (image) {
-        updatedData.image = image;
-      }
-  
-      const updatedRecette = await Recette.findByIdAndUpdate(id, updatedData, { new: true });
-  
-      if (!updatedRecette) {
-        return res.status(404).json({ message: "Recette non trouvée" });
-      }
-  
-      res.status(200).json(updatedRecette);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
-  };
+
 
 module.exports = {
     getAllRecettes,
     getRecetteById,
-    createRecette,
     updateRecette,
+    createRecette,
     deleteRecette,
     likeRecette,
     unlikeRecette,
     getCommentaire,
     postCommentaire,
     getRecettesByCategory,
+    getLastRecette,
+    
 };

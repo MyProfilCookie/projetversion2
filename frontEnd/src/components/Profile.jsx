@@ -11,9 +11,11 @@ import {
 import { AuthContext } from "../contexts/AuthProvider";
 import { RiCake3Line } from "react-icons/ri";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useTheme } from "../hooks/ThemeContext";
 
 function Profile({ user }) {
   const { logOut } = useContext(AuthContext);
+  const { isDarkMode } = useTheme(); 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => {
     setIsModalOpen(true);
@@ -22,7 +24,6 @@ function Profile({ user }) {
   const closeModal = () => {
     setIsModalOpen(false);
   };
-  //  const pour dashboard
 
   const handleDashboard = () => {
     setIsModalOpen(false);
@@ -33,21 +34,19 @@ function Profile({ user }) {
       .then(() => {
         alert("Vous êtes déconnecté");
         setIsModalOpen(false);
-        navigate(from, { replace: true }); // Redirection vers la page
+        navigate(from, { replace: true }); 
       })
       .catch((error) => {
         console.log(error);
       });
   };
-
-  // Redirection vers la page d'accueil après connexion
   const location = useLocation();
   const navigate = useNavigate();
   // Redirection vers la page d'accueil après connexion
   const from = location.state?.from?.pathname || "/";
 
   if (!user) {
-    return null; // or a loader/spinner
+    return null; // Affiche quelque chose si l'utilisateur n'est pas connecté
   }
 
   return (
@@ -67,9 +66,10 @@ function Profile({ user }) {
                   className="w-12 rounded-full"
                 />
               ) : (
-                // Dans le cas où l'utilisateur n'a pas de photo de profil, on affiche une icône par défaut
+                // Dans le cas où l'utilisateur n'a pas de photo de profil, on affiche une icône par défaut (gâteau)
                 <RiCake3Line
-                  style={{ height: "3rem", width: "1.8rem", color: "black" }}
+                className={`rounded-full ${isDarkMode ? "bgDark" : "PrimaryBG inverti-white"}`}
+                  style={{ height: "3rem", width: "1.8rem"}}
                 />
               )}
             </div>
@@ -82,7 +82,6 @@ function Profile({ user }) {
             className="drawer-overlay"
           ></label>
           <ul className="menu-drawer min-h-full">
-            {/* Sidebar content here */}
             <li style={{ fontSize: "1rem" }}>
               <Link to={`/update-profile`}>
                 <FontAwesomeIcon icon={faUser} size="2xl" /> Profile

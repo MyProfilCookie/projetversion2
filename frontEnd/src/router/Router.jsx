@@ -25,6 +25,7 @@ import AddRecette from "../pages/dashboard/admin/AddRecette";
 import UpdateRecette from "../pages/dashboard/admin/UpdateRecette";
 import ManageItems from "../pages/dashboard/admin/ManageItems";
 import ManageBookings from "../pages/dashboard/admin/ManegeBookings";
+import UserDashboard from "../pages/dashboard/user/UserDashboard";
 
 const router = createBrowserRouter([
   {
@@ -64,6 +65,14 @@ const router = createBrowserRouter([
         element: (
           <PrivateRouter>
             <RecipeManagement />
+          </PrivateRouter>
+        ),
+      },
+      {
+        path: "/dashboard/:id",
+        element: (
+          <PrivateRouter>
+            <UserDashboard />
           </PrivateRouter>
         ),
       },

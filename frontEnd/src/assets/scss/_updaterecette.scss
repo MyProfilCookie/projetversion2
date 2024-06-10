@@ -10,7 +10,7 @@
       margin-bottom: 16px;
   
       .highlight {
-        color: #38a169; // green color
+        color: #38a169; 
       }
     }
   
@@ -30,7 +30,7 @@
           font-size: 12px;
           font-weight: 700;
           text-transform: uppercase;
-          color: #4a5568; // gray-700
+          color: #4a5568; 
         }
   
         input,
@@ -38,15 +38,15 @@
         select {
           padding: 12px;
           border-radius: 8px;
-          border: 1px solid #e2e8f0; // gray-200
-          background-color: #edf2f7; // gray-100
-          color: #2d3748; // gray-700
+          border: 1px solid #e2e8f0; 
+          background-color: #edf2f7; 
+          color: #2d3748; 
           transition: background-color 0.2s;
   
           &:focus {
             outline: none;
             background-color: #fff;
-            border-color: #a0aec0; // gray-400
+            border-color: #a0aec0; 
           }
         }
       }
@@ -54,13 +54,13 @@
       .btn-submit {
         padding: 12px;
         border-radius: 8px;
-        background-color: #4299e1; // blue-500
+        background-color: #4299e1; 
         color: #fff;
         font-weight: 700;
         transition: background-color 0.2s;
   
         &:hover {
-          background-color: #2b6cb0; // blue-700
+          background-color: #2b6cb0; 
         }
       }
     }

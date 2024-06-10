@@ -19,7 +19,7 @@ import img7 from "/images/viennoiserie/painauraisin.webp";
 import img8 from "/images/viennoiserie/macaronsamandes.webp";
 import img9 from "/images/viennoiserie/chaussonauxpommes.webp";
 
-// Import Swiper styles
+
 import "swiper/scss";
 import "swiper/scss/navigation";
 import "swiper/scss/pagination";

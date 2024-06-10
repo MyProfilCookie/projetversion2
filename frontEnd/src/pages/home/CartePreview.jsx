@@ -3,6 +3,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../../contexts/CartProvider";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCreditCard } from "@fortawesome/free-solid-svg-icons";
 
 function CartePreview() {
   const { addToCart } = useCart();
@@ -30,6 +32,69 @@ function CartePreview() {
       path: "/cart",
       price: 15,
     },
+    {
+      id: 4,
+      name: "Papier",
+      image: "/images/achat/papier.webp",
+      path: "/cart",
+      price: 5,
+    }, 
+    {
+      id: 5,
+      name: "Moule de Cake",
+      image: "/images/achat/moulecake.webp",
+      path: "/cart",
+      price: 11,
+    },
+    {
+      id: 6,
+      name: "Plat à four",
+      image: "/images/achat/plats-a-four.webp",
+      path: "/cart",
+      price: 14,
+    },
+    {
+      id: 7,
+      name: "Moule de Muffin",
+      image: "/images/achat/moulemuffin.webp",
+      path: "/cart",
+      price: 11,
+    },
+    {
+      id: 8,
+      name: "Nos stickers",
+      image: "/images/achat/sticker.webp",
+      path: "/cart",
+      price: 2,
+    }, 
+    {
+      id: 9,
+      name: "Moule en forme de coeur",
+      image: "/images/achat/platcoeur.webp",
+      path: "/cart",
+      price: 11,
+    },
+    {
+      id: 10,
+      name: "Moule à tarte ",
+      image: "/images/achat/plat-tarte.webp",
+      path: "/cart",
+      price: 15,
+    },
+    {
+      id: 11,
+      name: "Moule en forme de carre",
+      image: "/images/achat/platcarre.webp",
+      path: "/cart",
+      price: 9,
+    },
+    {
+      id: 12,
+      name: "Moule en forme de rond",
+      image: "/images/achat/platrond.webp",
+      path: "/cart",
+      price: 8,
+    }
   ];
 
   const handleAddToCart = (item) => {
@@ -79,14 +144,9 @@ function CartePreview() {
       </div>
       <Link
         to="/cart"
-        className="btn-secondary font-semibold rounded-full mt-10 flex justify-center"
-        style={{
-          position: "absolute",
-          left: "50%",
-          transform: "translateX(-50%)",
-        }}
-      >
-        Voir le panier
+        className="btn-secondary font-semibold rounded-full mt-10 flex justify-center items-center"
+        style={{ width: "30%", margin: "0 auto", backgroundColor: "green", color: "white", padding: "10px" }}
+      ><FontAwesomeIcon icon={faCreditCard} style={{ marginRight: "10px" }} />Voir le panier
       </Link>
 
       {notification && <div className="notifications">{notification}</div>}

@@ -5,17 +5,35 @@
 //   text-align: center;
 // }
 
+$logo-height: 6em;
+$logo-padding: 1.5em;
+$transition-duration: 300ms;
+$hover-drop-shadow-color: #646cffaa;
+$hover-drop-shadow-react-color: #61dafbaa;
+$text-color: #888;
+
+@mixin transition($properties...) {
+  transition: $properties;
+}
+
+@mixin filter-drop-shadow($color) {
+  filter: drop-shadow(0 0 2em $color);
+}
+
+
 .logo {
-  height: 6em;
-  padding: 1.5em;
+  height: $logo-height;
+  padding: $logo-padding;
   will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+  @include transition(filter $transition-duration);
+
+  &:hover {
+    @include filter-drop-shadow($hover-drop-shadow-color);
+  }
+
+  &.react:hover {
+    @include filter-drop-shadow($hover-drop-shadow-react-color);
+  }
 }
 
 @keyframes logo-spin {
@@ -26,6 +44,7 @@
     transform: rotate(360deg);
   }
 }
+// prefers-reduced-motion: no-preference n'est pas encore supporté sur les navigateurs cela permet de ne pas lancer l'animation si l'utilisateur a désactivé les animations
 
 @media (prefers-reduced-motion: no-preference) {
   a:nth-of-type(2) .logo {
@@ -33,7 +52,6 @@
   }
 }
 
-
 .read-the-docs {
-  color: #888;
+  color: $text-color;
 }

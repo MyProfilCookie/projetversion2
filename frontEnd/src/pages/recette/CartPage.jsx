@@ -120,7 +120,7 @@ const CartPage = () => {
     <div className="max-w-screen-2xl container mx-auto xl-px-24 px-4">
       <div
         className={`bg-gradient-to-r from-0% from-[#FAFAFA] to-[#FCFCFC] to-100% ${
-          isDarkMode ? "dark" : ""
+          isDarkMode ? "dark" : "bg-primaryBG"
         }`}
       >
         <div className="py-28 flex flex-col items-center justify-center">
@@ -131,7 +131,7 @@ const CartPage = () => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col md:flex-row justify-between items-start my-12 gap-8">
+      <div className="flex flex-col md-flex-row justify-between items-start my-12 gap-8">
         <div className="md:w-1/2 space-y-3">
           <h3 className="text-lg font-semibold">Détail de l'utilisateur</h3>
           <p>Nom: {getFormattedName(user?.email)}</p>
@@ -146,7 +146,7 @@ const CartPage = () => {
             </span>
           </p>
         </div>
-        <div className="md:w-1/2 space-y-3">
+        <div className="md-w-1-2 space-y-3">
           <h3 className="text-lg font-semibold">Détail de la commande</h3>
           <p>Nombre d'articles: {cart.length}</p>
           <p>
@@ -225,7 +225,7 @@ const CartPage = () => {
               </div>
             ))}
           </div>
-          <div className="lg-w-1-4 p-4 border border-gray-200">
+          <div className="lg-w-1-4 p-4 border border-gray-200 justify-center text-center flex flex-col">
             <h3 className="text-xl font-semibold">Détails de la commande</h3>
             <p>Articles au total: {calculateTotalItems()}</p>
             <p>

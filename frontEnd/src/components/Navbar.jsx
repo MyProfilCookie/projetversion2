@@ -53,7 +53,7 @@ const Navbar = () => {
             src={logo}
             alt="logo"
             style={{ width: "60px" }}
-            className="logo-react"
+            className={`${isDarkMode ? "bgDark inverti" : "PrimaryBG"}`}
           />
         </Link>
         <div id="navbar-start" className="navbar-start">
@@ -71,7 +71,7 @@ const Navbar = () => {
                 icon={isOpen ? faTimes : faBars}
                 size="2xl"
                 style={{ height: "25px", color: "black" }}
-                className="md-hidden"
+                className={`md-hidden ${isDarkMode ? "bgDark inverti" : "PrimaryBG"}`}
               />
             </div>
             {isOpen && (
@@ -96,17 +96,17 @@ const Navbar = () => {
             className="btn btn-circle flex items-center justify-center mr-3"
           >
             <div
-              className="indicator"
+              className={"indicator" && `${isDarkMode ? "bgDark inverti" : "PrimaryBG"}`}
               style={{
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
               }}
             >
-              <FontAwesomeIcon icon={faShop} />
+              <FontAwesomeIcon icon={faShop}  />
               <span
-                className="badge badge-sm indicator-item"
-                style={{ width: "30px", height: "30px" }}
+                className="badge badge-sm indicator-item" 
+                style={{ width: "30px", height: "30px", fontWeight: "bold" }}
               >
                 {cartCount}
               </span>

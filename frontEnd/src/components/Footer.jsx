@@ -5,14 +5,16 @@ import logo from "/logo.svg";
 import { faUser, faUserGraduate } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
+import { useTheme } from "../hooks/ThemeContext";
 
 function Footer() {
+  const { isDarkMode } = useTheme();
   return (
     <div>
       <footer className="items-center">
         <aside className="footer grid-cols media-grid-cols-3 bg-belge text-base-content p-10 items-center mx-auto">
           <nav>
-            <h6 className="subtitle mt-2">
+            <h6 className={`subtitle mt-2 && ${isDarkMode ? "bgDark inverti" : "PrimaryBG"}`}>
               <Link to="/profile">
                 <FontAwesomeIcon icon={faUser} /> Mon profil
               </Link>
@@ -34,7 +36,7 @@ function Footer() {
             <a className="link link-hover">Conditions d'utilisation</a>
           </nav>
         </aside>
-        <aside className="footer grid-cols media-grid-cols-3 bg-belge text-base-content p-10 items-center mx-auto">
+        <aside className={`footer grid-cols media-grid-cols-3 bg-belge text-base-content p-10 items-center mx-auto && ${isDarkMode ? "bgDark inverti" : "PrimaryBG"}`}>
           <aside className="items-center grid-flow-col flex">
             <a href="/">
               <img src={logo} alt="logo" width={50} />

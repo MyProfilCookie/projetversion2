@@ -1,100 +1,190 @@
-// Variables de couleur
-$primary-color: #ff4747;
-$bg-color: #f8f9fa;
-$text-color: #333;
-$hover-color: #6366f1;
+// Variables
+$color-background: #f9f4ef;
+$color-white: #ffffff;
+$color-black: #333333;
+$color-red: #e63946;
+$color-green: #2a9d8f;
+$color-gray-light: rgba(0, 0, 0, 0.05);
+$color-error: #eb2f06;
+$color-input-border: #3c6382;
+$color-input-hover: #095d9a;
+$padding-small: 8px 16px;
+$border-radius-small: 0.575rem;
+$font-size-medium: 16px;
+$font-size-large: 22px;
+$margin-medium: 10px;
+$transition-duration: 0.3s;
+$box-shadow-light: 0 4px 8px rgba(0, 0, 0, 0.1);
+$box-shadow-hover: 0 6px 12px rgba(0, 0, 0, 0.15);
 
-#login {
+// Mixins
+@mixin flex-center {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background-color: $bg-color;
+}
 
-  > .login-container {
-    background: #fff;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+@mixin transition($properties...) {
+  transition: $properties;
+}
+
+// Styles
+.login-container {
+  @include flex-center;
+  height: 100vh;
+  background-color: $color-background;
+  
+  .card-body {
     width: 100%;
     max-width: 400px;
-    text-align: center;
+    padding: 2rem;
+    // box-shadow: $box-shadow-light;
+    background-color: $color-white;
+    border-radius: $border-radius-small;
+    font-family: $font-family-primary;
 
-    > h2 {
-      margin-bottom: 2rem;
-      color: $primary-color;
+    h3 {
+      font-weight: bold;
+      font-size: $font-size-large;
+      margin-bottom: 1rem;
+      text-align: center;
+      color: $color-red;
     }
 
-    > form {
+    .form-control {
+      margin-bottom: $margin-medium;
+
+      .label {
+        margin-bottom: 0.5rem;
+        display: block;
+        font-weight: bold;
+        color: $color-black;
+
+        .label-text {
+          font-size: $font-size-medium;
+        }
+
+        .label-text-alt {
+          margin-top: 0.5rem;
+          color: #667;
+          font-size: 0.875rem;
+          &:hover {
+            text-decoration: underline;
+            cursor: pointer;
+          }
+        }
+      }
+
+      .input {
+        width: 100%;
+        // padding: $padding-small;
+        font-size: $font-size-medium;
+        border: 1px solid $color-input-border;
+        border-radius: $border-radius-small;
+        color: $color-black;
+        background: none;
+        @include transition(border-color 180ms ease-in);
+
+        &:hover,
+        &:focus {
+          border-color: $color-input-hover;
+          outline: none;
+        }
+      }
+
+      .input-bordered {
+        border-width: 1px;
+      }
+    }
+
+    .error-message {
+      color: $color-error;
+      font-size: $font-size-medium;
+      font-style: italic;
+    }
+
+    .submit-btn {
+      width: 100%;
+      height: 40px;
+      font-size: $font-size-medium;
+      font-weight: bold;
+      cursor: pointer;
+      backdrop-filter: blur(2px);
+      background-color: $color-red;
+      color: $color-white;
+      border: none;
+      border-radius: $border-radius-small;
+      text-align: center;
       display: flex;
-      flex-direction: column;
-
-      > .form-group {
-        margin-bottom: 1.5rem;
-        text-align: left;
-
-        > label {
-          display: block;
-          margin-bottom: 0.5rem;
-          color: $text-color;
-        }
-
-        > input {
-          width: 100%;
-          padding: 0.75rem;
-          border: 1px solid #ccc;
-          border-radius: 5px;
-          font-size: 1rem;
-          &:focus {
-            outline: none;
-            border-color: $primary-color;
-          }
-        }
+      align-items: center;
+      justify-content: center;
+      @include transition(background-color $transition-duration ease-in-out);
+      
+      &:hover {
+        background-color: $color-green;
       }
+    }
 
-      > .btn-primary {
-        padding: 0.75rem 1.5rem;
-        background-color: $primary-color;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
+    .register-link {
+      text-align: center;
+      margin: $margin-medium 0;
+
+      .underline {
+        text-decoration: underline;
+        margin-left: 0.5rem;
+        color: $color-red;
         cursor: pointer;
-        font-size: 1rem;
-        transition: background-color 0.3s;
-
-        &:hover {
-          background-color: darken($primary-color, 10%);
-        }
       }
     }
   }
 
-  // Styles pour les écrans plus grands
-  @media (min-width: 768px) {
-    > .login-container {
-      padding: 3rem;
+  .social-buttons {
+    text-align: center;
+    display: flex;
+    flex-direction: wrap;
+    justify-content: space-around;
 
-      > h2 {
-        font-size: 2rem;
-      }
+    .btn {
+      border-radius: 30%;
+      padding: 0.5rem;
+      font-size: 1.5rem;
+      margin: 0.5rem;
+      background-color: $color-white;
+      color: $color-black;
+      border: 2px solid transparent;
+      @include transition(background-color $transition-duration ease-in-out, color $transition-duration ease-in-out);
 
-      > form {
-        > .form-group {
-          > label {
-            font-size: 1.125rem;
-          }
-
-          > input {
-            padding: 1rem;
-            font-size: 1.125rem;
-          }
-        }
-
-        > .btn-primary {
-          font-size: 1.125rem;
-          padding: 1rem 2rem;
-        }
+      &:hover {
+        background-color: $color-red;
+        color: $color-white;
       }
     }
   }
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+}
+
+.modal {
+  // background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1002;
+}
+
+.modal-box {
+  position: relative;
+  max-width: 500px;
+  margin: 0 auto;
 }

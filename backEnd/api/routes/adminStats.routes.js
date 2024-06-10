@@ -20,7 +20,7 @@ router.get('/', verifyToken, verifyAdmin, async (req, res) => {
         $group: {
           _id: null,
           totalRevenue: {
-            $sum: '$price'
+            $sum: '€price'
           }
         }
       }

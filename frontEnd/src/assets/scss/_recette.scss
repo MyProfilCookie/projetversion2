@@ -161,8 +161,8 @@ $box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             font-size: 1rem;
             color: $secondary-color;
             background-color: $input-bg-color;
-            resize: vertical; /* Allow vertical resizing */
-            min-height: 100px; /* Set a minimum height */
+            resize: vertical; 
+            min-height: 100px;
           }
 
           > button {

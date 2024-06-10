@@ -1,58 +1,79 @@
+// Variables
+$padding-small: 20px;
+$padding-large: 50px;
+$border-radius: 8px;
+$margin-bottom-large: 40px;
+$font-size-large: 48px;
+$font-size-medium: 24px;
+$font-size-small: 18px;
+$font-weight-bold: bold;
+$font-weight-extra-bold: 900;
+$color-primary: #333;
+$color-secondary: #555;
+$color-hover: tomato;
+$box-shadow-small: 0 0 10px rgba(0, 0, 0, 0.1);
+$box-shadow-large: 0 0 30px rgba(0, 0, 0, 0.1);
+
+// Mixins
+@mixin box-shadow($shadow) {
+  box-shadow: $shadow;
+}
+
+@mixin transition($properties...) {
+  transition: $properties;
+}
+
+// Styles
 .about-container {
-    padding: 20px;
-    // background-color: #f5f5f5;
-  }
-  
-  .hero-section {
-    padding: 50px;
-    text-align: center;
-    border-radius: 8px;
-    margin-bottom: 40px;
-  }
-  .hero-section:hover {
-    padding: 50px;
-    text-align: center;
-    color: tomato;
-    border-radius: 8px;
-    font-weight: 900;
+  padding: $padding-small;
+}
+
+.hero-section {
+  padding: $padding-large;
+  text-align: center;
+  border-radius: $border-radius;
+  margin-bottom: $margin-bottom-large;
+
+  &:hover {
+    color: $color-hover;
+    font-weight: $font-weight-extra-bold;
     font-size: larger;
-    margin-bottom: 40px;
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
-    
+    @include box-shadow($box-shadow-large);
   }
-  
-  .hero-title {
-    font-size: 48px;
-    font-weight: bold;
-    margin-bottom: 10px;
+}
+
+.hero-title {
+  font-size: $font-size-large;
+  font-weight: $font-weight-bold;
+  margin-bottom: 10px;
+}
+
+.hero-subtitle {
+  font-size: $font-size-medium;
+  margin-top: 10px;
+}
+
+.content-section {
+  margin-top: $margin-bottom-large;
+  padding: $padding-small;
+  border-radius: $border-radius;
+  // background-color: #fff;
+  // @include box-shadow($box-shadow-small);
+}
+
+.section-title {
+  font-size: 32px;
+  color: $color-primary;
+  margin-bottom: $padding-small;
+}
+
+.section-content {
+  font-size: $font-size-small;
+  color: $color-secondary;
+  line-height: 1.6;
+  margin-bottom: $padding-small;
+
+  strong {
+    color: $color-primary;
   }
-  
-  .hero-subtitle {
-    font-size: 24px;
-    margin-top: 10px;
-  }
-  
-  .content-section {
-    margin-top: 40px;
-    padding: 20px;
-    // background-color: #fff;
-    border-radius: 8px;
-    // box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .section-title {
-    font-size: 32px;
-    color: #333;
-    margin-bottom: 20px;
-  }
-  
-  .section-content {
-    font-size: 18px;
-    color: #555;
-    line-height: 1.6;
-    margin-bottom: 20px;
-  }
-  
-  .section-content strong {
-    color: #333;
-  }
+}

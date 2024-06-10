@@ -5,7 +5,7 @@ import { LikeRecetteProvider } from "../../contexts/LikeRecetteProvider";
 
 function Recettes() {
   const [recettes, setRecettes] = useState([]);
-  const [filteredRecettes, setFilteredRecettes] = useState(recettes);
+  const [filteredRecettes, setFilteredRecettes] = useState([]);
   const [search, setSearch] = useState("");
   const [searchOptions, setSearchOptions] = useState("toutes");
   const [currentPage, setCurrentPage] = useState(1);
@@ -19,6 +19,12 @@ function Recettes() {
         const normalizedData = data.map((item) => ({
           ...item,
           title: item.title || "",
+          category: item.category || "",
+          difficulte: item.difficulte || "",
+          description: item.description || "",
+          instructions: item.instructions || "",
+          ingredients: item.ingredients || "",
+          type: item.type || ""
         }));
         setRecettes(normalizedData);
         setFilteredRecettes(normalizedData);
@@ -35,25 +41,27 @@ function Recettes() {
         ? recettes
         : recettes.filter(
             (recette) =>
-              recette.title
-                ?.toLowerCase()
+              typeof recette.title === "string" && recette.title
+                .toLowerCase()
                 .includes(search.trim().toLowerCase()) ||
-              recette.category
-                ?.toLowerCase()
+              typeof recette.category === "string" && recette.category
+                .toLowerCase()
                 .includes(search.trim().toLowerCase()) ||
-              recette.difficulte
-                ?.toLowerCase()
+              typeof recette.difficulte === "string" && recette.difficulte
+                .toLowerCase()
                 .includes(search.trim().toLowerCase()) ||
-              recette.description
-                ?.toLowerCase()
+              typeof recette.description === "string" && recette.description
+                .toLowerCase()
                 .includes(search.trim().toLowerCase()) ||
-              recette.instructions
-                ?.toLowerCase()
+              typeof recette.instructions === "string" && recette.instructions
+                .toLowerCase()
                 .includes(search.trim().toLowerCase()) ||
-              recette.ingredients
-                ?.toLowerCase()
+              typeof recette.ingredients === "string" && recette.ingredients
+                .toLowerCase()
                 .includes(search.trim().toLowerCase()) ||
-              recette.type?.toLowerCase().includes(search.trim().toLowerCase()),
+              typeof recette.type === "string" && recette.type
+                .toLowerCase()
+                .includes(search.trim().toLowerCase())
           );
     setFilteredRecettes(filtered);
   }, [search, recettes]);
@@ -80,17 +88,17 @@ function Recettes() {
     switch (option) {
       case "difficile":
         sortedRecettes = sortedRecettes.filter(
-          (recette) => recette.difficulte === "difficile",
+          (recette) => recette.difficulte === "difficile"
         );
         break;
       case "facile":
         sortedRecettes = sortedRecettes.filter(
-          (recette) => recette.difficulte === "facile",
+          (recette) => recette.difficulte === "facile"
         );
         break;
       case "moyenne":
         sortedRecettes = sortedRecettes.filter(
-          (recette) => recette.difficulte === "moyenne",
+          (recette) => recette.difficulte === "moyenne"
         );
         break;
       default:
@@ -105,7 +113,7 @@ function Recettes() {
   const indexOfFirstRecette = indexOfLastRecette - itemsPerPage;
   const currentRecettes = filteredRecettes.slice(
     indexOfFirstRecette,
-    indexOfLastRecette,
+    indexOfLastRecette
   );
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
@@ -236,7 +244,9 @@ function Recettes() {
             <button
               key={index + 1}
               onClick={() => paginate(index + 1)}
-              className={`mx-1 px-2 py-1 rounded-full ${currentPage === index + 1 ? "btn-primary" : "btn"}`}
+              className={`mx-1 px-2 py-1 rounded-full ${
+                currentPage === index + 1 ? "btn-primary" : "btn"
+              }`}
             >
               {index + 1}
             </button>

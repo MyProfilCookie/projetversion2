@@ -1,58 +1,38 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import React, { createContext, useState, useEffect } from "react";
-import {
-  GoogleAuthProvider,
-  createUserWithEmailAndPassword,
-  getAuth,
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  signInWithPopup,
-  signOut,
-  updateProfile,
-} from "firebase/auth";
-import app from "../firebase/firebase.config";
-import useAxiosPublic from "../hooks/useAxiosPublic";
 
 export const AuthContext = createContext();
-const auth = getAuth(app);
-const googleProvider = new GoogleAuthProvider();
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const axiosPublic = useAxiosPublic();
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  const baseURL = 'http://localhost:3001';
 
   const createUser = async (email, password, username) => {
     setLoading(true);
     try {
-      const response = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password,
-      );
-      await updateProfile(auth.currentUser, { displayName: username });
-      console.log(response);
-      return response;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    } finally {
-      setLoading(false);
-    }
-  };
+      const response = await fetch(`${baseURL}/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password, username }),
+      });
 
-  const signUpWithGmail = async () => {
-    setLoading(true);
-    try {
-      const response = await signInWithPopup(auth, googleProvider);
-      const userInfo = { email: response.user.email };
-      const tokenResponse = await axiosPublic.post("/jwt", userInfo);
-      if (tokenResponse.data.token) {
-        localStorage.setItem("access_token", tokenResponse.data.token);
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Erreur lors de l'inscription: ${errorText}`);
       }
+
+      const data = await response.json();
+      setUser(data.user);
+      localStorage.setItem("access_token", data.token);
+      return data;
     } catch (error) {
-      console.error(error);
+      console.error("Erreur lors de l'inscription:", error);
       throw error;
     } finally {
       setLoading(false);
@@ -62,94 +42,112 @@ const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     setLoading(true);
     try {
-      const response = await signInWithEmailAndPassword(auth, email, password);
-      const userInfo = { email: response.user.email };
-      const tokenResponse = await axiosPublic.post("/jwt", userInfo);
-      if (tokenResponse.data.token) {
-        localStorage.setItem("access_token", tokenResponse.data.token);
+      const response = await fetch(`${baseURL}/users/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+        credentials: 'include', // Assurez-vous que les cookies sont envoyés
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Erreur lors de la connexion: ${errorText}`);
       }
-      return response;
+
+      const data = await response.json();
+      setUser(data.user);
+      localStorage.setItem('access_token', data.token);
+
+      await checkIfUserIsAdmin(data.user.email);
+
+      return data;
     } catch (error) {
-      console.error(error);
+      console.error('Erreur lors de la connexion:', error);
       throw error;
     } finally {
       setLoading(false);
     }
   };
-
-  const logOut = async () => {
+  const logOut = () => {
     localStorage.removeItem("access_token");
-    await signOut(auth);
+    setUser(null);
+    setIsAdmin(false);
   };
 
-  const updateUserProfile = async (name, photoURL) => {
-    try {
-      await updateProfile(auth.currentUser, {
-        displayName: name,
-        photoURL: photoURL,
-      });
-    } catch (error) {
-      console.error(error);
-      throw error;
+
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+      setLoading(true);
+      try {
+        const token = localStorage.getItem('access_token');
+        if (token) {
+          const response = await fetch(`${baseURL}/users/profile`, {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include', // Assurez-vous que les cookies sont envoyés
+          });
+
+          if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Erreur lors de la validation du token: ${errorText}`);
+          }
+
+          const data = await response.json();
+          setUser(data.user); // data.user contient les informations utilisateur
+          await checkIfUserIsAdmin(data.user.email);
+        } else {
+          setUser(null);
+          setIsAdmin(false);
+        }
+      } catch (error) {
+        console.error('Erreur lors de la validation du token:', error);
+        setUser(null);
+        setIsAdmin(false);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkAuthStatus();
+  }, []);
+  const checkIfUserIsAdmin = async (email) => {
+    const token = localStorage.getItem("access_token");
+    if (token) {
+      try {
+        const response = await fetch(`${baseURL}/users/admin/${email}`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Erreur lors de la vérification de l'admin: ${errorText}`);
+        }
+
+        const data = await response.json();
+        setIsAdmin(data.admin);
+      } catch (error) {
+        console.error("Erreur lors de la vérification de l'admin:", error);
+        setIsAdmin(false);
+      }
     }
   };
-
-  // useEffect(() => {
-  //   const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-  //     setUser(currentUser);
-  //     if (currentUser) {
-  //       const userInfo = { email: currentUser.email };
-  //       try {
-  //         const response = await axiosPublic.post('/jwt', userInfo);
-  //         if (response.data.token) {
-  //           localStorage.setItem('access_token', response.data.token);
-  //         }
-  //       } catch (error) {
-  //         console.error('Error fetching token:', error);
-  //       }
-  //     } else {
-  //       localStorage.removeItem('access_token');
-  //     }
-  //     setLoading(false);
-  //   });
-
-  //   return () => unsubscribe();
-  // }, [axiosPublic]);
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      if (currentUser) {
-        const userInfo = { email: currentUser.email };
-        try {
-          const response = await axiosPublic.post("/jwt", userInfo);
-          if (response.data.token) {
-            localStorage.setItem("access_token", response.data.token);
-          }
-        } catch (error) {
-          console.error("Error fetching token:", error);
-        }
-        // Mettre à jour l'état de l'utilisateur après la récupération de l'état d'authentification
-        setUser({
-          ...currentUser,
-          displayName: currentUser.displayName || "Aucun",
-        });
-      } else {
-        localStorage.removeItem("access_token");
-        setUser(null);
-      }
-      setLoading(false);
-    });
-
-    return () => unsubscribe();
-  }, [axiosPublic]);
 
   const authInfo = {
     user,
     loading,
+    isAdmin,
     createUser,
     login,
     logOut,
-    signUpWithGmail,
-    updateUserProfile,
   };
 
   return (
@@ -158,3 +156,20 @@ const AuthProvider = ({ children }) => {
 };
 
 export default AuthProvider;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

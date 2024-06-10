@@ -1,20 +1,24 @@
- // middlewares 
- const jwt = require('jsonwebtoken');
- 
- const verifyToken = (req, res, next) => {
-  
-    // console.log(req.headers.authorization);
-    if (!req.headers.authorization) {
-      return res.status(401).send({ message: 'unauthorized access' });
-    }
-    const token = req.headers.authorization.split(' ')[1];
-    jwt.verify(token, process.env.JW_SECRET, (err, decoded) => {
-      if (err) {
-        return res.status(401).send({ message: 'unauthorized access' })
-      }
-      req.decoded = decoded;
-      next();
-    })
+const jwt = require('jsonwebtoken');
+
+const verifyToken = (req, res, next) => {
+  const token = req.cookies.token || req.headers['x-access-token'] || req.headers['authorization'];
+
+  if (!token) {
+    return res.status(403).send({ message: 'No token provided' });
   }
 
-  module.exports = verifyToken;
+  jwt.verify(token, process.env.JW_SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(500).send({ message: 'Failed to authenticate token' });
+    }
+
+    req.userId = decoded.id;
+    next();
+  });
+};
+
+module.exports = verifyToken;
+
+
+
+

@@ -31,7 +31,7 @@ const ManageBookings = () => {
       return res.json();
     },
   });
-  //   console.log(menu)
+  //   console.log(recette)
   const axiosSecure = useAxiosSecure();
 
   //   pagination
@@ -67,7 +67,7 @@ const ManageBookings = () => {
   return (
     <div className="w-full md:w-[870px] mx-auto px-4 ">
       <h2 className="text-2xl font-semibold my-4">
-        Manage All <span className="text-green">Bookings!</span>
+        Management des <span className="text-green">Bookings!</span>
       </h2>
 
       {/* menu items table  */}
@@ -78,12 +78,12 @@ const ManageBookings = () => {
             <thead>
               <tr>
                 <th>#</th>
-                <th>User</th>
+                <th>Utilisateur</th>
                 <th>Transition Id</th>
-                <th>Price</th>
+                <th>Prix</th>
                 <th>Status</th>
-                <th>Confirm Order</th>
-                <th>Delete</th>
+                <th>Confirmation de paiement</th>
+                <th>Supprimer</th>
               </tr>
             </thead>
             <tbody>
@@ -128,14 +128,14 @@ const ManageBookings = () => {
           disabled={currentPage === 1}
           className="btn btn-sm mr-2 btn-warning"
         >
-          <FaArrowLeft /> Previous
+          <FaArrowLeft /> Précédent
         </button>
         <button
           onClick={() => setCurrentPage(currentPage + 1)}
           disabled={indexOfLastItem >= orders.length}
           className="btn btn-sm bg-green text-white"
         >
-          Next <FaArrowRight />
+          Suivant <FaArrowRight />
         </button>
       </div>
     </div>

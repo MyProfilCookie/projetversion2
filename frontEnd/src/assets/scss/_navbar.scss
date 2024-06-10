@@ -1,4 +1,4 @@
-// Variables de couleur
+// Variables pour les couleurs du composant
 $primary-color: #ff4747;
 $secondary-color: #333;
 $bg-color: rgb(75, 32, 65);
@@ -10,27 +10,12 @@ $hover-color: #6366f1;
   .navbar {
     display: flex;
     justify-content: space-around;
-    // padding: 1rem 0;
     align-items: center;
-    // background-color: #A7001E;
-    // background-color: #392E2C;
-    // background-color: $bg-color;
-    // color: #ffffff;
-    // box-shadow:
-    //   0 2px 4px 0 rgba(0, 0, 0, 0.1),
-    //   0 2px 4px 0 rgba(0, 0, 0, 0.06);
     width: 100%;
   }
   .md-hidden {
     display: block;
   }
-
-  // .navbar-start,
-  // .navbar-center {
-  //   // display: flex;
-  //   align-items: center;
-  //   width: 33%;
-  // }
 
   #navbar-logo {
     img {
@@ -165,8 +150,6 @@ $hover-color: #6366f1;
     }
   }
 }
-
-// Styles pour les petits écrans
 @media (max-width: 1024px) {
   #navbar-header {
     .navbar {

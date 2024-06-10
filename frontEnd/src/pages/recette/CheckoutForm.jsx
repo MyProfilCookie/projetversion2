@@ -89,6 +89,7 @@ const CheckoutForm = ({ price }) => {
       console.error("Erreur lors de la création du moyen de paiement:", error);
     } else {
       setCardError("");
+      console.log("Moyen de paiement créé:", paymentMethod);
     }
 
     const { paymentIntent, error: confirmError } =
@@ -126,6 +127,8 @@ const CheckoutForm = ({ price }) => {
         menuItems: cart.map((item) => item.menuItemId),
       };
 
+      console.log("Informations de paiement à envoyer:", paymentInfo);
+
       axiosSecure
         .post("/api/payments", paymentInfo)
         .then((res) => {
@@ -145,7 +148,7 @@ const CheckoutForm = ({ price }) => {
   };
 
   return (
-    <div className="flex flex-col sm:flex-row justify-start items-start gap-8">
+    <div className="flex flex-col sm-flex-row justify-center items-center gap-8">
       <div className="md:w-1/2 space-y-3">
         <h4 className="text-lg font-semibold">Résumé de la commande</h4>
         <p>Prix total: {price} €</p>
@@ -155,14 +158,12 @@ const CheckoutForm = ({ price }) => {
         </p>
       </div>
       <div
-        className={`md:w-1/3 w-full border space-y-5 card shrink-0 max-w-sm shadow-2xl bg-base-100 px-4 py-8 ${isDarkMode ? "dark" : ""
+        className={`md:w-1/3 w-full border space-y-5 card-shadow shrink-0 max-w-sm shadow-2xl bg-base-100 px-4 py-8 ${isDarkMode ? "dark" : "primaryBG"
           }`}
       >
         <h4 className="text-lg font-semibold">Procédez à votre paiement!</h4>
         <h5 className="font-medium">Carte de crédit/débit</h5>
-        <form onSubmit={handleSubmit}
-
->
+        <form onSubmit={handleSubmit}>
           <CardElement
             options={{
               style: {
@@ -181,13 +182,13 @@ const CheckoutForm = ({ price }) => {
           />
           <button
             type="submit"
-            className="btn btn-sm bg-green text-white mt-5"
+            className="btn btn-sm bg-green-500 text-white mt-5"
           >
             Payer
           </button>
         </form>
         {cardError && (
-          <p className="text-red text-xs italic">{cardError}</p>
+          <p className="text-white text-xs italic">{cardError}</p>
         )}
 
         <div className="mt-5 text-center">

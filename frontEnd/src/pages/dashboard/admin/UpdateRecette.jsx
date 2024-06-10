@@ -1,5 +1,6 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable no-unused-vars */
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
@@ -7,12 +8,13 @@ import Swal from "sweetalert2";
 
 const UpdateRecette = () => {
   const item = useLoaderData();
-  const { register, handleSubmit, reset, setValue } = useForm();
+  const { register, handleSubmit, reset, setValue, watch } = useForm();
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+  const [imagePreview, setImagePreview] = useState(null);
 
   useEffect(() => {
-    // Pre-fill the form with the existing data
     setValue("titre", item.titre);
     setValue("description", item.description);
     setValue("ingredients", item.ingredients.join(", "));
@@ -21,11 +23,27 @@ const UpdateRecette = () => {
     setValue("temps_cuisson", item.temps_cuisson);
     setValue("difficulte", item.difficulte);
     setValue("category", item.category);
-  }, [item, setValue]);
+    setImagePreview(`${API_URL}/uploads/${item.image}`);
+  }, [item, setValue, API_URL]);
 
-  const onSubmit = (data) => {
+  const watchImage = watch("image");
+
+  useEffect(() => {
+    if (watchImage && watchImage.length > 0) {
+      const file = watchImage[0];
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  }, [watchImage]);
+
+  const onSubmit = async (data) => {
     const formData = new FormData();
-    formData.append("image", data.image[0]);
+    if (data.image && data.image.length > 0) {
+      formData.append("image", data.image[0]);
+    }
     formData.append("titre", data.titre);
     formData.append("description", data.description);
     formData.append("ingredients", data.ingredients);
@@ -35,24 +53,33 @@ const UpdateRecette = () => {
     formData.append("difficulte", data.difficulte);
     formData.append("category", data.category);
 
-    axiosSecure
-      .patch(`/recettes/${item._id}`, formData)
-      .then((res) => {
-        if (res.data.modifiedCount) {
-          reset();
-          Swal.fire({
-            position: "top-end",
-            icon: "success",
-            title: "Votre recette a été mise à jour",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-          navigate("/dashboard/manage-items");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
+    console.log('FormData entries:');
+    for (let pair of formData.entries()) {
+      console.log(pair[0] + ', ' + pair[1]);
+    }
+
+    try {
+      const res = await axiosSecure.patch(`/recettes/${item._id}`, formData);
+      console.log("Response from server:", res);
+      if (res.data) {
+        reset();
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Votre recette a été mise à jour",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        navigate("/dashboard/manage-items");
+      }
+    } catch (err) {
+      console.error("Erreur: ", err);
+      Swal.fire({
+        icon: "error",
+        title: "Erreur",
+        text: "Une erreur est survenue lors de la mise à jour de la recette.",
       });
+    }
   };
 
   return (
@@ -130,9 +157,29 @@ const UpdateRecette = () => {
           </select>
         </div>
         <div className="form-group">
-          <label htmlFor="image">Image</label>
+          <label htmlFor="image">Image (fichier)</label>
           <input {...register("image")} id="image" type="file" />
         </div>
+        {imagePreview && (
+          <div className="form-group">
+            <label>Prévisualisation de l'image</label>
+            <img
+              src={imagePreview}
+              alt="Prévisualisation"
+              style={{ width: "200px" }}
+            />
+          </div>
+        )}
+        {item.image && !imagePreview && (
+          <div className="form-group">
+            <label>Image actuelle</label>
+            <img
+              src={`${API_URL}/uploads/${item.image}`}
+              alt="Recette"
+              style={{ width: "200px" }}
+            />
+          </div>
+        )}
         <div className="form-group">
           <button type="submit" className="btn-submit">
             Mettre à jour
@@ -144,3 +191,10 @@ const UpdateRecette = () => {
 };
 
 export default UpdateRecette;
+
+
+
+
+
+
+

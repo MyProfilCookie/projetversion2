@@ -4,13 +4,27 @@ require("dotenv").config();
 const port = process.env.PORT
 const cors = require("cors");
 console.log(process.env.DB_USER);
-const mongoose = require("mongoose");
+/*const mongoose = require("mongoose");*/
 const jwt = require('jsonwebtoken');
 const compression = require("compression");
 const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
 const bodyParser = require('body-parser');
+const {connect} = require("mongoose")
+const cookieParser = require('cookie-parser');
+const User = require("./api/models/User");
+const createError = require('http-errors');
+const bcrypt = require('bcrypt');
+
+// connection a la base de données
+connect(process.env.DB)
+    .then(function(){
+        console.log("connexion à la base réussie")
+    })
+    .catch(function(err){
+        throw new Error(err)
+})
 
 // Configuration de multer
 const storage = multer.diskStorage({
@@ -31,13 +45,13 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // Route d'upload
-app.post('/api/recettes/:id/upload', upload.single('image'), (req, res) => {
-  try {
-    res.status(200).json({ message: 'Image uploadée avec succès', filename: req.file.filename });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
+// app.post('/api/recettes/:id/upload', upload.single('image'), (req, res) => {
+//   try {
+//     res.status(200).json({ message: 'Image uploadée avec succès', filename: req.file.filename });
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// });
 
 
 
@@ -47,28 +61,62 @@ app.use((req, res, next) => {
   next();
 });
 app.use(cors({
-  origin: 'http://localhost:5174', // Remplacez par l'URL de votre frontend
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true, // Si vous utilisez des cookies
+  origin: 'http://localhost:9009',
+  credentials: true,
 }));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(bodyParser.json());
 
 
 app.use(compression());
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  next();
-});
+const loginUser = async (req, res, next) => {
+  const { email, password } = req.body;
 
+  if (!email || !password) {
+    return next(createError(400, 'Email et mot de passe sont requis'));
+  }
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return next(createError(400, 'Utilisateur non trouvé'));
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return next(createError(400, 'Mot de passe incorrect'));
+    }
+
+    const token = jwt.sign({ id: user._id, email: user.email }, process.env.JW_SECRET, {
+      expiresIn: '1h',
+    });
+
+    // Envoyer le cookie avec le token
+    res.cookie('token', token, {
+      httpOnly: true,
+      sameSite: 'None',
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 3600000, // 1 heure en millisecondes
+    });
+
+    console.log(`Token from cookie: ${token}`, res.cookies);
+    res.status(200).json({
+      user: { id: user._id, email: user.email, username: user.username },
+      token,
+    });
+  } catch (error) {
+    next(createError(500, error.message));
+  }
+};
+
+app.post('/users/login', loginUser);
 
 app.post("/jwt", async (req, res) => {
   const user = req.body;
-  // console.log(user)
   const token = jwt.sign(user, process.env.JW_SECRET, {
     expiresIn: "1h",
   });
@@ -80,17 +128,20 @@ app.post("/jwt", async (req, res) => {
     email: user.email
   });
 });
+app.get("/users/profile", async (req, res) => {
+  const token = req.headers.authorization;
+  try {
+    const decoded = jwt.verify(token, process.env.JW_SECRET);
+    const user = await User.findById(decoded.id);
+    if (!user) {
+      return res.status(404).send({ message: "User not found" });
+    }
+    res.status(200).send({ user });
+  } catch (err) {
+    res.status(500).send({ message: "Failed to authenticate token" });
+  }
+});
 
-// ayivorvirginie26
-// wKWrXh7j14xwoID3
-
-// connection a la base de données
-mongoose
-.connect(
-  `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@myblog.5qztkw7.mongodb.net/myblog?retryWrites=true&w=majority&appName=myblog`
-)
-.then(() => console.log("Base de données MongoDB connectée"))
-.catch((err) => console.log(err));
 
 
 // importation des routes
@@ -100,7 +151,7 @@ const adminStats =  require('./api/routes/adminStats.routes');
 const orderStats = require("./api/routes/orderStats.routes");
 const paymentRoutes = require("./api/routes/payment.routes");
 const cartsRoutes = require("./api/routes/cart.routes");
-const routerImages = require('./api/routes/images.routes')
+// const routerImages = require('./api/routes/images.routes')
 
 // routes
 app.use('/recettes', recetteRoutes);
@@ -109,29 +160,14 @@ app.use('/admin-stats', adminStats);
 app.use('/order-stats', orderStats);
 app.use('/payments', paymentRoutes);
 app.use('/carts', cartsRoutes);
-app.use('/images', routerImages);
+// app.use('/images', routerImages);
 app.use('/api', paymentRoutes);
 
 
 
+
 const verifyToken = require("./api/Middleware/verifyToken");
-
-// router.post('/create-payment-intent', async (req, res) => {
-//   try {
-//     const { price } = req.body;
-
-//     const paymentIntent = await stripe.paymentIntents.create({
-//       amount: price * 100, // montant en centimes
-//       currency: 'eur',
-//     });
-
-//     res.status(200).send({
-//       clientSecret: paymentIntent.client_secret,
-//     });
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// });
+app.use(verifyToken);
 
 
 

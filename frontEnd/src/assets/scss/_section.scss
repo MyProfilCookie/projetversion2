@@ -1,28 +1,50 @@
-.avatar-group {
-  display: flex;
-  align-items: center;
-  gap: 1px;
-}
-.-space-x-6 {
-  margin-bottom: 2rem;
-  --tw-space-x-reverse: 0;
-  margin-right: calc(1.5rem * var(--tw-space-x-reverse));
-  margin-left: calc(6rem * calc(1 - var(--tw-space-x-reverse)));
-}
-.rtl-space-x-reverse {
-  --tw-space-x-reverse: 1;
-}
-.avatar {
-  margin-left: -1rem;
+$avatar-size: 3rem;
+$avatar-border-color: #fff;
+$avatar-border-radius: 9999px;
+$gap: 1px;
+$space-x: 6rem;
+$negative-margin: -1rem;
+$margin-bottom: 2rem;
+$reverse-space-x: 0;
+
+@mixin flex-center {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 9999px;
-  border: 1px solid #fff;
-  width: 3rem;
-  height: 3rem;
+}
+
+
+@mixin space-x($reverse) {
+  margin-right: calc(1.5rem * $reverse);
+  margin-left: calc($space-x * (1 - $reverse));
+}
+
+.avatar-group {
+  @include flex-center;
+  gap: $gap;
+}
+
+.-space-x-6 {
+  margin-bottom: $margin-bottom;
+  $reverse-space-x: 0; 
+  @include space-x($reverse-space-x);
+}
+
+.rtl-space-x-reverse {
+  $reverse-space-x: 1; 
+  @include space-x($reverse-space-x);
+}
+
+.avatar {
+  margin-left: $negative-margin;
+  @include flex-center;
+  border-radius: $avatar-border-radius;
+  border: 1px solid $avatar-border-color;
+  width: $avatar-size;
+  height: $avatar-size;
   overflow: hidden;
-  & img {
+
+  img {
     width: 100%;
     height: 100%;
     object-fit: cover;

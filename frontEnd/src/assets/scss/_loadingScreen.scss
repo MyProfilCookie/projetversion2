@@ -1,21 +1,41 @@
-.loading-container {
+// Variables
+$color-loading-logo: #f05c0d;
+$font-size-loading-logo: 300px;
+$animation-duration: 1s;
+$animation-timing: linear;
+$animation-iteration: infinite;
+$height-full: 100vh;
+
+// Mixins
+@mixin flex-center {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; /* Utiliser la hauteur totale de la fenêtre de visualisation pour centrage vertical */
+}
+
+@mixin animation($name, $duration, $timing, $iteration) {
+  animation: $name $duration $timing $iteration;
+}
+
+// Keyframes
+@keyframes spin {
+  from {
+    transform: rotate(0deg); 
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Styles
+.loading-container {
+  @include flex-center;
+  height: $height-full;
 }
 
 .loading-logo {
-  font-size: 300px; /* Taille de l'icône */
-  color: #f05c0d;
-  animation: spin 1s linear infinite; /* Définition de l'animation de rotation */
+  font-size: $font-size-loading-logo;
+  color: $color-loading-logo;
+  @include animation(spin, $animation-duration, $animation-timing, $animation-iteration);
 }
 
-@keyframes spin {
-  from {
-    transform: rotate(0deg); /* Début de la rotation à 0 degrés */
-  }
-  to {
-    transform: rotate(360deg); /* Rotation complète à 360 degrés */
-  }
-}
