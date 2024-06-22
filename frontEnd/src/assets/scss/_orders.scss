@@ -1,0 +1,115 @@
+// Variables
+$primary-color: #34d399;
+$secondary-color: #f97316;
+$tertiary-color: #6366f1;
+$quaternary-color: #a855f7;
+$highlight-color: #fafafa;
+$background-gradient: linear-gradient(to right, #fafafa 0%, #fcfcfc 100%);
+$table-header-bg: #34d399;
+$table-header-text: #ffffff;
+$table-row-alt-bg: #7ed2a7;
+$button-text: #f91a16;
+$button-bg: transparent;
+
+// Container
+.containers {
+  width: 100%;
+  padding: 0 1rem;
+
+  @media (min-width: 1280px) {
+    max-width: 1280px;
+    padding: 0 6rem;
+  }
+}
+
+// Header
+.headers {
+  // background: $background-gradient;
+  text-align: center;
+  padding: 3rem 0;
+
+  h2 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    line-height: 1.2;
+
+    @media (min-width: 768px) {
+      font-size: 3rem;
+    }
+
+    .text-green {
+      color: $primary-color;
+    }
+  }
+}
+
+// Table
+.table-container {
+  overflow-x: auto; // Ajouté pour gérer le débordement en mobile
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2rem 0;
+
+    th,
+    td {
+      padding: 1rem;
+      text-align: center;
+    }
+
+    thead {
+      background-color: $table-header-bg;
+      color: $table-header-text;
+
+      th {
+        &:first-child {
+          border-top-left-radius: 0.5rem;
+        }
+
+        &:last-child {
+          border-top-right-radius: 0.5rem;
+        }
+      }
+    }
+
+    tbody {
+      tr {
+        &:nth-child(even) {
+          background-color: $table-row-alt-bg;
+        }
+      }
+    }
+  }
+}
+
+// Button
+.btn {
+  &-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  &.border-none {
+    border: none;
+  }
+
+  &.text-orange-400 {
+    color: $button-text;
+  }
+
+  &.bg-transparent {
+    background-color: $button-bg;
+  }
+}
+
+// Responsive styles
+@media (min-width: 768px) {
+  .header {
+    padding: 7rem 0;
+
+    h2 {
+      font-size: 4rem;
+    }
+  }
+}

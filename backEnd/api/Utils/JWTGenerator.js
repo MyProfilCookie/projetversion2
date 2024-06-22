@@ -1,11 +1,20 @@
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
 
-const maxAge = 3 * 24 * 60 * 60;
- function JWTGenerator(payload) {
-    const token = jwt.sign(payload, process.env.JW_SECRET, {
-        expiresIn: maxAge,
-    });
-    return token;
-}
+const generateToken = (user) => {
+  const payload = {
+    id: user.id,
+    email: user.email,
+  };
 
-module.exports = JWTGenerator;
+  const options = {
+    expiresIn: '1h', // Le token expirera dans 1 heure
+  };
+
+  return jwt.sign(payload, process.env.JWT_SECRET, options);
+
+
+};
+
+const user = { id: '123', email: 'test@example.com' };
+const token = generateToken(user);
+console.log('Generated JWT:', token);

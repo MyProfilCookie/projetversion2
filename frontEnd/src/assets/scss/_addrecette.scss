@@ -1,83 +1,131 @@
+// Variables
+$max-width-dashboard: 1200px;
+$padding-small: 1rem;
+$padding-medium: 2rem;
+$padding-large: 1rem;
+$margin-large: 2rem;
+$font-size-title: 2rem;
+$font-weight-bold: 600;
+$color-gray-light: #888;
+$color-gray-dark: #555;
+$color-white: #fff;
+$color-green: #34d399;
+$color-red: #f87171;
+$transition-duration: 0.3s;
+
+// Mixins
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin transition($properties...) {
+  transition: $properties;
+}
+
+// Styles
 .add-recette-container {
-    // width: 100%;
-    // width: 600px;
-    padding: 16px;
-    box-sizing: border-box;
-  
-    .title {
-      text-align: center;
-      font-size: 24px;
-      font-weight: 600;
-      margin-bottom: 16px;
-  
-      .highlight {
-        color: #FF6F61; 
-      }
+  width: 100%;
+  max-width: $max-width-dashboard;
+  margin: 0 auto;
+  padding: $padding-small;
+
+  @media (min-width: 640px) {
+    padding: $padding-medium;
+  }
+
+  .title {
+    text-align: center;
+    margin-bottom: $margin-large;
+    font-size: $font-size-title;
+    font-weight: $font-weight-bold;
+
+    .highlight {
+      color: $color-green;
     }
-  
-    .form-container {
-      max-width: 500px;
+  }
+
+  .form-container {
+    display: flex;
+    flex-direction: column;
+    gap: $padding-large;
+
+    .form-group {
       display: flex;
       flex-direction: column;
-      gap: 16px;
-    //   width: 100%;
-      margin: 0 auto;
-  
-      .form-group {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-  
-        label {
-          font-size: 12px;
-          font-weight: 700;
-          text-transform: uppercase;
-          color: #6B4226; 
+      margin-bottom: $padding-large;
+
+      label {
+        margin-bottom: 0.5rem;
+        font-weight: $font-weight-bold;
+        color: $color-gray-dark;
+      }
+
+      input,
+      textarea,
+      select {
+        padding: 0.5rem;
+        border: 1px solid $color-gray-light;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        color: $color-gray-dark;
+
+        &:focus {
+          outline: none;
+          border-color: $color-green;
         }
-  
+      }
+
+      .error {
+        color: $color-red;
+        margin-top: 0.5rem;
+        font-size: 0.875rem;
+      }
+    }
+
+    .btn-submit {
+      padding: 0.75rem;
+      background-color: $color-green;
+      color: $color-white;
+      border: none;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      font-weight: $font-weight-bold;
+      cursor: pointer;
+      @include transition(background-color $transition-duration);
+
+      &:hover {
+        background-color: darken($color-green, 10%);
+      }
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .add-recette-container {
+    .title {
+      font-size: 2.5rem;
+    }
+
+    .form-container {
+      .form-group {
+        label {
+          font-size: 1.25rem;
+        }
+
         input,
         textarea,
         select {
-          padding: 12px;
-          border-radius: 8px;
-          border: 1px solid #D3A588; 
-          background-color: #FFF4E6; 
-          color: #6B4226; 
-          transition: background-color 0.2s;
-  
-          &:focus {
-            outline: none;
-            background-color: #FFEBD2; 
-            border-color: #D3A588; 
-          }
+          font-size: 1.25rem;
         }
-  
-        .error {
-          color: #E57373;
-          font-size: 12px;
-        }
-      }
-  
-      .btn-submit {
-        padding: 12px;
-        border-radius: 8px;
-        background-color: #FF6F61; 
-        color: #FFF; 
-        font-weight: 700;
-        transition: background-color 0.2s;
-  
-        &:hover {
-          background-color: #E65C50;
-        }
-      }
-    }
-  
-    @media (min-width: 768px) {
-      .form-container {
-        width: 800px;
       }
 
+      .btn-submit {
+        font-size: 1.25rem;
+      }
     }
   }
-  
+}
+
   

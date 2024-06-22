@@ -1,12 +1,16 @@
 // Variables
-$primary-color: #4a90e2;
-$secondary-color: #50e3c2;
-$tertiary-color: #f5a623;
-$danger-color: #d0021b;
-$text-color: #333;
-$bg-color: #fff;
-$table-bg: #f7f8fa;
-$header-bg: $primary-color;
+$primary-color: #34d399;
+$secondary-color: #f97316;
+$tertiary-color: #6366f1;
+$quaternary-color: #a855f7;
+$highlight-color: #fafafa;
+$table-header-bg: #34d399;
+$table-header-text: #ffffff;
+$table-row-alt-bg: lighten(#34d399, 30%);
+$button-bg-admin: #f87171;
+$button-bg-user: #6366f1;
+$button-bg-delete: #f97316;
+$button-text-color: #ffffff;
 
 // Mixins
 @mixin flex-center {
@@ -14,99 +18,111 @@ $header-bg: $primary-color;
   align-items: center;
   justify-content: center;
 }
-#users-container {
-    margin: 1rem;
-    padding: 1rem;
-    background-color: $bg-color;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  
-    // Header
-    > .header {
-      @include flex-center;
-      justify-content: space-between;
-      margin-bottom: 1rem;
-  
-      h2 {
-        margin: 0;
-        font-size: 1.5rem;
-      }
-    }
-  
-    // Table
-    > .table-container {
-      overflow-x: auto;
-  
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        background-color: $table-bg;
-  
-        thead {
-          background-color: $header-bg;
-          color: #fff;
-  
-          th {
-            padding: 0.75rem;
-            text-align: left;
-            font-weight: bold;
-          }
-        }
-  
-        tbody {
-          tr {
-            &:nth-child(even) {
-              background-color: lighten($table-bg, 5%);
-            }
-  
-            td {
-              padding: 0.75rem;
-              text-align: left;
-  
-              &:first-child {
-                text-align: center;
-              }
-  
-              .btn {
-                padding: 0.25rem 0.5rem;
-                border: none;
-                border-radius: 4px;
-                color: #fff;
-                cursor: pointer;
-  
-                &.btn-circle {
-                  border-radius: 50%;
-                }
-  
-                &.bg-indigo-500 {
-                  background-color: $secondary-color;
-                }
-  
-                &.bg-orange-500 {
-                  background-color: $tertiary-color;
-                }
-  
-                &:hover {
-                  opacity: 0.8;
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-  
-  // Media queries
+
+@mixin transition($properties...) {
+  transition: $properties;
+}
+
+// Styles
+.users-container {
+  width: 100%;
+  padding: 1rem;
+  margin: 0 auto;
+
   @media (min-width: 768px) {
-    #users-container {
-      margin: 2rem;
-      padding: 2rem;
-  
-      > .header {
-        h2 {
-          font-size: 2rem;
+    width: 870px;
+  }
+
+  .header {
+    @include flex-center;
+    justify-content: space-between;
+    margin: 1rem 0;
+
+    h2 {
+      font-size: 1.5rem;
+
+      @media (min-width: 768px) {
+        font-size: 2rem;
+      }
+    }
+  }
+
+  .table-container {
+    overflow-x: auto;
+    margin-bottom: 1rem;
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+
+      th,
+      td {
+        padding: 0.75rem;
+        text-align: center;
+      }
+
+      thead {
+        background-color: $table-header-bg;
+        color: $table-header-text;
+
+        th {
+          &:first-child {
+            border-top-left-radius: 0.5rem;
+          }
+
+          &:last-child {
+            border-top-right-radius: 0.5rem;
+          }
+        }
+      }
+
+      tbody {
+        tr {
+          &:nth-child(even) {
+            background-color: $table-row-alt-bg;
+          }
+
+          td {
+            .btn {
+              border-radius: 5px;
+              padding: 0.25rem 0.5rem;
+              font-size: 0.875rem;
+
+              &.btn-circle {
+                border-radius: 9999px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              }
+
+              &.bg-red-500 {
+                background-color: $button-bg-admin;
+                color: $button-text-color;
+                @include transition(background-color 0.2s ease);
+              }
+
+              &.bg-indigo-500 {
+                background-color: $button-bg-user;
+                color: $button-text-color;
+                @include transition(background-color 0.2s ease);
+              }
+
+              &.bg-orange-500 {
+                background-color: $button-bg-delete;
+                color: $button-text-color;
+                @include transition(background-color 0.2s ease);
+              }
+
+              &:hover {
+                opacity: 0.8;
+              }
+            }
+          }
         }
       }
     }
   }
+}
+
+

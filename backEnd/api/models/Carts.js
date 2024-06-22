@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const cartSchema = new Schema({
-    menuItemId: String,
+    recetteItemId: String,
     name: {
         type: String,
         trim: true,

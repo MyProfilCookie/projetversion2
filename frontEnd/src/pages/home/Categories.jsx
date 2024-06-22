@@ -7,25 +7,25 @@ function Categories() {
     {
       id: 1,
       name: "Gourmandise",
-      image: "./images/gourmandise.jpeg",
+      image: "./images/gourmandise.jpg",
       path: "/categories/gourmandise",
     },
     {
       id: 2,
       name: "Chocolat",
-      image: "./images/chocolat.jpeg",
+      image: "./images/chocolat.jpg",
       path: "/categories/chocolat",
     },
     {
       id: 3,
       name: "Pains et viennoiserie",
-      image: "./images/pain.jpeg",
+      image: "./images/pain.jpg",
       path: "/categories/pains-viennoiserie",
     },
     {
       id: 4,
       name: "Fruits",
-      image: "./images/fruits.jpeg",
+      image: "./images/fruits.jpg",
       path: "/categories/fruits",
     },
   ];
@@ -57,9 +57,9 @@ function Categories() {
               />
             </div>
             <div className="mt-5 space-y-1 mb-3">
-              <h5 className="text-center font-bold">{category.name}</h5>
-              <button className="btn-primary font-semibold rounded-full mt-10">
-                Voir plus
+              <h5 className="text-center font-bold text-lg" style={{ fontFamily: "Playfair Display" }}>{category.name}</h5>
+              <button className="btn-primary font-semibold mt-10" style={{ fontFamily: "Playfair Display", fontWeight: "bold", borderRadius: "10px" }}>
+                Voir les recettes de {category.name}
               </button>
             </div>
           </Link>

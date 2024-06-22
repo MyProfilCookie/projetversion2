@@ -13,6 +13,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { AuthContext } from "../contexts/AuthProvider";
 import { useTheme } from "../hooks/ThemeContext";
+import ChefPatisserieLogo from "./ChefPatisserieLogo";
 
 
 function Modal() {
@@ -22,9 +23,9 @@ function Modal() {
   const modalRef = useRef(null);
 
   // Redirection vers la page d'accueil après la connexion
-  const location = useLocation();
-  const navigate = useNavigate();
-  const from = location.state?.from?.pathname || "/";
+  // const location = useLocation();
+  // const navigate = useNavigate();
+  // const from = location.state?.from?.pathname || "/";
 
   const {
     register,
@@ -44,7 +45,7 @@ function Modal() {
         name: result.user?.displayName,
       };
       alert("Connexion réussie !");
-      navigate(from, { replace: true });
+      // navigate(from, { replace: true });
       closeModal();
       reset();
     } catch (error) {
@@ -109,9 +110,9 @@ function Modal() {
 
   return (
     <div>
-      <button onClick={openModal} className={`${isDarkMode ? "bgDark inverti" : "PrimaryBG"}`} style={{height: "3rem", width: "3rem", borderRadius: "50%", marginRight: "1rem"}}>
+      <button onClick={openModal} className={`${isDarkMode ? "bgDark inverti" : "PrimaryBG"}`} style={{height: "3rem", width: "3rem", borderRadius: "50%", marginRight: "1rem", border: "none", cursor: "pointer", backgroundColor: "transparent"}}>
         
-        <FaUserSecret size={30} />
+        <ChefPatisserieLogo {...{ isDarkMode }} />
       </button>
       {isModalOpen && (
         <div className="modal-overlay">

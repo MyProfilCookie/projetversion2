@@ -26,7 +26,7 @@ const AddRecette = () => {
     formData.append("temps_cuisson", data.temps_cuisson);
     formData.append("difficulte", data.difficulte);
     formData.append("category", data.category);
-    formData.append("image", data.image[0]); // Append the file
+    formData.append("image", data.image[0]);
 
     try {
       const response = await axiosSecure.post("/recettes", formData, {
@@ -42,7 +42,7 @@ const AddRecette = () => {
         confirmButtonText: "OK",
       });
       reset();
-      navigate("/"); // Redirect to another page if needed
+      navigate("/"); 
     } catch (error) {
       console.error("Error adding recette:", error);
       Swal.fire({

@@ -17,6 +17,8 @@ const User = require("./api/models/User");
 const createError = require('http-errors');
 const bcrypt = require('bcrypt');
 
+// const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+
 // connection a la base de données
 connect(process.env.DB)
     .then(function(){
@@ -26,25 +28,10 @@ connect(process.env.DB)
         throw new Error(err)
 })
 
-// Configuration de multer
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const uploadPath = path.join(__dirname, 'uploads');
-    if (!fs.existsSync(uploadPath)) {
-      fs.mkdirSync(uploadPath, { recursive: true });
-    }
-    cb(null, 'uploads');
-  },
-  filename: (req, file, cb) => {
-    const recetteId = req.params.id; // Supposons que l'ID de la recette soit passé en paramètre
-    const ext = path.extname(file.originalname);
-    cb(null, `${recetteId}${ext}`);
-  }
-});
 
-const upload = multer({ storage: storage });
 
-// Route d'upload
+// const upload = multer({ storage: storage });
+
 // app.post('/api/recettes/:id/upload', upload.single('image'), (req, res) => {
 //   try {
 //     res.status(200).json({ message: 'Image uploadée avec succès', filename: req.file.filename });
@@ -63,16 +50,34 @@ app.use((req, res, next) => {
 app.use(cors({
   origin: 'http://localhost:9009',
   credentials: true,
+  optionsSuccessStatus: 200
 }));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(bodyParser.json());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Configuration de multer
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     const uploadPath = path.join(__dirname, 'uploads');
+//     if (!fs.existsSync(uploadPath)) {
+//       fs.mkdirSync(uploadPath, { recursive: true });
+//     }
+//     cb(null, 'uploads');
+//   },
+//   filename: (req, file, cb) => {
+//     const recetteId = req.params.id; // Supposons que l'ID de la recette soit passé en paramètre
+//     const ext = path.extname(file.originalname);
+//     cb(null, `${recetteId}${ext}`);
+//   }
+// });
 
 
 app.use(compression());
+
 const loginUser = async (req, res, next) => {
   const { email, password } = req.body;
 
@@ -91,7 +96,7 @@ const loginUser = async (req, res, next) => {
       return next(createError(400, 'Mot de passe incorrect'));
     }
 
-    const token = jwt.sign({ id: user._id, email: user.email }, process.env.JW_SECRET, {
+    const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, {
       expiresIn: '1h',
     });
 
@@ -112,35 +117,22 @@ const loginUser = async (req, res, next) => {
     next(createError(500, error.message));
   }
 };
-
-app.post('/users/login', loginUser);
-
-app.post("/jwt", async (req, res) => {
-  const user = req.body;
-  const token = jwt.sign(user, process.env.JW_SECRET, {
-    expiresIn: "1h",
-  });
-  res.send({ 
-    token: token
-    ,
-    user: user
-    ,
-    email: user.email
-  });
-});
-app.get("/users/profile", async (req, res) => {
-  const token = req.headers.authorization;
+app.get('/users/profile', async (req, res) => {
+  // Exemple de route pour récupérer le profil utilisateur
+  const token = req.headers.authorization.split(' ')[1];
   try {
-    const decoded = jwt.verify(token, process.env.JW_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findById(decoded.id);
     if (!user) {
-      return res.status(404).send({ message: "User not found" });
+      return res.status(404).json({ message: 'User not found' });
     }
-    res.status(200).send({ user });
-  } catch (err) {
-    res.status(500).send({ message: "Failed to authenticate token" });
+    res.json({ user });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 });
+
+app.post('/users/login', loginUser);
 
 
 
@@ -152,8 +144,10 @@ const orderStats = require("./api/routes/orderStats.routes");
 const paymentRoutes = require("./api/routes/payment.routes");
 const cartsRoutes = require("./api/routes/cart.routes");
 // const routerImages = require('./api/routes/images.routes')
+const contactRoutes = require('./api/routes/contact.routes');
 
 // routes
+app.use('/contact', contactRoutes);
 app.use('/recettes', recetteRoutes);
 app.use('/users', userRoutes);
 app.use('/admin-stats', adminStats);
@@ -161,9 +155,27 @@ app.use('/order-stats', orderStats);
 app.use('/payments', paymentRoutes);
 app.use('/carts', cartsRoutes);
 // app.use('/images', routerImages);
-app.use('/api', paymentRoutes);
+app.use('/payments', paymentRoutes);
 
+// const payments = [
+//   { id: 1, amount: 100, currency: 'USD', email: 'virginie.ayivor@3wa.io' },
+//   { id: 2, amount: 200, currency: 'EUR', email: 'virginie.ayivor@3wa.io' },
+//   { id: 3, amount: 300, currency: 'USD', email: 'other@example.com' },
+// ];
 
+// app.get('/payments', (req, res) => {
+//   const email = req.query.email;
+//   console.log(`Received request for payments with email: ${email}`);
+
+//   if (!email) {
+//     return res.status(400).json({ message: 'Email est requis' });
+//   }
+
+//   const userPayments = payments.filter(payment => payment.email === email);
+//   console.log('Payments retrieved:', userPayments);
+
+//   res.json(userPayments);
+// });
 
 
 const verifyToken = require("./api/Middleware/verifyToken");

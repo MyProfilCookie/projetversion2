@@ -148,7 +148,7 @@ const CartPage = () => {
         </div>
         <div className="md-w-1-2 space-y-3">
           <h3 className="text-lg font-semibold">Détail de la commande</h3>
-          <p>Nombre d'articles: {cart.length}</p>
+          <p>Nombre d'articles: {calculateTotalItems()}</p>
           <p>
             Total: <span id="total-price">{orderTotal.toFixed(2)}€</span>
           </p>
@@ -252,3 +252,4 @@ const CartPage = () => {
 };
 
 export default CartPage;
+

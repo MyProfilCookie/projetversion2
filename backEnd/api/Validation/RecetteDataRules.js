@@ -1,6 +1,6 @@
 const { check } = require('express-validator');
 const createHttpError = require('http-errors');
-const Recette = require('../Model/Recette');
+const Recette = require('../models/Recette');
 
 exports.checkRecetteInput = [
     check("titre").trim().not().isEmpty().withMessage("Le titre est obligatoire"),

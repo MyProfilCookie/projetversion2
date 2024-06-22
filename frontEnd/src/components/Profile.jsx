@@ -14,9 +14,13 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTheme } from "../hooks/ThemeContext";
 
 function Profile({ user }) {
-  const { logOut } = useContext(AuthContext);
-  const { isDarkMode } = useTheme(); 
+  const { logOut, isAdmin } = useContext(AuthContext);
+  const { isDarkMode } = useTheme();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const from = location.state?.from?.pathname || "/";
+
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -29,21 +33,16 @@ function Profile({ user }) {
     setIsModalOpen(false);
   };
 
-  const handleLogout = () => {
-    logOut()
-      .then(() => {
-        alert("Vous êtes déconnecté");
-        setIsModalOpen(false);
-        navigate(from, { replace: true }); 
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  const handleLogout = async () => {
+    try {
+      await logOut();
+      alert("Vous êtes déconnecté");
+      setIsModalOpen(false);
+      navigate(from, { replace: true });
+    } catch (error) {
+      console.log(error);
+    }
   };
-  const location = useLocation();
-  const navigate = useNavigate();
-  // Redirection vers la page d'accueil après connexion
-  const from = location.state?.from?.pathname || "/";
 
   if (!user) {
     return null; // Affiche quelque chose si l'utilisateur n'est pas connecté
@@ -68,8 +67,8 @@ function Profile({ user }) {
               ) : (
                 // Dans le cas où l'utilisateur n'a pas de photo de profil, on affiche une icône par défaut (gâteau)
                 <RiCake3Line
-                className={`rounded-full ${isDarkMode ? "bgDark" : "PrimaryBG inverti-white"}`}
-                  style={{ height: "3rem", width: "1.8rem"}}
+                  className={`rounded-full ${isDarkMode ? "bgDark" : "PrimaryBG inverti-white"}`}
+                  style={{ height: "3rem", width: "1.8rem" }}
                 />
               )}
             </div>
@@ -83,22 +82,18 @@ function Profile({ user }) {
           ></label>
           <ul className="menu-drawer min-h-full">
             <li style={{ fontSize: "1rem" }}>
-              <Link to={`/update-profile`}>
-                <FontAwesomeIcon icon={faUser} size="2xl" /> Profile
-              </Link>
-            </li>
-            <li style={{ fontSize: "1rem" }}>
               <Link to="/my-recipe">
                 <FontAwesomeIcon icon={faClipboardList} size="2xl" /> Mes
                 recettes
               </Link>
             </li>
-            <li style={{ fontSize: "1rem" }}>
-              <Link to={`/dashboard/`}>
-                <FontAwesomeIcon icon={faCircleUser} size="2xl" /> Dashboard
-              </Link>
-            </li>
-
+            {isAdmin && (
+              <li style={{ fontSize: "1rem" }}>
+                <Link to={`/dashboard/`}>
+                  <FontAwesomeIcon icon={faCircleUser} size="2xl" /> Dashboard
+                </Link>
+              </li>
+            )}
             <li style={{ fontSize: "1rem" }}>
               <a onClick={handleLogout}>
                 <FontAwesomeIcon icon={faRightFromBracket} size="2xl" /> Logout
@@ -112,3 +107,4 @@ function Profile({ user }) {
 }
 
 export default Profile;
+

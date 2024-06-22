@@ -1,41 +1,60 @@
-// Variables
-$color-loading-logo: #f05c0d;
-$font-size-loading-logo: 300px;
-$animation-duration: 1s;
-$animation-timing: linear;
-$animation-iteration: infinite;
-$height-full: 100vh;
+.loading-spinner {
+  .border {
+    border-color: #3b82f6;
+    border-width: 1px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 0.375rem;
+    padding: 1rem;
+    max-width: 100%;
+    width: 100%;
+    margin: 0 auto;
 
-// Mixins
-@mixin flex-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+    .animate-pulse {
+      display: flex;
+      gap: 1rem;
 
-@mixin animation($name, $duration, $timing, $iteration) {
-  animation: $name $duration $timing $iteration;
-}
+      .rounded-full {
+        background-color: #e5e7eb;
+        height: 2.5rem;
+        width: 2.5rem;
+        border-radius: 9999px;
+      }
 
-// Keyframes
-@keyframes spin {
-  from {
-    transform: rotate(0deg); 
+      .flex-1 {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        padding-top: 0.25rem;
+
+        .h-2 {
+          height: 0.5rem;
+          background-color: #e5e7eb;
+          border-radius: 0.375rem;
+        }
+
+        .space-y-6 {
+          display: flex;
+          flex-direction: column;
+          gap: 0.75rem;
+
+          .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+
+            .col-span-2 {
+              grid-column: span 2;
+            }
+
+            .col-span-1 {
+              grid-column: span 1;
+            }
+          }
+        }
+      }
+    }
   }
-  to {
-    transform: rotate(360deg);
-  }
 }
 
-// Styles
-.loading-container {
-  @include flex-center;
-  height: $height-full;
-}
-
-.loading-logo {
-  font-size: $font-size-loading-logo;
-  color: $color-loading-logo;
-  @include animation(spin, $animation-duration, $animation-timing, $animation-iteration);
-}
 

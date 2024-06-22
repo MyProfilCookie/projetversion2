@@ -10,16 +10,16 @@ const verifyAdmin = require('../Middleware/verifyAdmin');
 router.get('/',verifyToken, (req, res) => {
     cartController.getCartByEmail(req, res)
 });
-// post cart item
+// Ajouter un panier
 router.post('/', cartController.addToCarts);
 
-// delete cart item
+// Supprimer un panier
 router.delete('/:id', cartController.deleteCart)
 
-// update cart quantity
+// Met à jour la quantité du panier
 router.put('/:id', cartController.updateCart);
 
-// get single cart item
+// Récupère un seul article de panier
 router.get('/:id', cartController.getSingleCart);
 
 module.exports = router;

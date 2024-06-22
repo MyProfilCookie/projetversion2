@@ -30,7 +30,7 @@ export const CartProvider = ({ children }) => {
         return prevCart.map((cartItem) =>
           cartItem.id === item.id
             ? { ...cartItem, quantity: cartItem.quantity + 1 }
-            : cartItem,
+            : cartItem
         );
       } else {
         return [...prevCart, { ...item, quantity: 1 }];
@@ -42,8 +42,13 @@ export const CartProvider = ({ children }) => {
     setCart(updatedCart);
   };
 
+  const clearCart = () => {
+    setCart([]);
+    localStorage.removeItem("cart");
+  };
+
   return (
-    <CartContext.Provider value={{ cart, addToCart, updateCart }}>
+    <CartContext.Provider value={{ cart, addToCart, updateCart, clearCart }}>
       {children}
     </CartContext.Provider>
   );

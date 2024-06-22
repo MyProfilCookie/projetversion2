@@ -132,15 +132,24 @@ const ManageItems = () => {
                           }}
                         >
                           {item.image ? (
-                            <img
-                              src={`${import.meta.env.VITE_API_URL}uploads/${item.image}`}
-                              alt="recette image"
-                            />
+                            item.image.startsWith('uploads/') ? (
+                              <img
+                                src={`${import.meta.env.VITE_API_URL}/${item.image}`}
+                                alt="recette image"
+                              />
+                            ) : (
+                              <img
+                                src={`${import.meta.env.VITE_API_URL}/uploads/${item.image}`}
+                                alt="recette image"
+                              />
+                            )
                           ) : (
                             <div className="w-12 h-12 flex items-center justify-center text-white">
                               No Image
                             </div>
                           )}
+
+
                         </div>
                       </div>
                     </div>

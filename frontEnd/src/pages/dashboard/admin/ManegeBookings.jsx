@@ -1,25 +1,19 @@
+/* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
+import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
-import useRecette from "../../../hooks/useRecette";
-import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import { Link } from "react-router-dom";
-import {
-  FaArrowCircleRight,
-  FaArrowLeft,
-  FaArrowRight,
-  FaEdit,
-  FaTrashAlt,
-  FaUsers,
-} from "react-icons/fa";
+import { FaTrashAlt, FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { GiConfirmed } from "react-icons/gi";
 import Swal from "sweetalert2";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import LoadingScreen from "../../../components/LoadingScreen";
 import useAuth from "../../../hooks/useAuth";
-import { useQuery } from "@tanstack/react-query";
 
-const ManageBookings = () => {
+const ManegeBooking = () => {
   const { user, loading } = useAuth();
   const token = localStorage.getItem("access_token");
-  const { refetch, data: orders = [] } = useQuery({
+
+  const { refetch, data: orders = [], isError, isLoading, error } = useQuery({
     queryKey: ["orders", user?.email],
     enabled: !loading,
     queryFn: async () => {
@@ -31,30 +25,46 @@ const ManageBookings = () => {
       return res.json();
     },
   });
-  //   console.log(recette)
-  const axiosSecure = useAxiosSecure();
 
-  //   pagination
+  const axiosSecure = useAxiosSecure();
   const [currentPage, setCurrentPage] = useState(1);
   const items_Per_Page = 10;
   const indexOfLastItem = currentPage * items_Per_Page;
   const indexOfFirstItem = indexOfLastItem - items_Per_Page;
   const currentItems = orders.slice(indexOfFirstItem, indexOfLastItem);
 
-  // delete item
-  const handleDeleteItem = (item) => {
-    console.log(item._id);
+  const handleDeleteItem = async (item) => {
+    Swal.fire({
+      title: "Êtes-vous sûr?",
+      text: "Vous ne pourrez pas annuler cela!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Oui, supprimez-le!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await axiosSecure.delete(`/payments/${item._id}`);
+          Swal.fire("Supprimé!", "Votre réservation a été supprimée.", "success");
+          refetch();
+        } catch (error) {
+          Swal.fire(
+            "Erreur!",
+            "Il y a eu un problème lors de la suppression de votre réservation.",
+            "error"
+          );
+        }
+      }
+    });
   };
 
-  // confirm order
   const confiremedOrder = async (item) => {
-    console.log(item);
     await axiosSecure.patch(`/payments/${item._id}`).then((res) => {
-      console.log(res.data);
       Swal.fire({
         position: "top-end",
         icon: "success",
-        title: `Order Confirmed Now!`,
+        title: `Commande confirmée!`,
         showConfirmButton: false,
         timer: 1500,
       });
@@ -62,26 +72,30 @@ const ManageBookings = () => {
     });
   };
 
-  console.log(orders);
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
+
+  if (isError) {
+    return <div>Erreur : {error.message}</div>;
+  }
 
   return (
-    <div className="w-full md:w-[870px] mx-auto px-4 ">
-      <h2 className="text-2xl font-semibold my-4">
-        Management des <span className="text-green">Bookings!</span>
+    <div className="manage-booking-container w-full md:w-[870px] mx-auto px-4">
+      <h2 className="header text-2xl font-semibold my-4">
+        Gestion des <span className="text-green">commandes!</span>
       </h2>
 
-      {/* menu items table  */}
-      <div>
+      <div className="table-container">
         <div className="overflow-x-auto lg:overflow-x-visible">
           <table className="table w-full">
-            {/* head */}
             <thead>
               <tr>
                 <th>#</th>
                 <th>Utilisateur</th>
-                <th>Transition Id</th>
+                <th>ID de Transaction</th>
                 <th>Prix</th>
-                <th>Status</th>
+                <th>Statut</th>
                 <th>Confirmation de paiement</th>
                 <th>Supprimer</th>
               </tr>
@@ -91,12 +105,12 @@ const ManageBookings = () => {
                 <tr key={index}>
                   <td>{index + 1}</td>
                   <td>{item.email}</td>
-                  <td>{item.transitionId}</td>
-                  <td>${item.price}</td>
+                  <td>{item._id ? item._id.substring(0, 8) : "N/A"}</td>
+                  <td>{item.price}€</td>
                   <td>{item.status}</td>
                   <td className="text-center">
                     {item.status === "confirmed" ? (
-                      "done"
+                      "terminé"
                     ) : (
                       <button
                         className="btn bg-green text-white btn-xs text-center"
@@ -121,8 +135,7 @@ const ManageBookings = () => {
         </div>
       </div>
 
-      {/* Pagination */}
-      <div className="flex justify-center my-4">
+      <div className="pagination-container flex justify-center my-4">
         <button
           onClick={() => setCurrentPage(currentPage - 1)}
           disabled={currentPage === 1}
@@ -142,4 +155,7 @@ const ManageBookings = () => {
   );
 };
 
-export default ManageBookings;
+export default ManegeBooking;
+
+
+

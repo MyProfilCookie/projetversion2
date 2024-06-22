@@ -8,7 +8,7 @@ const paymentSchema = new Schema ({
     status: String,
     itemsName: Array,
     cartItems: Array,
-    menuItems: Array,
+    recetteItems: Array,
     createdAt: {
         type: Date,
         default: Date.now

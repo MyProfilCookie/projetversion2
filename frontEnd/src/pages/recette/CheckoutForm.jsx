@@ -19,7 +19,7 @@ const CheckoutForm = ({ price }) => {
   const [paypalUrl, setPaypalUrl] = useState("");
 
   const { user } = useAuth();
-  const { cart } = useCart();
+  const { cart, clearCart } = useCart(); // Ajout de clearCart pour vider le panier
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
 
@@ -32,7 +32,7 @@ const CheckoutForm = ({ price }) => {
     }
 
     axiosSecure
-      .post("/api/create-payment-intent", { price })
+      .post("/payments/create-payment-intent", { price })
       .then((res) => {
         console.log("Intention de paiement créée:", res.data);
         setClientSecret(res.data.clientSecret);
@@ -45,7 +45,7 @@ const CheckoutForm = ({ price }) => {
       });
 
     axiosSecure
-      .post("/api/create-paypal-transaction", { price })
+      .post("/payments/create-paypal-transaction", { price })
       .then((res) => {
         console.log("Transaction PayPal créée:", res.data);
         setPaypalUrl(
@@ -121,7 +121,7 @@ const CheckoutForm = ({ price }) => {
         transactionId: paymentIntent.id,
         price,
         quantity: cart.reduce((total, item) => total + item.quantity, 0),
-        status: "order pending",
+        status: "Payé",
         itemsName: cart.map((item) => item.name),
         cartItems: cart.map((item) => item._id),
         menuItems: cart.map((item) => item.menuItemId),
@@ -130,11 +130,12 @@ const CheckoutForm = ({ price }) => {
       console.log("Informations de paiement à envoyer:", paymentInfo);
 
       axiosSecure
-        .post("/api/payments", paymentInfo)
+        .post("/payments", paymentInfo)
         .then((res) => {
           console.log("Informations de paiement envoyées:", res.data);
           if (res.data) {
             alert("Informations de paiement envoyées avec succès !");
+            clearCart(); // Vider le panier après paiement réussi
             navigate("/order");
           }
         })

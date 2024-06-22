@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-// Import your middleware
+// Importation des models
 const User = require('../models/User');
 const Recette = require('../models/Recette');
 const Payment = require('../models/Payments'); 
@@ -20,7 +20,7 @@ router.get('/', verifyToken, verifyAdmin, async (req, res) => {
         $group: {
           _id: null,
           totalRevenue: {
-            $sum: '€price'
+            $sum: '$price' 
           }
         }
       }
@@ -39,7 +39,5 @@ router.get('/', verifyToken, verifyAdmin, async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
-
-
 
 module.exports = router;

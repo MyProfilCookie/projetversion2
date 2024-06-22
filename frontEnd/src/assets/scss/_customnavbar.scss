@@ -12,13 +12,17 @@
         margin: 0 1rem;
   
         .custom-navbar-link {
-          color: white;
+          display: flex;
+          align-items: center;
+          padding: 0.5rem 1rem;
           text-decoration: none;
-          font-weight: bold;
+          color: inherit;
+          border-radius: 0.5rem;
+          transition: background-color 0.2s ease;
   
           &:hover {
             color: #f44336;
-            text-decoration: underline;
+            
           }
         }
       }

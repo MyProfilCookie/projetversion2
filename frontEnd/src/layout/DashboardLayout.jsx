@@ -87,30 +87,20 @@ const DashboardLayout = () => {
               <Outlet />
             </div>
           </div>
-          <div className={`drawer-side3 ${isDarkMode ? "dark" : "primaryBG"}`}>
+          {/* <div className={`drawer-side3 ${isDarkMode ? "dark" : "primaryBG"}`}>
             <label
               htmlFor="my-drawer-2"
               aria-label="close sidebar"
               className="drawer-overlay"
             ></label>
             <ul className="menu-drawer2 p-4 w-full text-base-content">
-              <li className="mb-3">
-                <Link to="/dashboard" className="flex items-center gap-2">
-                  <span className="badge badge-primary">Admin</span>
-                </Link>
-              </li>
               <div className="divider"></div>
-              <li className="mt-3">
-                <Link to="/dashboard" className="flex items-center gap-2">
-                  <MdDashboard /> Dashboard
-                </Link>
-              </li>
               <li>
                 <Link
                   to="/dashboard/bookings"
                   className="flex items-center gap-2"
                 >
-                  <FaShoppingBag /> Manage Bookings
+                  <FaShoppingBag /> Les commandes
                 </Link>
               </li>
               <li>
@@ -126,18 +116,18 @@ const DashboardLayout = () => {
                   to="/dashboard/manage-items"
                   className="flex items-center gap-2"
                 >
-                  <FaEdit /> Manage Items
+                  <FaEdit /> Éditer les recettes
                 </Link>
               </li>
               <li className="mb-3">
                 <Link to="/dashboard/users" className="flex items-center gap-2">
-                  <FaUsers /> Users
+                  <FaUsers /> Utilisateurs
                 </Link>
               </li>
               <div className="divider"></div>
               {sharedMenu}
             </ul>
-          </div>
+          </div> */}
         </div>
       ) : (
         <div className="h-screen flex items-center justify-center">

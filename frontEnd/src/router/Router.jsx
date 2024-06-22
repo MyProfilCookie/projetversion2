@@ -1,10 +1,10 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import Main from "../layout/Main";
 import Home from "../pages/home/Home";
 import Recettes from "../pages/recette/Recettes";
 import Register from "../components/Register";
 import PrivateRouter from "../PrivateRouter/PrivateRouter";
-import UserProfil from "../pages/dashboard/user/UserProfile";
+// import UserProfil from "../pages/dashboard/user/UserProfile";
 import RecetteDetail from "../pages/recette/RecetteDetail";
 import Order from "../pages/dashboard/user/Order";
 import DashboardLayout from "../layout/DashboardLayout";
@@ -25,7 +25,8 @@ import AddRecette from "../pages/dashboard/admin/AddRecette";
 import UpdateRecette from "../pages/dashboard/admin/UpdateRecette";
 import ManageItems from "../pages/dashboard/admin/ManageItems";
 import ManageBookings from "../pages/dashboard/admin/ManegeBookings";
-import UserDashboard from "../pages/dashboard/user/UserDashboard";
+import MessageContact from "../pages/dashboard/admin/MessageContact";
+// import UserDashboard from "../pages/dashboard/user/UserDashboard";
 
 const router = createBrowserRouter([
   {
@@ -56,10 +57,10 @@ const router = createBrowserRouter([
         path: "/about",
         element: <About />,
       },
-      {
+      /*{
         path: "/*",
         element: <Erreur404 />,
-      },
+      },*/
       {
         path: "/my-recipe",
         element: (
@@ -69,20 +70,8 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/dashboard/:id",
-        element: (
-          <PrivateRouter>
-            <UserDashboard />
-          </PrivateRouter>
-        ),
-      },
-      {
         path: "/process-checkout",
         element: <Payment />,
-      },
-      {
-        path: "/update-profile",
-        element: <UserProfil />,
       },
       {
         path: "/recettes/nouvelles",
@@ -131,7 +120,7 @@ const router = createBrowserRouter([
     element: <Login />,
   },
   {
-    path: "dashboard",
+    path: "/dashboard",
     element: (
       <PrivateRouter>
         <DashboardLayout />
@@ -155,6 +144,10 @@ const router = createBrowserRouter([
         element: <ManageItems />,
       },
       {
+        path: "messages",
+        element: <MessageContact />,
+      },
+      {
         path: "update-recette/:id",
         element: <UpdateRecette />,
         loader: ({ params }) =>
@@ -166,8 +159,17 @@ const router = createBrowserRouter([
         path: "bookings",
         element: <ManageBookings />,
       },
+      {
+        path: "*",
+        element: <Navigate to="/404" replace />, 
+      },
     ],
+  },
+  {
+    path: "/*",
+    element: <Erreur404 />,
   },
 ]);
 
 export default router;
+

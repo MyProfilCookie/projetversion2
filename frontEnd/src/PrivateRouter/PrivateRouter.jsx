@@ -7,6 +7,7 @@ import { AuthContext } from "../contexts/AuthProvider";
 import LoadingScreen from "../components/LoadingScreen";
 
 const PrivateRoute = ({ children }) => {
+  // useContext pour utiliser le context d'authentification et récupérer l'utilisateur connecté
   const { user, loading } = useContext(AuthContext);
   const location = useLocation();
 

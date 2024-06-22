@@ -1,16 +1,61 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useAuth } from '../contexts/AuthProvider';
 import successIcon from "/images/site/validation.png";
 import errorIcon from "/images/site/warning.gif";
 
+const validateInputs = (name, email, subject, message) => {
+  const errors = [];
+  if (name.trim().length === 0) {
+    errors.push("Veuillez renseigner votre nom !");
+  }
+  if (email.trim().length === 0 || !validateEmail(email)) {
+    errors.push("Veuillez renseigner une adresse email valide !");
+  }
+  if (subject.trim().length === 0) {
+    errors.push("Veuillez sélectionner un sujet !");
+  }
+  if (message.trim().length === 0) {
+    errors.push("Veuillez écrire un message !");
+  }
+  return errors;
+};
+
+const validateEmail = (email) => /\S+@\S+\.\S+/.test(email);
+
 const Contact = () => {
+  const { isAuthenticated } = useAuth();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
+  const [subjects, setSubjects] = useState([]);
   const [errors, setErrors] = useState([]);
   const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    const fetchSubjects = async () => {
+      try {
+        const token = localStorage.getItem('access_token');
+        const response = await axios.get(`http://localhost:3001/contact/subjects`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (response.data.success) {
+          setSubjects(response.data.subjects);
+        } else {
+          setErrors(["Erreur lors du chargement des sujets."]);
+        }
+      } catch (error) {
+        console.error("Erreur lors du chargement des sujets :", error);
+        setErrors(["Erreur lors du chargement des sujets."]);
+      }
+    };
+
+    fetchSubjects();
+  }, []);
 
   const handleInputChange = (setter) => (e) => {
     setter(e.target.value);
@@ -21,6 +66,11 @@ const Contact = () => {
     setErrors([]);
     setSuccess(false);
 
+    if (!isAuthenticated) {
+      setErrors(["Vous devez être connecté pour envoyer un message."]);
+      return;
+    }
+
     const validationErrors = validateInputs(name, email, subject, message);
     if (validationErrors.length > 0) {
       setErrors(validationErrors);
@@ -28,11 +78,16 @@ const Contact = () => {
     }
 
     try {
-      const response = await axios.post("http://127.0.0.1:3001/contact", {
+      const token = localStorage.getItem('access_token');
+      const response = await axios.post(`http://localhost:3001/contact`, {
         name,
         email,
         subject,
         message,
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
       if (response.data.success) {
         setSuccess(true);
@@ -52,25 +107,10 @@ const Contact = () => {
     }
   };
 
-  const validateInputs = (name, email, subject, message) => {
-    const newErrors = [];
-    if (!name) newErrors.push("Veuillez renseigner votre nom !");
-    if (!validateEmail(email))
-      newErrors.push("Veuillez renseigner une adresse email valide !");
-    if (!subject) newErrors.push("Veuillez renseigner le sujet !");
-    if (!message) newErrors.push("Veuillez écrire un message !");
-    return newErrors;
-  };
-
-  const validateEmail = (email) => /\S+@\S+\.\S+/.test(email);
-
   return (
     <div className="contact-page">
       <div className="container mx-auto max-w-screen-2xl">
-        <div
-          className="
-        flex flex-col items-center justify-center gap-8"
-        >
+        <div className="flex flex-col items-center justify-center gap-8">
           <div className="text-center space-y-7 py-4">
             <h2 className="media-text-5xl text-4xl font-bold media-leading-snug leading-snug">
               Contactez <span className="text-red">Nous</span>
@@ -143,23 +183,28 @@ const Contact = () => {
             <label
               htmlFor="email"
               className={email ? "form__label active" : "form__label"}
+              style={{ color: validateEmail(email) ? "green" : "red" }}
             >
               Email
             </label>
           </div>
           <div className="form2">
-            <input
-              type="text"
+            <select
               id="subject"
               name="subject"
-              placeholder=""
               className="form__input"
               value={subject}
               onChange={handleInputChange(setSubject)}
-            />
+            >
+              <option value="">Sélectionnez un sujet</option>
+              {subjects.map((subjectOption) => (
+                <option key={subjectOption} value={subjectOption}>{subjectOption}</option>
+              ))}
+            </select>
             <label
               htmlFor="subject"
               className={subject ? "form__label active" : "form__label"}
+              style={{ color: subject ? "green" : "red" }}
             >
               Sujet
             </label>
@@ -177,6 +222,7 @@ const Contact = () => {
             <label
               htmlFor="message"
               className={message ? "form__label active" : "form__label"}
+              style={{ color: message ? "green" : "red" }}
             >
               Message
             </label>
@@ -196,3 +242,9 @@ const Contact = () => {
 };
 
 export default Contact;
+
+
+
+
+
+

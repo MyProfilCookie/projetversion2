@@ -1,0 +1,142 @@
+// Variables
+$max-width-dashboard: 1200px;
+$padding-small: 1rem;
+$padding-medium: 2rem;
+$padding-large: 1rem;
+$margin-large: 2rem;
+$font-size-title: 2rem;
+$font-weight-bold: 600;
+$color-gray-light: #888;
+$color-gray-dark: #555;
+$color-white: #fff;
+$color-green: #34d399;
+$color-red: #f87171;
+$transition-duration: 0.3s;
+
+// Mixins
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin transition($properties...) {
+  transition: $properties;
+}
+
+// Styles
+.manage-booking-container {
+  width: 100%;
+  max-width: $max-width-dashboard;
+  margin: 0 auto;
+  padding: $padding-small;
+
+  @media (min-width: 640px) {
+    padding: $padding-medium;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: $margin-large;
+
+    h2 {
+      font-size: $font-size-title;
+      font-weight: $font-weight-bold;
+
+      .text-green {
+        color: $color-green;
+      }
+    }
+  }
+
+  .table-container {
+    overflow-x: auto;
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+
+      th,
+      td {
+        padding: 0.75rem;
+        text-align: center;
+      }
+
+      thead {
+        background-color: $color-green;
+        color: $color-white;
+
+        th {
+          &:first-child {
+            border-top-left-radius: 0.5rem;
+          }
+
+          &:last-child {
+            border-top-right-radius: 0.5rem;
+          }
+        }
+      }
+
+      tbody {
+        tr {
+          &:nth-child(even) {
+            background-color: $color-green;
+            opacity: 0.1;
+          }
+        }
+      }
+    }
+  }
+
+  .btn {
+    &-sm {
+      padding: 0.25rem 0.5rem;
+      font-size: 0.875rem;
+    }
+
+    &.btn-circle {
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    &.bg-red {
+      background-color: $color-red;
+      color: $color-white;
+      @include transition(background-color 0.2s ease);
+    }
+
+    &.bg-green {
+      background-color: $color-green;
+      color: $color-white;
+      @include transition(background-color 0.2s ease);
+    }
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  .pagination-container {
+    @include flex-center;
+    margin-top: $margin-large;
+
+    .btn {
+      &-sm {
+        margin-right: 0.5rem;
+      }
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .manage-booking-container {
+    .header {
+      h2 {
+        font-size: 2rem;
+      }
+    }
+  }
+}

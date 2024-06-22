@@ -1,5 +1,5 @@
-/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable no-unused-vars */
+/* eslint-disable react/no-unescaped-entities */
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useLoaderData, useNavigate } from "react-router-dom";
@@ -11,7 +11,7 @@ const UpdateRecette = () => {
   const { register, handleSubmit, reset, setValue, watch } = useForm();
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/';
   const [imagePreview, setImagePreview] = useState(null);
 
   useEffect(() => {
@@ -23,7 +23,7 @@ const UpdateRecette = () => {
     setValue("temps_cuisson", item.temps_cuisson);
     setValue("difficulte", item.difficulte);
     setValue("category", item.category);
-    setImagePreview(`${API_URL}/uploads/${item.image}`);
+    setImagePreview(`${API_URL}/${item.image}`);
   }, [item, setValue, API_URL]);
 
   const watchImage = watch("image");
@@ -59,7 +59,11 @@ const UpdateRecette = () => {
     }
 
     try {
-      const res = await axiosSecure.patch(`/recettes/${item._id}`, formData);
+      const res = await axiosSecure.patch(`/recettes/${item._id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
       console.log("Response from server:", res);
       if (res.data) {
         reset();
@@ -74,10 +78,12 @@ const UpdateRecette = () => {
       }
     } catch (err) {
       console.error("Erreur: ", err);
+      console.log("Error response: ", err.response);
+      const errorMessage = err.response?.data?.message || 'Une erreur est survenue lors de la mise à jour de la recette.';
       Swal.fire({
         icon: "error",
         title: "Erreur",
-        text: "Une erreur est survenue lors de la mise à jour de la recette.",
+        text: errorMessage,
       });
     }
   };
@@ -174,7 +180,7 @@ const UpdateRecette = () => {
           <div className="form-group">
             <label>Image actuelle</label>
             <img
-              src={`${API_URL}/uploads/${item.image}`}
+              src={`${API_URL}/${item.image}`}
               alt="Recette"
               style={{ width: "200px" }}
             />
@@ -191,6 +197,7 @@ const UpdateRecette = () => {
 };
 
 export default UpdateRecette;
+
 
 
 

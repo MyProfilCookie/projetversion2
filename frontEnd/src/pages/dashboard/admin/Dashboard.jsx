@@ -1,10 +1,11 @@
-import React from "react";
-import { useQuery } from "@tanstack/react-query";
+/* eslint-disable no-unused-vars */
+import React, { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import useAuth from "../../../hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCcVisa } from "@fortawesome/free-brands-svg-icons";
-import { FaBook, FaEuroSign, FaUsers } from "react-icons/fa";
-import { Link } from "react-router-dom"
+import { FaBook, FaEuroSign, FaUsers, FaEnvelope } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import {
   BarChart,
   Bar,
@@ -18,6 +19,8 @@ import {
 
 const Dashboard = () => {
   const { user } = useAuth();
+  const queryClient = useQueryClient();
+  const [replyMessage, setReplyMessage] = useState("");
 
   const { data: stats = {} } = useQuery({
     queryKey: ["admin-stats"],
@@ -37,11 +40,11 @@ const Dashboard = () => {
     },
   });
 
-  const { data: users = [] } = useQuery({
-    queryKey: ["users"],
+  const { data: messagesResponse = {} } = useQuery({
+    queryKey: ["messages"],
     queryFn: async () => {
       const token = localStorage.getItem("access_token");
-      const response = await fetch("http://localhost:3001/users", {
+      const response = await fetch("http://localhost:3001/contact", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -55,14 +58,13 @@ const Dashboard = () => {
     },
   });
 
-  console.log("Users:", users);
+  const messages = Array.isArray(messagesResponse.messages) ? messagesResponse.messages : [];
 
-  const { data: chartData = [] } = useQuery({
-    queryKey: ["order-stats"],
-    queryFn: async () => {
+  const deleteMessageMutation = useMutation({
+    mutationFn: async (id) => {
       const token = localStorage.getItem("access_token");
-      const response = await fetch("http://localhost:3001/order-stats", {
-        method: "GET",
+      const response = await fetch(`http://localhost:3001/contact/${id}`, {
+        method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -73,16 +75,44 @@ const Dashboard = () => {
       }
       return response.json();
     },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["messages"]);
+    },
   });
+
+  const replyMessageMutation = useMutation({
+    mutationFn: async ({ id, reply }) => {
+      const token = localStorage.getItem("access_token");
+      const response = await fetch(`http://localhost:3001/contact/reply/${id}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ reply }),
+      });
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["messages"]);
+    },
+  });
+
+  const handleReply = (id) => {
+    if (replyMessage.trim()) {
+      replyMessageMutation.mutate({ id, reply: replyMessage });
+      setReplyMessage("");
+    }
+  };
 
   const getFormattedName = (email) => {
     if (!email) return "None";
     const [firstPart] = email.split("@", 1);
     return firstPart.split(".").join(" ");
   };
-
-  console.log("Stats:", stats);
-  console.log("Chart Data:", chartData);
 
   const data = [
     { name: "Revenue", value: stats.revenue, color: "#34D399" },
@@ -98,13 +128,13 @@ const Dashboard = () => {
       </div>
 
       <div className="stats">
-        <Link to="/dashboard/order" className="stat bg-emerald-200">
+        <Link to="/" className="stat bg-emerald-200">
           <div className="stat-figure">
             <FaEuroSign />
           </div>
           <div className="stat-title">Revenue</div>
           <div className="stat-value">{stats.revenue} €</div>
-          <div className="stat-desc">Jan 1ier - Feb 1ier</div>
+          <div className="stat-desc">Jan 1ier - Fev 1ier</div>
         </Link>
 
         <Link to="/dashboard/users" className="stat bg-orange-200">
@@ -125,13 +155,22 @@ const Dashboard = () => {
           <div className="stat-desc">↗︎ 400 (22%)</div>
         </Link>
 
-        <Link to="/dashboard/order" className="stat bg-purple-300">
+        <Link to="/order" className="stat bg-purple-300">
           <div className="stat-figure">
             <FontAwesomeIcon icon={faCcVisa} />
           </div>
           <div className="stat-title">Orders</div>
           <div className="stat-value">{stats.orders}</div>
           <div className="stat-desc">↘︎ 90 (14%)</div>
+        </Link>
+
+        <Link to="/dashboard/messages" className="stat bg-teal-300">
+          <div className="stat-figure">
+            <FaEnvelope />
+          </div>
+          <div className="stat-title">Messages</div>
+          <div className="stat-value">{messages.length}</div>
+          <div className="stat-desc">Total des messages</div>
         </Link>
       </div>
 
@@ -150,8 +189,36 @@ const Dashboard = () => {
           </BarChart>
         </ResponsiveContainer>
       </div>
+
+      {/* <div className="messages">
+        <h3>Messages</h3>
+        {messages.map((message) => (
+          <div key={message._id} className="message bg-teal-200 p-4 rounded-lg mb-4">
+            <h4>{message.subject}</h4>
+            <p>{message.message}</p>
+            <p><strong>From:</strong> {message.name} ({message.email})</p>
+            <button onClick={() => deleteMessageMutation.mutate(message._id)} className="btn-delete">
+              Supprimer
+            </button>
+            <div className="reply-section mt-4">
+              <input
+                type="text"
+                value={replyMessage}
+                onChange={(e) => setReplyMessage(e.target.value)}
+                placeholder="Votre réponse"
+                className="input-reply"
+              />
+              <button onClick={() => handleReply(message._id)} className="btn-reply">
+                Répondre
+              </button>
+            </div>
+          </div>
+        ))}
+      </div> */}
     </div>
   );
 };
 
 export default Dashboard;
+
+

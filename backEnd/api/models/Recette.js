@@ -1,29 +1,30 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-// création du schema de la base de données pour les recettes
+
+// Création du schéma de la base de données pour les recettes
 const recetteSchema = new Schema(
   {
     titre: {
       type: String,
       trim: true,
       required: true,
-      minlenght: 5,
-      maxlenght: 100,
+      minlength: 5,
+      maxlength: 100,
     },
     description: {
       type: String,
       trim: true,
       required: true,
-      minlenght: 5,
-      maxlenght: 200,
+      minlength: 5,
+      maxlength: 500, // Augmenter pour permettre des descriptions plus longues
     },
     ingredients: [
       {
         type: String,
         trim: true,
         required: true,
-        minlenght: 5,
-        maxlenght: 200,
+        minlength: 5,
+        maxlength: 5000, // Augmenter pour permettre des ingrédients plus longs
       },
     ],
     instructions: [
@@ -31,39 +32,39 @@ const recetteSchema = new Schema(
         type: String,
         trim: true,
         required: true,
-        minlenght: 5,
-        maxlenght: 200,
+        minlength: 5,
+        maxlength: 10000, // Augmenter pour permettre des instructions plus longues
       },
     ],
     temps_preparation: {
       type: String,
       trim: true,
       required: true,
-      minlenght: 1,
-      maxlenght: 100,
+      minlength: 1,
+      maxlength: 1000,
     },
     temps_cuisson: {
       type: String,
       trim: true,
       required: true,
-      minlenght: 1,
-      maxlenght: 100,
+      minlength: 1,
+      maxlength: 100,
     },
     difficulte: {
       type: String,
       trim: true,
       required: true,
-      minlenght: 6,
-      maxlenght: 10,
+      minlength: 6,
+      maxlength: 10,
       enum: ["facile", "moyenne", "difficile"],
     },
     category: {
       type: String,
       trim: true,
       required: true,
-      minlenght: 1,
-      maxlenght: 10,
-      enum: ["Chocolat", "Gourmandises", "Pains et viennoiserie", "Fruits"],
+      minlength: 1,
+      maxlength: 30,
+      enum: ["Chocolat", "Gourmandises", "Pains et viennoiserie", "Fruits"], // Ajouter les autres catégories si elles sont requises
     },
     image: {
       type: String,
@@ -74,27 +75,28 @@ const recetteSchema = new Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
-    comments: {
-      type: [
-        {
-          commenterId: String,
-          commenterPseudo: String,
-          text: String,
-          timestamp: Number,
-        },
-      ],
-      required: true,
-    },
+    comments: [
+      {
+        commenterId: String,
+        commenterPseudo: String,
+        text: String,
+        timestamp: Number,
+      },
+    ],
     likes: {
       type: [String],
-      required: true,
+    },
+    dislikes: {
+      type: [String],
     },
   },
   {
     timestamps: true,
   }
 );
-// exportation du schema
+
+// Exportation du schéma
 const Recette = mongoose.model("Recette", recetteSchema);
 
 module.exports = Recette;
+

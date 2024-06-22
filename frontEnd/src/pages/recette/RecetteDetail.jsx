@@ -1,62 +1,70 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable no-unused-vars */
-import React, { useState, useEffect, useContext } from "react";
-import { useParams } from "react-router-dom";
-import { LikeRecetteContext } from "../../contexts/LikeRecetteProvider";
-import useAuth from "../../hooks/useAuth";
-import axios from "axios";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faThumbsUp, faThumbsDown } from "@fortawesome/free-solid-svg-icons";
+import React, { useState, useEffect, useContext } from 'react';
+import { useParams } from 'react-router-dom';
+import { AuthContext } from '../../contexts/AuthProvider';
+import { useLikeRecette } from '../../contexts/LikeRecetteProvider';
+import axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import LoadingScreen from '../../components/LoadingScreen';
+import { faThumbsUp, faThumbsDown } from '@fortawesome/free-regular-svg-icons';
 
 function RecetteDetail() {
-  const { id } = useParams();
-  const { likes, dislikes, toggleLike, toggleDislike } =
-    useContext(LikeRecetteContext);
-  const { user } = useAuth();
+  const { id } = useParams(); // Utilisation de useParams pour obtenir l'ID de la recette
+  const { user, loading } = useContext(AuthContext);
+  const { likes, dislikes, handleToggleLike, handleToggleDislike } = useLikeRecette();
   const [recette, setRecette] = useState(null);
-  const [comment, setComment] = useState("");
+  const [comment, setComment] = useState('');
   const [comments, setComments] = useState([]);
   const [checkedSteps, setCheckedSteps] = useState([]);
 
   useEffect(() => {
     const fetchRecette = async () => {
       try {
-        console.log(`Requête pour l'ID: ${id}`);
         const response = await axios.get(`/api/recettes/${id}`);
-        console.log(`Réponse reçue: ${response.data}`);
         setRecette(response.data);
       } catch (error) {
-        console.error("Erreur lors de la récupération de la recette:", error);
+        console.error('Erreur lors de la récupération de la recette:', error);
       }
     };
+
+    const fetchComments = async (recetteId) => {
+      try {
+        const response = await axios.get(`/api/recettes/${recetteId}/comments`);
+        setComments(response.data || []);
+      } catch (error) {
+        console.error('Erreur lors de la récupération des commentaires:', error);
+        setComments([]);
+      }
+    };
+
     fetchRecette();
     fetchComments(id);
   }, [id]);
 
-  const fetchComments = async (recetteId) => {
-    try {
-      const response = await axios.get(`/api/recettes/${recetteId}/comments`);
-      setComments(response.data || []);
-    } catch (error) {
-      console.error("Erreur lors de la récupération des commentaires:", error);
-      setComments([]);
-    }
-  };
-
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
     if (!user) {
-      alert("Vous devez être connecté pour laisser un commentaire.");
+      alert('Vous devez être connecté pour laisser un commentaire.');
       return;
     }
+
     try {
+      const commentData = { contenu: comment, user: user._id, recette: recette._id };
       const response = await axios.post(
         `/api/recettes/${recette._id}/comments`,
-        { comment },
+        commentData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+          },
+        }
       );
       setComments([...comments, response.data]);
-      setComment("");
+      setComment('');
     } catch (error) {
-      console.error("Erreur lors de l'envoi du commentaire:", error);
+      console.error('Erreur lors de l\'envoi du commentaire:', error);
     }
   };
 
@@ -72,13 +80,28 @@ function RecetteDetail() {
     });
   };
 
-  if (!recette) {
-    return <div>Recette introuvable.</div>;
-  }
+  const handleDeleteComment = async (commentId) => {
+    try {
+      const token = localStorage.getItem('access_token');
+      await axios.delete(`/api/comments/${commentId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setComments(comments.filter((c) => c._id !== commentId));
+    } catch (error) {
+      console.error('Erreur lors de la suppression du commentaire:', error);
+    }
+  };
 
-  // Construisez l'URL de l'image en utilisant la base URL de votre serveur
+  if (loading || !recette) {
+    return <LoadingScreen />;
+  }
+  
   const imageUrl = recette.image
-    ? `${import.meta.env.VITE_API_URL}uploads/${recette.image}`
+    ? recette.image.startsWith('uploads/')
+      ? `${import.meta.env.VITE_API_URL}/${recette.image}`
+      : `${import.meta.env.VITE_API_URL}/uploads/${recette.image}`
     : null;
 
   return (
@@ -87,14 +110,14 @@ function RecetteDetail() {
         <h1 className="title">{recette.titre}</h1>
         <div className="like-dislike">
           <button
-            className={`like-button ${likes[recette._id] ? "liked" : ""}`}
-            onClick={() => toggleLike(recette._id)}
+            className={`like-button ${likes[recette._id] ? 'liked' : ''}`}
+            onClick={() => handleToggleLike(recette._id)}
           >
             <FontAwesomeIcon icon={faThumbsUp} />
           </button>
           <button
-            className={`dislike-button ${dislikes[recette._id] ? "disliked" : ""}`}
-            onClick={() => toggleDislike(recette._id)}
+            className={`dislike-button ${dislikes[recette._id] ? 'disliked' : ''}`}
+            onClick={() => handleToggleDislike(recette._id)}
           >
             <FontAwesomeIcon icon={faThumbsDown} />
           </button>
@@ -107,7 +130,13 @@ function RecetteDetail() {
         )}
       </div>
       <div className="left-column">
-        {recette.image && <img src={imageUrl} alt={recette.titre} />}
+        {recette.image && (
+          recette.image.startsWith('uploads/') ? (
+            <img src={`${import.meta.env.VITE_API_URL}/${recette.image}`} alt={recette.titre} />
+          ) : (
+            <img src={`${import.meta.env.VITE_API_URL}/uploads/${recette.image}`} alt={recette.titre} />
+          )
+        )}
         <div className="details">
           <p>Temps de préparation : {recette.temps_preparation}</p>
           <p>Temps de cuisson : {recette.temps_cuisson}</p>
@@ -129,7 +158,7 @@ function RecetteDetail() {
             {recette.instructions.map((step, index) => (
               <li
                 key={index}
-                className={checkedSteps.includes(index) ? "checked" : ""}
+                className={checkedSteps.includes(index) ? 'checked' : ''}
               >
                 <input
                   type="checkbox"
@@ -145,12 +174,24 @@ function RecetteDetail() {
           <h3>Commentaires</h3>
           <ul>
             {Array.isArray(comments) &&
-              comments.map((c, index) => <li key={index}>{c.comment}</li>)}
+              comments.map((c, index) => (
+                <li key={index}>
+                  {c.user.image ? (
+                    <img src={`${import.meta.env.VITE_API_URL}/uploads/${c.user.image}`} alt={c.user.username} style={{ width: '30px', height: '30px', borderRadius: '50%' }} />
+                  ) : (
+                    <FontAwesomeIcon icon={faUserCircle} style={{ width: '30px', height: '30px' }} />
+                  )}
+                  <strong>{c.user.username}</strong>: {c.contenu}
+                  {user && user._id === c.user._id && (
+                    <button onClick={() => handleDeleteComment(c._id)}>Supprimer</button>
+                  )}
+                </li>
+              ))}
           </ul>
           {user && (
             <form
               onSubmit={handleCommentSubmit}
-              style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
+              style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
             >
               <textarea
                 value={comment}
@@ -163,15 +204,15 @@ function RecetteDetail() {
               <button
                 type="submit"
                 style={{
-                  alignSelf: "center",
-                  padding: "0.5rem 1rem",
-                  borderRadius: "0.5rem",
-                  fontWeight: "bold",
-                  cursor: "pointer",
-                  transition: "background-color 0.3s",
-                  backgroundColor: "#ff6347",
-                  color: "#fff",
-                  border: "none",
+                  alignSelf: 'center',
+                  padding: '0.5rem 1rem',
+                  borderRadius: '0.5rem',
+                  fontWeight: 'bold',
+                  cursor: 'pointer',
+                  transition: 'background-color 0.3s',
+                  backgroundColor: '#ff6347',
+                  color: '#fff',
+                  border: 'none',
                 }}
               >
                 Envoyer

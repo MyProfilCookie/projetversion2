@@ -11,9 +11,7 @@ function Chocolat() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          `/api/recettes/category?category=Chocolat`,
-        );
+        const response = await fetch(`/api/recettes/category?category=Chocolat`);
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -30,18 +28,25 @@ function Chocolat() {
   const ids = recettes.map((recette) => recette._id);
   console.log("IDs:", ids);
 
+  const getImageUrl = (item) => {
+    if (!item.image) return null;
+    return item.image.startsWith('uploads/')
+      ? `${import.meta.env.VITE_API_URL}/${item.image}`
+      : `${import.meta.env.VITE_API_URL}/uploads/${item.image}`;
+  };
+
   return (
     <div>
       <Categories currentCategory={currentCategory} />
       <div id="cards-container">
         {recettes.map((recette) => (
-          <div id="card" key={recette._id}>
-            <img src={recette.image} alt={recette.title} />
+          <div id="card" key={recette._id} style={{ height: "100%" }}>
+            <img src={getImageUrl(recette)} alt={recette.title} style={{ borderRadius: "10px 10px 0 0", height: "200px", objectFit: "cover" }} />
             <div id="card-body-cards">
-              <h3 className="card-title">{recette.title}</h3>
-              <p>{recette.description}</p>
+              <h3 className="card-title" style={{ fontFamily: "Playfair Display", color: "chocolate" }}>{recette.titre}</h3>
+              <p>{recette.description ? recette.description.slice(0, 100) + "..." : ""}</p>
               <button className="btn-primary">
-                <Link to={`/recettes/${recette._id}`}>Voir plus</Link>
+                <Link to={`/recettes/${recette._id}`} style={{ fontFamily: "Playfair Display", fontWeight: "bold", color: "white" }}>Voir plus de détails</Link>
               </button>
             </div>
           </div>

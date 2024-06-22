@@ -1,0 +1,76 @@
+// Contact.scss
+.contact-page {
+  
+    .section-container {
+      form {
+        .error, .success {
+          display: flex;
+          align-items: center;
+          margin-bottom: 20px;
+          
+          .imgErrorAndValid {
+            margin-right: 10px;
+          }
+  
+          .fsz2 {
+            font-size: 1.2rem;
+            color: #120d04;
+          }
+        }
+  
+        .form2 {
+          position: relative;
+          margin-bottom: 30px;
+  
+          .form__input {
+            width: 100%;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 5px;
+            &:focus {
+              border-color: #666;
+            }
+          }
+  
+          .form__label {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: #aaa;
+            transition: all 0.3s;
+            &.active {
+              top: -20px;
+              left: 10px;
+              font-size: 0.8rem;
+              color: #666;
+            }
+          }
+        }
+  
+        .btn-formulaire {
+          padding: 10px 20px;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+  
+          &.cancel {
+            background-color: #d9534f;
+            color: #fff;
+            &:hover {
+              background-color: #c9302c;
+            }
+          }
+  
+          &.confirm {
+            background-color: #5cb85c;
+            color: #fff;
+            &:hover {
+              background-color: #4cae4c;
+            }
+          }
+        }
+      }
+    }
+  }
+  

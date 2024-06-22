@@ -3,6 +3,7 @@ const path = require('path');
 
 const router = Router(); 
 
+//Route pour l'affichage de l'image
 router.get("/img/upload/:nom", function(req, rep){
     const nom = req.params.nom
 
