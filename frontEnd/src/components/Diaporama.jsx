@@ -11,7 +11,7 @@ import {
 import { Swiper, SwiperSlide } from "swiper/react";
 import img from "/images/muffin/muffinmyrtille.webp";
 import img2 from "/images/gourmandise/eclairs.webp";
-import img3 from "/images/gourmandise/cakefruits.webp";
+import img3 from "/images/gourmandise/cheesecake-aux-framboises.webp";
 import img4 from "/images/tartecitron/tartelettesframboises.webp";
 import img5 from "/images/tartecitron/tartemeringue.jpeg";
 import img6 from "/images/viennoiserie/croissant.webp";

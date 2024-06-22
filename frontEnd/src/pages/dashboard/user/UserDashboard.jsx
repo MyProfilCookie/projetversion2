@@ -213,7 +213,7 @@ const UserDashboard = () => {
   }
 
   if (!user) {
-    return <div>L'utilisateur n'existe pas</div>; // or redirect to login page
+    return <div>L'utilisateur n'existe pas</div>; 
   }
 
   return (
@@ -271,7 +271,7 @@ const UserDashboard = () => {
         <ul>
           {Object.keys(dislikes).map((recetteId) => (
             <li key={recetteId}>
-              {dislikes[recetteId].titre} {/* Assuming dislikes is an object with recette details */}
+              {dislikes[recetteId].titre} {/* On verifie si la recette est dans le tableau dislikes */}
               <button onClick={() => handleToggleDislike(recetteId, !dislikes[recetteId])}>
                 {dislikes[recetteId] ? 'Remove Dislike' : 'Dislike'}
               </button>
@@ -413,6 +413,7 @@ const UserDashboard = () => {
 };
 
 export default UserDashboard;
+
 
 
 

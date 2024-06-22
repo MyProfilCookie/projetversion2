@@ -32,8 +32,8 @@ function SectionRecette() {
             </p>
             <p className="title">Découvrez la recette préférée de nos chefs</p>
             <blockquote className="my-5 text-secondary text-lg leading-30  ">
-              ❝ Avec une façon très gourmande j'arrive à manger de la
-              viennoiserie et de la chocolat au moment parfait sans s’ennuyer. ❞
+              ❝ Avec une façon très gourmande j'arrive parfaitement à combiner la gourmandise de la
+              viennoiserie et la douceur du chocolat. Merci <strong style={{ color: "#ff4747" }}>Gourmande Elit</strong> ❞
             </blockquote>
             <div className="flex justify-between items-center"></div>
           </div>
