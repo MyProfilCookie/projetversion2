@@ -76,6 +76,7 @@ $color-notification: white;
   @include transition(transform $transition-duration);
   overflow: hidden;
   max-height: 500px;
+  // font-family: "Playfair Display", serif;
 
   &:hover {
     transform: scale(1.05);

@@ -36,7 +36,7 @@ const Carts = ({ item }) => {
       };
 
       axios
-        .post(`${import.meta.env.VITE_API_URL}/carts`, cartItem)
+        .post(`/api/carts`, cartItem)
         .then((response) => {
           console.log(response);
           if (response) {

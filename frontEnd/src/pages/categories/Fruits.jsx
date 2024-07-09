@@ -45,9 +45,9 @@ function Fruits() {
             <div id="card-body-cards">
               <h3 className="card-title" style={{ fontFamily: "Playfair Display", color: "chocolate" }}>{recette.titre}</h3>
               <p>{recette.description ? recette.description.slice(0, 100) + "..." : ""}</p>
-              <button className="btn-primary">
+              {/* <button className="btn-primary">
                 <Link to={`/recettes/${recette._id}`} style={{ fontFamily: "Playfair Display", fontWeight: "bold", color: "white" }}>Voir plus de détails</Link>
-              </button>
+              </button> */}
             </div>
           </div>
         ))}

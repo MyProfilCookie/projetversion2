@@ -51,7 +51,7 @@ const DashboardLayout = () => {
       {isAdmin ? (
         <div className="drawer sm-drawer-open ">
         {/* Bouton mode sombre */}
-        <div className="fixed top-14 lg:top-0  right-0 p-5 themediv">
+        <div className="fixed top-14 lg-top-0  right-0 p-5 themediv">
             <input
               type="checkbox"
               className="toggle"

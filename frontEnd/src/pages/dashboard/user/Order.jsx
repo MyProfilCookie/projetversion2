@@ -12,7 +12,7 @@ const Order = () => {
     queryKey: ["orders"],
     enabled: !loading && !!token,
     queryFn: async () => {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/payments/all`, {
+      const res = await fetch(`/api/payments/all`, {
         headers: {
           authorization: `Bearer ${token}`,
         },

@@ -87,7 +87,7 @@ const ManegeBooking = () => {
       </h2>
 
       <div className="table-container">
-        <div className="overflow-x-auto lg:overflow-x-visible">
+        <div className="overflow-x-auto lg-overflow-x-visible">
           <table className="table w-full">
             <thead>
               <tr>

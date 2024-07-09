@@ -4,19 +4,16 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStarHalfStroke, faStar } from "@fortawesome/free-solid-svg-icons";
+import { faLemon} from "@fortawesome/free-solid-svg-icons";
 
 function Banner() {
   return (
     <div className="container mx-auto px-4 py-8 xl-px-24 max-w-screen-2xl banner-container">
       {/* <h1 className='text-center text-4xl font-bold text-gray-90 leading-snug'>Notre patisserie <span className='text-red'>binaire</span> on code <span className='text-red'>avec des cônes <FontAwesomeIcon icon={faIceCream} /></span></h1> */}
 
+      <h1 className="md-text-5xl text-4xl font-bold md-leading-snug leading-snug" style={{ fontFamily: "Playfair Display", color: "#233142", fontWeight: "bold", textShadow: "0px 1px 1px rgba(0, 0, 0, 0.25)", letterSpacing: "0.05em", textTransform: "uppercase", lineHeight: "1.2", textAlign: "center", marginTop: "2rem" }}>La pâtisserie gourmande elit <FontAwesomeIcon icon={faLemon} /></h1>
       <div className="section-container py-16 flex md-flex-col-reverse justify-between items-center gap-8">
         <div className="md-w-half space-y-7 sd-w-full banner">
-          <h2 className="md-text-5xl text-4xl font-bold md-leading-snug leading-snug">
-            {" "}
-            La pâtisserie <span className="text-red">gourmande</span>{" "}
-            <span className="text-red">elit</span>.
-          </h2>
           <p className="text-xl text-gray">
             La pâtisserie est un art délicat qui combine créativité et précision. Chaque recette est une symphonie de saveurs, de textures et de couleurs, soigneusement orchestrée pour créer des délices visuels et gustatifs.Les ingrédients de base, tels que la farine, le sucre, le beurre et les œufs, se transforment sous les mains expertes des pâtissiers en gâteaux, tartes, et viennoiseries exquises.</p>
           <p className="text-xl text-gray">Chez La pâtisserie gourmande elit, nous mettons tout notre savoir-faire et notre amour de la pâtisserie dans chaque création pour offrir à nos clients des desserts d'exception qui éveillent les sens et régalent les papilles. Bienvenue dans notre univers sucré, où la gourmandise est une véritable passion.

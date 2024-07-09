@@ -26,7 +26,7 @@ const Dashboard = () => {
     queryKey: ["admin-stats"],
     queryFn: async () => {
       const token = localStorage.getItem("access_token");
-      const response = await fetch("http://localhost:3001/admin-stats", {
+      const response = await fetch("/api/admin-stats", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -44,7 +44,7 @@ const Dashboard = () => {
     queryKey: ["messages"],
     queryFn: async () => {
       const token = localStorage.getItem("access_token");
-      const response = await fetch("http://localhost:3001/contact", {
+      const response = await fetch("/api/contact", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -63,7 +63,7 @@ const Dashboard = () => {
   const deleteMessageMutation = useMutation({
     mutationFn: async (id) => {
       const token = localStorage.getItem("access_token");
-      const response = await fetch(`http://localhost:3001/contact/${id}`, {
+      const response = await fetch(`/api/contact/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -83,7 +83,7 @@ const Dashboard = () => {
   const replyMessageMutation = useMutation({
     mutationFn: async ({ id, reply }) => {
       const token = localStorage.getItem("access_token");
-      const response = await fetch(`http://localhost:3001/contact/reply/${id}`, {
+      const response = await fetch(`/api/contact/reply/${id}`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,

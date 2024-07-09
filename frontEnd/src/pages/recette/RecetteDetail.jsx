@@ -83,7 +83,7 @@ function RecetteDetail() {
   const handleDeleteComment = async (commentId) => {
     try {
       const token = localStorage.getItem('access_token');
-      await axios.delete(`/api/comments/${commentId}`, {
+      await axios.delete(`/api/recettes/${recette._id}/comments/${commentId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -100,8 +100,8 @@ function RecetteDetail() {
   
   const imageUrl = recette.image
     ? recette.image.startsWith('uploads/')
-      ? `${import.meta.env.VITE_API_URL}/${recette.image}`
-      : `${import.meta.env.VITE_API_URL}/uploads/${recette.image}`
+      ? `/api/${recette.image}`
+      : `/api/uploads/${recette.image}`
     : null;
 
   return (
@@ -132,9 +132,9 @@ function RecetteDetail() {
       <div className="left-column">
         {recette.image && (
           recette.image.startsWith('uploads/') ? (
-            <img src={`${import.meta.env.VITE_API_URL}/${recette.image}`} alt={recette.titre} />
+            <img src={`/api/${recette.image}`} alt={recette.titre} />
           ) : (
-            <img src={`${import.meta.env.VITE_API_URL}/uploads/${recette.image}`} alt={recette.titre} />
+            <img src={`/api/uploads/${recette.image}`} alt={recette.titre} />
           )
         )}
         <div className="details">
@@ -177,7 +177,7 @@ function RecetteDetail() {
               comments.map((c, index) => (
                 <li key={index}>
                   {c.user.image ? (
-                    <img src={`${import.meta.env.VITE_API_URL}/uploads/${c.user.image}`} alt={c.user.username} style={{ width: '30px', height: '30px', borderRadius: '50%' }} />
+                    <img src={`/api/uploads/${c.user.image}`} alt={c.user.username} style={{ width: '30px', height: '30px', borderRadius: '50%' }} />
                   ) : (
                     <FontAwesomeIcon icon={faUserCircle} style={{ width: '30px', height: '30px' }} />
                   )}

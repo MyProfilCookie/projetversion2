@@ -38,7 +38,7 @@ const Contact = () => {
     const fetchSubjects = async () => {
       try {
         const token = localStorage.getItem('access_token');
-        const response = await axios.get(`http://localhost:3001/contact/subjects`, {
+        const response = await axios.get(`/api/contact/subjects`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -79,7 +79,7 @@ const Contact = () => {
 
     try {
       const token = localStorage.getItem('access_token');
-      const response = await axios.post(`http://localhost:3001/contact`, {
+      const response = await axios.post(`/api/contact`, {
         name,
         email,
         subject,

@@ -11,20 +11,17 @@ const LikeRecetteProvider = ({ children }) => {
   const { user } = useContext(AuthContext);
   const [likes, setLikes] = useState({});
   const [dislikes, setDislikes] = useState({});
-  const [recettes, setRecettes] = useState([]); // Ajoutez un état pour les recettes
+  const [recettes, setRecettes] = useState([]);
 
   useEffect(() => {
-    if (user) {
+    if (user && user._id) {
       const fetchLikesDislikes = async () => {
         try {
-          const response = await axios.get(
-            `${import.meta.env.VITE_API_URL}/users/${user._id}/liked-disliked-recettes`,
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-              },
-            }
-          );
+          const response = await axios.get(`/api/users/${user._id}/liked-disliked-recettes`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+            },
+          });
 
           const data = response.data;
 
@@ -55,11 +52,16 @@ const LikeRecetteProvider = ({ children }) => {
   }, [user]);
 
   const handleToggleLike = async (recetteId, like = true) => {
+    if (!user || !user._id) {
+      console.error('User not authenticated');
+      return;
+    }
+
     try {
       const method = like ? 'POST' : 'DELETE';
       const response = await axios({
         method,
-        url: `${import.meta.env.VITE_API_URL}/users/${user._id}/liked-recipes`,
+        url: `/api/users/${user._id}/liked-recipes`,
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('access_token')}`,
@@ -79,7 +81,6 @@ const LikeRecetteProvider = ({ children }) => {
         return newLikes;
       });
 
-      // Remove dislike if it's currently disliked
       if (dislikes[recetteId]) {
         setDislikes((prevDislikes) => {
           const newDislikes = { ...prevDislikes };
@@ -88,18 +89,23 @@ const LikeRecetteProvider = ({ children }) => {
         });
       }
 
-      updateRecetteLikesDislikes(recetteId, data.likes, data.dislikes); // Mettez à jour les likes et dislikes de la recette
+      updateRecetteLikesDislikes(recetteId, data.likes, data.dislikes);
     } catch (error) {
       console.error('Error toggling like:', error.response || error.message);
     }
   };
 
   const handleToggleDislike = async (recetteId, dislike = true) => {
+    if (!user || !user._id) {
+      console.error('User not authenticated');
+      return;
+    }
+
     try {
       const method = dislike ? 'POST' : 'DELETE';
       const response = await axios({
         method,
-        url: `${import.meta.env.VITE_API_URL}/users/${user._id}/disliked-recipes`,
+        url: `/api/users/${user._id}/disliked-recipes`,
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('access_token')}`,
@@ -119,7 +125,6 @@ const LikeRecetteProvider = ({ children }) => {
         return newDislikes;
       });
 
-      // Remove like if it's currently liked
       if (likes[recetteId]) {
         setLikes((prevLikes) => {
           const newLikes = { ...prevLikes };
@@ -128,7 +133,7 @@ const LikeRecetteProvider = ({ children }) => {
         });
       }
 
-      updateRecetteLikesDislikes(recetteId, data.likes, data.dislikes); // Mettez à jour les likes et dislikes de la recette
+      updateRecetteLikesDislikes(recetteId, data.likes, data.dislikes);
     } catch (error) {
       console.error('Error toggling dislike:', error.response || error.message);
     }
@@ -156,6 +161,8 @@ const LikeRecetteProvider = ({ children }) => {
 const useLikeRecette = () => useContext(LikeRecetteContext);
 
 export { LikeRecetteProvider, LikeRecetteContext, useLikeRecette };
+
+
 
 
 

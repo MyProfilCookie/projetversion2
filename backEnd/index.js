@@ -8,16 +8,14 @@ console.log(process.env.DB_USER);
 const jwt = require('jsonwebtoken');
 const compression = require("compression");
 const path = require('path');
-const fs = require('fs');
-const multer = require('multer');
+// const fs = require('fs');
+// const multer = require('multer');
 const bodyParser = require('body-parser');
 const {connect} = require("mongoose")
 const cookieParser = require('cookie-parser');
 const User = require("./api/models/User");
 const createError = require('http-errors');
 const bcrypt = require('bcrypt');
-
-// const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 // connection a la base de données
 connect(process.env.DB)
@@ -29,8 +27,6 @@ connect(process.env.DB)
 })
 
 
-
-// const upload = multer({ storage: storage });
 
 // app.post('/api/recettes/:id/upload', upload.single('image'), (req, res) => {
 //   try {
@@ -59,7 +55,6 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Configuration de multer
 // const storage = multer.diskStorage({
 //   destination: (req, file, cb) => {
 //     const uploadPath = path.join(__dirname, 'uploads');
@@ -143,7 +138,6 @@ const adminStats =  require('./api/routes/adminStats.routes');
 const orderStats = require("./api/routes/orderStats.routes");
 const paymentRoutes = require("./api/routes/payment.routes");
 const cartsRoutes = require("./api/routes/cart.routes");
-// const routerImages = require('./api/routes/images.routes')
 const contactRoutes = require('./api/routes/contact.routes');
 
 // routes
@@ -154,29 +148,7 @@ app.use('/admin-stats', adminStats);
 app.use('/order-stats', orderStats);
 app.use('/payments', paymentRoutes);
 app.use('/carts', cartsRoutes);
-// app.use('/images', routerImages);
 app.use('/payments', paymentRoutes);
-
-// const payments = [
-//   { id: 1, amount: 100, currency: 'USD', email: 'virginie.ayivor@3wa.io' },
-//   { id: 2, amount: 200, currency: 'EUR', email: 'virginie.ayivor@3wa.io' },
-//   { id: 3, amount: 300, currency: 'USD', email: 'other@example.com' },
-// ];
-
-// app.get('/payments', (req, res) => {
-//   const email = req.query.email;
-//   console.log(`Received request for payments with email: ${email}`);
-
-//   if (!email) {
-//     return res.status(400).json({ message: 'Email est requis' });
-//   }
-
-//   const userPayments = payments.filter(payment => payment.email === email);
-//   console.log('Payments retrieved:', userPayments);
-
-//   res.json(userPayments);
-// });
-
 
 const verifyToken = require("./api/Middleware/verifyToken");
 app.use(verifyToken);

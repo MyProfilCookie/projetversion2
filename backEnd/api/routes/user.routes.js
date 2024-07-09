@@ -103,6 +103,7 @@ UserRouter.patch('/:userId', verifyToken, async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+UserRouter.post('/users/:userId/upload', upload.single('profileImage'), UserController.uploadImage);
 
 // Routes pour les recettes likées et dislikées
 UserRouter.get("/:userId/liked-disliked-recettes", verifyToken, UserController.getUserLikedDislikedRecipes);

@@ -9,7 +9,7 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { AuthContext } from "../contexts/AuthProvider";
-import { RiCake3Line } from "react-icons/ri";
+import { GiStrawberry } from "react-icons/gi";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTheme } from "../hooks/ThemeContext";
 
@@ -66,9 +66,9 @@ function Profile({ user }) {
                 />
               ) : (
                 // Dans le cas où l'utilisateur n'a pas de photo de profil, on affiche une icône par défaut (gâteau)
-                <RiCake3Line
+                <GiStrawberry
                   className={`rounded-full ${isDarkMode ? "bgDark" : "PrimaryBG inverti-white"}`}
-                  style={{ height: "3rem", width: "1.8rem" }}
+                  style={{ height: "3rem", width: "2.5rem" }}
                 />
               )}
             </div>

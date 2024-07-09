@@ -69,10 +69,30 @@ userSchema.pre("save", async function (next) {
   // Assigne le role 'admin' à l'utilisateur si l'email correspond à l'administrateur
   if (user.email === ADMIN_EMAIL) {
     user.role = "admin";
+    user.isAdmin = true;
   }
 
   next();
 });
+
+// Vérifie le rôle lors de la mise à jour
+userSchema.pre("findOneAndUpdate", async function (next) {
+  const update = this.getUpdate();
+
+  // Assigne le rôle 'admin' si l'email correspond à l'administrateur
+  if (update.email === ADMIN_EMAIL || (update.$set && update.$set.email === ADMIN_EMAIL)) {
+    if (update.$set) {
+      update.$set.role = "admin";
+      update.$set.isAdmin = true;
+    } else {
+      update.role = "admin";
+      update.isAdmin = true;
+    }
+  }
+
+  next();
+});
+
 
 const User = mongoose.model("User", userSchema);
 

@@ -2,15 +2,16 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../../../contexts/AuthProvider';
-import { useLikeRecette } from '../../../contexts/LikeRecetteProvider';
+import useLikeRecette from '../../../hooks/useLikeRecette';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import { faUserCircle, faHeart, faHeartCrack } from '@fortawesome/free-solid-svg-icons';
 import LoadingScreen from '../../../components/LoadingScreen';
+import Swal from 'sweetalert2';
 
 const UserDashboard = () => {
   const { user, loading } = useContext(AuthContext);
-  const { likes, dislikes, handleToggleLike, handleToggleDislike } = useLikeRecette();
+  const { likes, dislikes, handleToggleLike, handleToggleDislike, fetchLikesDislikes } = useLikeRecette();
   const [dislikedRecipes, setDislikedRecipes] = useState([]);
   const [userRecipes, setUserRecipes] = useState([]);
   const [pendingRecipes, setPendingRecipes] = useState([]);
@@ -45,7 +46,7 @@ const UserDashboard = () => {
         }
 
         const likedResponse = await axios.get(
-          `${import.meta.env.VITE_API_URL}/users/${user._id}/liked-disliked-recettes`,
+          `/api/users/${user._id}/liked-disliked-recettes`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -53,7 +54,7 @@ const UserDashboard = () => {
           }
         );
         const userRecipesResponse = await axios.get(
-          `${import.meta.env.VITE_API_URL}/users/${user._id}/recettes`,
+          `/api/users/${user._id}/recettes`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -61,7 +62,7 @@ const UserDashboard = () => {
           }
         );
         const pendingRecipesResponse = await axios.get(
-          `${import.meta.env.VITE_API_URL}/users/${user._id}/pending-recettes`,
+          `/api/users/${user._id}/pending-recettes`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -84,7 +85,7 @@ const UserDashboard = () => {
       try {
         const token = localStorage.getItem('access_token');
         const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/payments?email=${user.email}`,
+          `/api/payments?email=${user.email}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -111,7 +112,7 @@ const UserDashboard = () => {
     try {
       const token = localStorage.getItem('access_token');
       await axios.patch(
-        `${import.meta.env.VITE_API_URL}/users/${user._id}`,
+        `/api/users/${user._id}`,
         { email, username },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -131,8 +132,10 @@ const UserDashboard = () => {
 
     try {
       const token = localStorage.getItem('access_token');
-      await axios.post(
-        `${import.meta.env.VITE_API_URL}/users/${user._id}/upload`,
+      const userId = user._id; // Assurez-vous que user._id est disponible
+
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}users/${userId}/upload`,
         formData,
         {
           headers: {
@@ -172,7 +175,7 @@ const UserDashboard = () => {
       }
 
       await axios.post(
-        `${import.meta.env.VITE_API_URL}/users/${user._id}/recettes`,
+        `/api/users/${user._id}/recettes`,
         formData,
         {
           headers: {
@@ -195,7 +198,7 @@ const UserDashboard = () => {
       setNewRecipeFile(null);
       // Refresh pending recipes
       const pendingRecipesResponse = await axios.get(
-        `${import.meta.env.VITE_API_URL}/users/${user._id}/pending-recettes`,
+        `/api/users/${user._id}/pending-recettes`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -208,12 +211,36 @@ const UserDashboard = () => {
     }
   };
 
+  const handleConfirmAction = async (action, recetteId, isLiked) => {
+    const result = await Swal.fire({
+      title: 'Confirmer l\'action',
+      text: `Voulez-vous vraiment ${isLiked ? 'annuler' : 'ajouter'} ce like?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Oui, continuer',
+      cancelButtonText: 'Annuler',
+      willOpen: () => {
+        const swalPopup = document.querySelector('.swal2-popup');
+        if (swalPopup) {
+          swalPopup.style.opacity = '1';
+        }
+      },
+    });
+
+    if (result.isConfirmed) {
+      await action(recetteId, !isLiked);
+      fetchLikesDislikes();
+    }
+  };
+
   if (loading) {
     return <LoadingScreen />;
   }
 
   if (!user) {
-    return <div>L'utilisateur n'existe pas</div>; 
+    return <div>L'utilisateur n'existe pas</div>;
   }
 
   return (
@@ -223,7 +250,7 @@ const UserDashboard = () => {
       <div className='profile-section'>
         <div className='profile-picture'>
           {user.image ? (
-            <img src={`${import.meta.env.VITE_API_URL}/uploads/${user.image}`} alt={user.username} />
+            <img src={`/api/uploads/${user.image}`} alt={user.username} />
           ) : (
             <FontAwesomeIcon icon={faUserCircle} size="3x" />
           )}
@@ -258,8 +285,8 @@ const UserDashboard = () => {
           {Object.keys(likes).map((recetteId) => (
             <li key={recetteId}>
               {likes[recetteId].titre} {/* Assuming likes is an object with recette details */}
-              <button onClick={() => handleToggleLike(recetteId, !likes[recetteId])}>
-                {likes[recetteId] ? 'Unlike' : 'Like'}
+              <button onClick={() => handleConfirmAction(handleToggleLike, recetteId, likes[recetteId])}>
+                {likes[recetteId] ? <FontAwesomeIcon icon={faHeart} color="red" /> : <FontAwesomeIcon icon={faHeart} color="grey" />}
               </button>
             </li>
           ))}
@@ -271,9 +298,9 @@ const UserDashboard = () => {
         <ul>
           {Object.keys(dislikes).map((recetteId) => (
             <li key={recetteId}>
-              {dislikes[recetteId].titre} {/* On verifie si la recette est dans le tableau dislikes */}
-              <button onClick={() => handleToggleDislike(recetteId, !dislikes[recetteId])}>
-                {dislikes[recetteId] ? 'Remove Dislike' : 'Dislike'}
+              {dislikes[recetteId].titre} {/* Assuming dislikes is an object with recette details */}
+              <button onClick={() => handleConfirmAction(handleToggleDislike, recetteId, dislikes[recetteId])}>
+                {dislikes[recetteId] ? <FontAwesomeIcon icon={faHeartCrack} color="black" /> : <FontAwesomeIcon icon={faHeartCrack} color="grey" />}
               </button>
             </li>
           ))}
@@ -285,7 +312,15 @@ const UserDashboard = () => {
         <ul>
           {Array.isArray(userRecipes) &&
             userRecipes.map((recipe) => (
-              <li key={recipe._id}>{recipe.titre}</li>
+              <li key={recipe._id}>
+                {recipe.titre}
+                <button onClick={() => handleConfirmAction(handleToggleLike, recipe._id, likes[recipe._id])}>
+                  {likes[recipe._id] ? <FontAwesomeIcon icon={faHeart} color="red" /> : <FontAwesomeIcon icon={faHeart} color="grey" />}
+                </button>
+                <button onClick={() => handleConfirmAction(handleToggleDislike, recipe._id, dislikes[recipe._id])}>
+                  {dislikes[recipe._id] ? <FontAwesomeIcon icon={faHeartCrack} color="black" /> : <FontAwesomeIcon icon={faHeartCrack} color="grey" />}
+                </button>
+              </li>
             ))}
         </ul>
       </div>
@@ -413,6 +448,8 @@ const UserDashboard = () => {
 };
 
 export default UserDashboard;
+
+
 
 
 

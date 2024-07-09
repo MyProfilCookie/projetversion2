@@ -5,7 +5,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCookieBite } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
-import logo from "/avatar.webp";
+import logo from "/avatar.jpg";
+import logo2 from "/avatar2.jpg";
+import logo3 from "/avatar3.jpg";
+import logo4 from "/avatar4.jpg";
+
 
 function SectionRecette() {
   return (
@@ -46,17 +50,17 @@ function SectionRecette() {
               </div>
               <div className="avatar">
                 <div className="w-12">
-                  <img src={logo} />
+                  <img src={logo2} />
                 </div>
               </div>
               <div className="avatar">
                 <div className="w-12">
-                  <img src={logo} />
+                  <img src={logo3} />
                 </div>
               </div>
               <div className="avatar">
                 <div className="w-12">
-                  <img src={logo} />
+                  <img src={logo4} />
                 </div>
               </div>
             </div>

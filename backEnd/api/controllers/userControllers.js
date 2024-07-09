@@ -636,6 +636,19 @@ const toggleAdminStatus = async (req, res, next) => {
   }
 };
 
+const uploadImage = (req, res) => {
+  const userId = req.params.userId;
+  const file = req.file;
+
+  if (!file) {
+    return res.status(400).send('No file uploaded.');
+  }
+
+  // Logique pour traiter le fichier, par exemple le déplacer à un emplacement permanent, mettre à jour l'utilisateur, etc.
+  res.send('File uploaded successfully.');
+};
+
+
 module.exports = {
   getAllUsers,
   createUser,
@@ -666,4 +679,5 @@ module.exports = {
   toggleLikeRecipe,
   toggleDislikeRecipe,
   toggleAdminStatus,
+  uploadImage
 };

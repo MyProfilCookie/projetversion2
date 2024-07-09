@@ -23,7 +23,7 @@ const ManageItems = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:3001/recettes", {
+      const response = await fetch("/api/recettes", {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -65,7 +65,7 @@ const ManageItems = () => {
             return;
           }
 
-          const response = await fetch(`http://localhost:3001/recettes/${item._id}`, {
+          const response = await fetch(`/api/recettes/${item._id}`, {
             method: "DELETE",
             headers: {
               "Authorization": `Bearer ${token}`,

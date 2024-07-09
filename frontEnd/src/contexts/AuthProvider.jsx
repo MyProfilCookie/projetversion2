@@ -16,7 +16,7 @@ const AuthProvider = ({ children }) => {
   const createUser = async (email, password, username) => {
     setLoading(true);
     try {
-      const response = await fetch(`${baseURL}/register`, {
+      const response = await fetch(`/api/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -43,7 +43,7 @@ const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     setLoading(true);
     try {
-      const response = await fetch(`${baseURL}/users/login`, {
+      const response = await fetch(`/api/users/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -83,7 +83,7 @@ const AuthProvider = ({ children }) => {
       try {
         const token = localStorage.getItem('access_token');
         if (token) {
-          const response = await fetch(`${baseURL}/users/profile`, {
+          const response = await fetch(`/api/users/profile`, {
             method: 'GET',
             headers: {
               Authorization: `Bearer ${token}`,
@@ -118,7 +118,7 @@ const AuthProvider = ({ children }) => {
     const token = localStorage.getItem("access_token");
     if (token) {
       try {
-        const response = await fetch(`${baseURL}/users/admin/${email}`, {
+        const response = await fetch(`/api/users/admin/${email}`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,

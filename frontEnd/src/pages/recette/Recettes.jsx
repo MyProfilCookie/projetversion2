@@ -1,8 +1,11 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState, useContext } from "react";
 import Cards from "../../components/Cards";
 import { LikeRecetteProvider, useLikeRecette } from "../../contexts/LikeRecetteProvider";
 import { AuthContext } from "../../contexts/AuthProvider";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEarlybirds } from "@fortawesome/free-brands-svg-icons";
 
 function Recettes() {
   const [recettes, setRecettes] = useState([]);
@@ -43,29 +46,29 @@ function Recettes() {
       search.trim() === ""
         ? recettes
         : recettes.filter(
-            (recette) =>
-              typeof recette.title === "string" && recette.title
-                .toLowerCase()
-                .includes(search.trim().toLowerCase()) ||
-              typeof recette.category === "string" && recette.category
-                .toLowerCase()
-                .includes(search.trim().toLowerCase()) ||
-              typeof recette.difficulte === "string" && recette.difficulte
-                .toLowerCase()
-                .includes(search.trim().toLowerCase()) ||
-              typeof recette.description === "string" && recette.description
-                .toLowerCase()
-                .includes(search.trim().toLowerCase()) ||
-              typeof recette.instructions === "string" && recette.instructions
-                .toLowerCase()
-                .includes(search.trim().toLowerCase()) ||
-              typeof recette.ingredients === "string" && recette.ingredients
-                .toLowerCase()
-                .includes(search.trim().toLowerCase()) ||
-              typeof recette.type === "string" && recette.type
-                .toLowerCase()
-                .includes(search.trim().toLowerCase())
-          );
+          (recette) =>
+            typeof recette.title === "string" && recette.title
+              .toLowerCase()
+              .includes(search.trim().toLowerCase()) ||
+            typeof recette.category === "string" && recette.category
+              .toLowerCase()
+              .includes(search.trim().toLowerCase()) ||
+            typeof recette.difficulte === "string" && recette.difficulte
+              .toLowerCase()
+              .includes(search.trim().toLowerCase()) ||
+            typeof recette.description === "string" && recette.description
+              .toLowerCase()
+              .includes(search.trim().toLowerCase()) ||
+            typeof recette.instructions === "string" && recette.instructions
+              .toLowerCase()
+              .includes(search.trim().toLowerCase()) ||
+            typeof recette.ingredients === "string" && recette.ingredients
+              .toLowerCase()
+              .includes(search.trim().toLowerCase()) ||
+            typeof recette.type === "string" && recette.type
+              .toLowerCase()
+              .includes(search.trim().toLowerCase())
+        );
     setFilteredRecettes(filtered);
   }, [search, recettes]);
 
@@ -125,20 +128,10 @@ function Recettes() {
     <div className="p-10">
       <div className="container mx-auto px-4 xl-px-24 max-w-screen-2xl">
         <div className="flex flex-col items-center justify-center gap-8">
-          <div className="text-center space-y-7 px-4">
-            <h2 className="media-text-5xl text-4xl font-bold media-leading-snug leading-snug">
-              La pâtisserie{" "}
-              <span className="text-red text-justify">gourmande</span>{" "}
-              <span className="text-red">elit</span>.
-            </h2>
+          <div className="text-center space-y-7 px-4 banner">
+            <h2 className="media-text-5xl text-4xl font-bold media-leading-snug leading-snug" style={{ fontFamily: "Playfair Display", fontWeight: "bold", textShadow: "0px 1px 1px rgba(0, 0, 0, 0.25)", letterSpacing: "0.05em", textTransform: "uppercase", lineHeight: "1.2", textAlign: "center", marginTop: "2rem", marginBottom: "3rem" }}>La pâtisserie gourmande elit <FontAwesomeIcon icon={faEarlybirds} /></h2>
             <p className="text-xl text-gray text-xl media-w-4-5 mx-auto text-justify">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-              in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-              sunt in culpa qui officia deserunt mollit anim id est laborum.
+            Bienvenue dans l'univers de la pâtisserie ! Que vous soyez un pâtissier débutant ou expérimenté, nous avons une collection de recettes pour tous les goûts et niveaux. Découvrez des techniques de cuisson, des astuces et des conseils pour réaliser des desserts délicieux et impressionnants. Laissez libre cours à votre créativité et réveillez le pâtissier qui sommeille en vous. Préparez-vous à épater vos proches avec des douceurs irrésistibles !
             </p>
           </div>
         </div>
@@ -246,9 +239,8 @@ function Recettes() {
           <button
             key={index + 1}
             onClick={() => paginate(index + 1)}
-            className={`mx-1 px-2 py-1 rounded-full ${
-              currentPage === index + 1 ? "btn-primary" : "btn"
-            }`}
+            className={`mx-1 px-2 py-1 rounded-full ${currentPage === index + 1 ? "btn-primary" : "btn"
+              }`}
           >
             {index + 1}
           </button>
