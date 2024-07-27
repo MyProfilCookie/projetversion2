@@ -161,9 +161,12 @@ const CheckoutForm = ({ price }) => {
       <div
         className={`md:w-1/3 w-full border space-y-5 card-shadow shrink-0 max-w-sm shadow-2xl bg-base-100 px-4 py-8 ${isDarkMode ? "dark" : "primaryBG"
           }`}
+
       >
-        <h4 className="text-lg font-semibold">Procédez à votre paiement!</h4>
-        <h5 className="font-medium">Carte de crédit/débit</h5>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa Logo" style={{ width: "100px", height: "auto", margin: "0 auto" }} />
+        <h4 className="text-lg font-semibold" style={{ fontSize: "1rem", color: "white", textAlign: "center", marginTop: "0.5rem", marginBottom: "1rem" }}>Procédez à votre paiement!</h4>
+
+        <h5 className="font-medium" style={{ fontSize: "1rem", color: "white", textAlign: "center", marginBottom: "1rem" }}>Carte de crédit/débit</h5>
         <form onSubmit={handleSubmit}>
           <CardElement
             options={{

@@ -1,8 +1,28 @@
 .banner {
-    p::first-letter {
-        // color: red;
-        font-size: 400%;
-        font-weight: normal;
-        font-family: "Playfair Display", serif;
-      }
+  p::first-letter {
+    // color: red;
+    font-size: 400%;
+    font-weight: normal;
+    font-family: "Playfair Display", serif;
+  }
+}
+.ice-cream-icon {
+  display: inline-flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.ice-cream-icon-animate {
+  animation: slide-in-right 1s ease forwards;
+}
+
+@keyframes slide-in-right {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }

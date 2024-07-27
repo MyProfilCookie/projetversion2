@@ -9,6 +9,8 @@ import { useCart } from "../../contexts/CartProvider";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import CheckoutForm from "./CheckoutForm";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 
 const stripePromise = loadStripe(
   "pk_test_51PJX1EJ9cNEOCcHhPnKT4sBxvL5xs9aQN7VTmRUabgl4khJ6k7KbYIcjJsHIhesao1lhsj0YYfIAjhn9hvAPxwLw008vby1XDo"
@@ -17,7 +19,7 @@ const stripePromise = loadStripe(
 const CartPage = () => {
   const { isDarkMode } = useTheme();
   const { user } = useContext(AuthContext);
-  const { cart, updateCart } = useCart();
+  const { cart, updateCart, clearCart } = useCart();
   const [cartItems, setCartItems] = useState([]);
 
   useEffect(() => {
@@ -102,6 +104,28 @@ const CartPage = () => {
     });
   };
 
+  const handleClearCart = () => {
+    Swal.fire({
+      title: 'Êtes-vous sûr?',
+      text: "Vous allez supprimer tous les articles du panier!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Oui, supprimez tout!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        clearCart();
+        setCartItems([]);
+        Swal.fire(
+          'Supprimé!',
+          'Votre panier a été vidé.',
+          'success'
+        )
+      }
+    })
+  }
+
   const getFormattedName = (email) => {
     if (!email) return "None";
     // on récupère le premier nom de l'utilisateur
@@ -119,9 +143,8 @@ const CartPage = () => {
   return (
     <div className="max-w-screen-2xl container mx-auto xl-px-24 px-4">
       <div
-        className={`bg-gradient-to-r from-0% from-[#FAFAFA] to-[#FCFCFC] to-100% ${
-          isDarkMode ? "dark" : "bg-primaryBG"
-        }`}
+        className={`bg-gradient-to-r from-0% from-[#FAFAFA] to-[#FCFCFC] to-100% ${isDarkMode ? "dark" : "bg-primaryBG"
+          }`}
       >
         <div className="py-28 flex flex-col items-center justify-center">
           <div className="text-center px-4 space-y-7">
@@ -146,6 +169,14 @@ const CartPage = () => {
             </span>
           </p>
         </div>
+        <button
+
+          onClick={handleClearCart}
+          style={{ margin: "0 auto", border: "none", backgroundColor: "transparent", }}
+        >
+          <FontAwesomeIcon icon={faTrashAlt} style={{ fontSize: "1.5rem", color: "black", cursor: "pointer" }} /> <span style={{ color: "red", fontWeight: "bold", fontSize: "1rem", marginLeft: "0.5rem" }}>Vider le panier</span>
+
+        </button>
         <div className="md-w-1-2 space-y-3">
           <h3 className="text-lg font-semibold">Détail de la commande</h3>
           <p>Nombre d'articles: {calculateTotalItems()}</p>
@@ -169,7 +200,7 @@ const CartPage = () => {
                 className="flex flex-col lg-flex-row items-center border-b border-gray-200 py-4"
               >
                 <img
-                  className="w-24 h-24 object-cover lg-w-32 lg-h-32"
+                  className="w-72 h-72 object-cover lg-w-32 lg-h-32"
                   src={item.image}
                   alt={item.name}
                 />
@@ -232,6 +263,7 @@ const CartPage = () => {
               Prix total:{" "}
               <span id="total-price">{orderTotal.toFixed(2)} €</span>
             </p>
+
             <Elements stripe={stripePromise}>
               <CheckoutForm price={orderTotal} />
             </Elements>

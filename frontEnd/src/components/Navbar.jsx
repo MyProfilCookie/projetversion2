@@ -35,6 +35,7 @@ const Navbar = () => {
     { id: 2, name: "Contact", link: "/contact" },
     { id: 3, name: "About", link: "/about" },
     { id: 4, name: "Recettes", link: "/recettes" },
+    { id: 5, name: "Articles", link: "/articles" },
   ];
 
   const cartCount = Array.isArray(cart)
@@ -103,9 +104,9 @@ const Navbar = () => {
                 justifyContent: "center",
               }}
             >
-              <FontAwesomeIcon icon={faShop}  />
+              <FontAwesomeIcon icon={faShop} />
               <span
-                className="badge badge-sm indicator-item" 
+                className="badge badge-sm indicator-item"
                 style={{ width: "30px", height: "30px", fontWeight: "bold" }}
               >
                 {cartCount}

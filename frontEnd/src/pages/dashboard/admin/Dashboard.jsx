@@ -119,6 +119,7 @@ const Dashboard = () => {
     { name: "Users", value: stats.users, color: "#F97316" },
     { name: "Recettes", value: stats.recetteItems, color: "#6366F1" },
     { name: "Orders", value: stats.orders, color: "#A855F7" },
+    { name: "Messages", value: messages.length, color: "#D63384" },
   ];
 
   return (
@@ -181,7 +182,7 @@ const Dashboard = () => {
             <XAxis dataKey="name" />
             <YAxis />
             <Tooltip />
-            <Bar dataKey="value">
+            <Bar dataKey="value" fill="#fff"> {/* Remplit les barres en blanc */}
               {data.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.color} />
               ))}
@@ -220,5 +221,6 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
 
 

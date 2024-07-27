@@ -4,14 +4,17 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStarHalfStroke, faStar } from "@fortawesome/free-solid-svg-icons";
-import { faLemon} from "@fortawesome/free-solid-svg-icons";
+import { faLemon } from "@fortawesome/free-solid-svg-icons";
+import { faIceCream } from "@fortawesome/free-solid-svg-icons";
 
 function Banner() {
   return (
     <div className="container mx-auto px-4 py-8 xl-px-24 max-w-screen-2xl banner-container">
       {/* <h1 className='text-center text-4xl font-bold text-gray-90 leading-snug'>Notre patisserie <span className='text-red'>binaire</span> on code <span className='text-red'>avec des cônes <FontAwesomeIcon icon={faIceCream} /></span></h1> */}
 
-      <h1 className="md-text-5xl text-4xl font-bold md-leading-snug leading-snug" style={{ fontFamily: "Playfair Display", color: "#233142", fontWeight: "bold", textShadow: "0px 1px 1px rgba(0, 0, 0, 0.25)", letterSpacing: "0.05em", textTransform: "uppercase", lineHeight: "1.2", textAlign: "center", marginTop: "2rem" }}>La pâtisserie gourmande elit <FontAwesomeIcon icon={faLemon} /></h1>
+      <h1 className="md-text-5xl text-4xl font-bold md-leading-snug leading-snug" style={{ fontFamily: "Playfair Display", color: "#233142", fontWeight: "bold", textShadow: "0px 1px 1px rgba(0, 0, 0, 0.25)", letterSpacing: "0.05em", textTransform: "uppercase", lineHeight: "1.2", textAlign: "center", marginTop: "2rem" }}>La pâtisserie gourmande elit <span className="ice-cream-icon">
+        <FontAwesomeIcon icon={faLemon} className="ice-cream-icon-animate" style={{ height: "2.5rem", width: "2.5rem" }} />
+      </span></h1>
       <div className="section-container py-16 flex md-flex-col-reverse justify-between items-center gap-8">
         <div className="md-w-half space-y-7 sd-w-full banner">
           <p className="text-xl text-gray">

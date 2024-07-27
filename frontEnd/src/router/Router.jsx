@@ -26,6 +26,7 @@ import UpdateRecette from "../pages/dashboard/admin/UpdateRecette";
 import ManageItems from "../pages/dashboard/admin/ManageItems";
 import ManageBookings from "../pages/dashboard/admin/ManegeBookings";
 import MessageContact from "../pages/dashboard/admin/MessageContact";
+import Articles from "../pages/purchases/Articles";
 // import UserDashboard from "../pages/dashboard/user/UserDashboard";
 
 const router = createBrowserRouter([
@@ -57,10 +58,10 @@ const router = createBrowserRouter([
         path: "/about",
         element: <About />,
       },
-      /*{
-        path: "/*",
-        element: <Erreur404 />,
-      },*/
+      {
+        path: "/articles",
+        element: <Articles />,
+      },
       {
         path: "/my-recipe",
         element: (
@@ -161,7 +162,7 @@ const router = createBrowserRouter([
       },
       {
         path: "*",
-        element: <Navigate to="/404" replace />, 
+        element: <Navigate to="/404" replace />,
       },
     ],
   },

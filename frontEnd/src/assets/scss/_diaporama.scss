@@ -27,6 +27,8 @@ $progress: 125.6;
   object-fit: cover;
   object-position: 50% 50%;
   position: relative;
+  height: 50vh;
+  border-radius: 15px;
   top: 0;
   left: 0;
   z-index: $z-index-negative;
@@ -44,12 +46,13 @@ $progress: 125.6;
 .swiper-slide {
   text-align: center;
   font-size: $font-size-medium;
-  background: $color-white;
+  background: transparent;
   @include flex-center;
 
   img {
     display: block;
     width: 100%;
+    border: none;
     object-fit: cover;
   }
 }
